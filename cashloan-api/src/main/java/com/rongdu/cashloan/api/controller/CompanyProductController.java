@@ -19,7 +19,7 @@ import java.util.Map;
 @Scope("prototype")
 @Controller
 @CrossOrigin
-@RequestMapping("/api/account")
+@RequestMapping("/api/company")
 public class CompanyProductController {
 
     public static final Logger logger = LoggerFactory.getLogger(CompanyProductController.class);
@@ -27,7 +27,7 @@ public class CompanyProductController {
     @Resource
     private ICompanyProductService companyProductService;
 
-    @RequestMapping("/save/company/prod/detail")
+    @RequestMapping("/save/prod/detail")
     public void saveRecords(HttpServletResponse response, CompanyProdDetail companyProdDetail){
         logger.info(String.format("保存公司产品>>前端传入的参数【%s】",companyProdDetail.toString()));
         Map<String,Object> result = new HashMap<String,Object>();
@@ -43,7 +43,7 @@ public class CompanyProductController {
         ServletUtils.writeToResponse(response,result);
     }
 
-    @RequestMapping("/query/company/prod/detail")
+    @RequestMapping("/query/prod/detail")
     public void queryRecords(HttpServletResponse response){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
