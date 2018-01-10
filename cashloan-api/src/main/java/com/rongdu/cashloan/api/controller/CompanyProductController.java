@@ -1,0 +1,61 @@
+package com.rongdu.cashloan.api.controller;
+
+import com.rongdu.cashloan.cl.domain.CompanyProdDetail;
+import com.rongdu.cashloan.cl.service.ICompanyProductService;
+import com.rongdu.cashloan.core.common.context.Constant;
+import com.rongdu.cashloan.core.common.util.ServletUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+
+@Scope("prototype")
+@Controller
+@CrossOrigin
+//@RequestMapping("/api/account")
+@RequestMapping("/account")
+public class CompanyProductController {
+
+    public static final Logger logger = LoggerFactory.getLogger(CompanyProductController.class);
+
+    @Resource
+    private ICompanyProductService companyProductService;
+
+    @RequestMapping("/save/company/prod/detail")
+    public void saveRecords(HttpServletResponse response, CompanyProdDetail companyProdDetail){
+        logger.info(String.format("保存公司产品>>前端传入的参数【%s】",companyProdDetail.toString()));
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            companyProductService.saveOrUpdate(companyProdDetail);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "保存成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "保存失败");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+
+    @RequestMapping("/query/company/prod/detail")
+    public void queryRecords(HttpServletResponse response){
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            Map<String, Object> resultMap = companyProductService.listHomeBdata();
+            result.put(Constant.RESPONSE_DATA, resultMap);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+}
