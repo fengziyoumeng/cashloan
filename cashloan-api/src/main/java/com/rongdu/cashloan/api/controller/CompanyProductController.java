@@ -19,8 +19,7 @@ import java.util.Map;
 @Scope("prototype")
 @Controller
 @CrossOrigin
-//@RequestMapping("/api/account")
-@RequestMapping("/account")
+@RequestMapping("/api/account")
 public class CompanyProductController {
 
     public static final Logger logger = LoggerFactory.getLogger(CompanyProductController.class);
