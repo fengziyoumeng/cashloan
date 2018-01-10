@@ -121,22 +121,22 @@
     from cl_banner_info
     <where>
       <if test="id != null">
-        id = #{id,jdbcType=BIGINT},
+        id = #{id,jdbcType=BIGINT}
       </if>
       <if test="banner_url != null">
-        and banner_url = #{banner_url,jdbcType=VARCHAR},
+        and banner_url = #{banner_url,jdbcType=VARCHAR}
       </if>
       <if test="skip_url != null">
-        and skip_url = #{skip_url,jdbcType=VARCHAR},
+        and skip_url = #{skip_url,jdbcType=VARCHAR}
       </if>
       <if test="sort != null">
-        and sort = #{sort,jdbcType=VARCHAR},
+        and sort = #{sort,jdbcType=VARCHAR}
       </if>
       <if test="site != null">
-        and site = #{site,jdbcType=VARCHAR},
+        and site = #{site,jdbcType=VARCHAR}
       </if>
       <if test="status != null">
-        and status = #{status,jdbcType=VARCHAR},
+        and status = #{status,jdbcType=VARCHAR}
       </if>
       <if test="state != null">
         and state = #{state,jdbcType=VARCHAR}

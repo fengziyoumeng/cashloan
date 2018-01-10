@@ -64,28 +64,28 @@
     from cl_ad_info
     <where>
       <if test="id != null">
-        id = #{id,jdbcType=BIGINT},
+        id = #{id,jdbcType=BIGINT}
       </if>
       <if test="adUrl != null">
-        and ad_url = #{adUrl,jdbcType=VARCHAR},
+        and ad_url = #{adUrl,jdbcType=VARCHAR}
       </if>
       <if test="skipUrl != null">
-        and skip_url = #{skipUrl,jdbcType=VARCHAR},
+        and skip_url = #{skipUrl,jdbcType=VARCHAR}
       </if>
       <if test="title != null">
-        and title = #{title,jdbcType=VARCHAR},
+        and title = #{title,jdbcType=VARCHAR}
       </if>
       <if test="message != null">
-        and message = #{message,jdbcType=VARCHAR},
+        and message = #{message,jdbcType=VARCHAR}
       </if>
       <if test="site != null">
-        and site = #{site,jdbcType=INTEGER},
+        and site = #{site,jdbcType=INTEGER}
       </if>
       <if test="sort != null">
-        and sort = #{sort,jdbcType=INTEGER},
+        and sort = #{sort,jdbcType=INTEGER}
       </if>
       <if test="status != null">
-        and status = #{status,jdbcType=INTEGER},
+        and status = #{status,jdbcType=INTEGER}
       </if>
       <if test="state != null">
         and state = #{state,jdbcType=INTEGER}

@@ -110,22 +110,22 @@
     from b_company_prod
     <where>
     <if test="id != null">
-      id = #{id,jdbcType=BIGINT},
+      id = #{id,jdbcType=BIGINT}
     </if>
       <if test="big_type != null">
-        and big_type = #{big_type,jdbcType=INTEGER},
+        and big_type = #{big_type,jdbcType=INTEGER}
       </if>
       <if test="type != null">
-        and type = #{type,jdbcType=INTEGER},
+        and type = #{type,jdbcType=INTEGER}
       </if>
       <if test="type_name != null">
-        and type_name = #{type_name,jdbcType=VARCHAR},
+        and type_name = #{type_name,jdbcType=VARCHAR}
       </if>
       <if test="type_img_path != null">
-        and type_img_path = #{type_img_path,jdbcType=VARCHAR},
+        and type_img_path = #{type_img_path,jdbcType=VARCHAR}
       </if>
       <if test="sort != null">
-        and sort = #{sort,jdbcType=INTEGER},
+        and sort = #{sort,jdbcType=INTEGER}
       </if>
     </where>
   </select>
