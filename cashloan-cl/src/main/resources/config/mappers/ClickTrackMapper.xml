@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- click_track表:信用卡模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.ClickTrackMapper">
+    <!--<cache/>-->
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.ClickTrack">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="position_mark" property="positionMark" jdbcType="VARCHAR" />
+        <result column="flag" property="flag" jdbcType="BIGINT" />
+        <result column="click_time" property="clickTime" jdbcType="TIMESTAMP" />
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+        <result column="recode_date" property="recodeDate" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,position_mark,flag,click_time,channel_name,recode_date
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="clickTime != null and clickTime != '' ">
+                and click_time = #{clickTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.ClickTrack">
+        insert into click_track(user_id,position_mark,flag,click_time,channel_name,recode_date)VALUES
+        (
+            #{userId,jdbcType=BIGINT},#{positionMark,jdbcType=VARCHAR},#{flag,jdbcType=BIGINT},
+            #{clickTime,jdbcType=TIMESTAMP},#{channelName,jdbcType=VARCHAR},date_format(#{clickTime}, '%Y-%m-%d')
+        )
+    </insert>
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from click_track
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from click_track
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from click_track
+        <include refid="searchBy"/>
+        order by click_time
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete
+        from click_track
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.ClickTrack">
+        update click_track
+        set channel_name = #{channelName}
+        where id = #{id}
+    </update>
+
+    <select id="queryTrailRecodes" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from click_track
+        <where>
+            <if test="channelName!=null and channelName!='' and channelName!='null' ">channel_name = #{channelName}</if>
+            <if test="beginTime!=null and beginTime!='' and beginTime!='null' ">
+                and DATE_FORMAT(click_time,'%Y-%m-%d') &gt;= #{beginTime}
+            </if>
+            <if test="endTime!=null and endTime!='' and endTime!='null'">
+                and DATE_FORMAT(click_time,'%Y-%m-%d') &lt;= #{endTime}
+            </if>
+            <if test="userId!=null and userId!='' and userId!='null' ">and user_id = #{userId}</if>
+        </where>
+        order by user_id,click_time
+    </select>
+
+    <select id="queryTrailsByDate" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+          <include refid="Base_Column_List" />
+        from click_track where recode_date = #{recodeDate} order by user_id,click_time
+    </select>
+
+    <select id="totalUV" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(1) from click_track
+        where recode_date = #{time} and channel_name = #{name}
+        and user_id &gt;= #{sUserId} and user_id &lt;= #{eUserId}
+    </select>
+
+    <select id="duplicateUV" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(1) from (
+            select position_mark,user_id from click_track
+            where recode_date = #{time} and channel_name = #{name}
+            and user_id &gt;= #{sUserId} and user_id &lt;= #{eUserId}
+            group by position_mark,user_id,flag
+        )a
+    </select>
+
+    <select id="registerUV" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(1) from (
+            select position_mark,user_id from click_track
+            where recode_date = #{time} and channel_name = #{name} and position_mark = 'platRegister'
+            and user_id &gt;= #{sUserId} and user_id &lt;= #{eUserId}
+            group by position_mark,user_id,flag
+        )a
+    </select>
+
+</mapper>

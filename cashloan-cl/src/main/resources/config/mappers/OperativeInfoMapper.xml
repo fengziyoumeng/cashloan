@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.cashloan.cl.mapper.OperativeInfoMapper">
+  <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.OperativeInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="proc_id" jdbcType="BIGINT" property="proc_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="wx" jdbcType="VARCHAR" property="wx" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="module" jdbcType="VARCHAR" property="module" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, proc_id, name, tel, wx, qq, job, module
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from b_operative_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from b_operative_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.rongdu.cashloan.cl.domain.OperativeInfo">
+    insert into b_operative_info (id, proc_id, name, 
+      tel, wx, qq, job, 
+      module)
+    values (#{id,jdbcType=BIGINT}, #{proc_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{wx,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, 
+      #{module,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rongdu.cashloan.cl.domain.OperativeInfo">
+    insert into b_operative_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="proc_id != null">
+        proc_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="wx != null">
+        wx,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="module != null">
+        module,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="proc_id != null">
+        #{proc_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="wx != null">
+        #{wx,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="module != null">
+        #{module,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rongdu.cashloan.cl.domain.OperativeInfo">
+    update b_operative_info
+    <set>
+      <if test="proc_id != null">
+        proc_id = #{proc_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="wx != null">
+        wx = #{wx,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        job = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="module != null">
+        module = #{module,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rongdu.cashloan.cl.domain.OperativeInfo">
+    update b_operative_info
+    set proc_id = #{proc_id,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      wx = #{wx,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      job = #{job,jdbcType=VARCHAR},
+      module = #{module,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

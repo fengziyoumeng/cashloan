@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_borrow表:借款信息表模块 -->
+<mapper namespace="com.rongdu.cashloan.core.mapper.BorrowMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.core.domain.Borrow">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="amount" property="amount" jdbcType="DECIMAL" />
+        <result column="real_amount" property="realAmount" jdbcType="DECIMAL" />
+        <result column="fee" property="fee" jdbcType="DECIMAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="time_limit" property="timeLimit" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="reject_reason" property="rejectReason" jdbcType="VARCHAR" />
+        <result column="state_success" property="stateSuccess" jdbcType="VARCHAR" />
+        <result column="card_id" property="cardId" jdbcType="BIGINT" />
+        <result column="service_fee" property="serviceFee" jdbcType="DECIMAL" />
+        <result column="info_auth_fee" property="infoAuthFee" jdbcType="DECIMAL" />
+        <result column="interest" property="interest" jdbcType="DECIMAL" />
+        <result column="client" property="client" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="coordinate" property="coordinate" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="audit_process" property="auditProcess" jdbcType="INTEGER" />
+		<result column="audit_process_time" property="auditProcessTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,order_no,amount,real_amount,fee,create_time,time_limit,state,state_success,card_id,service_fee,info_auth_fee,interest,client,address,coordinate,remark
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !='' and id !=null">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !='' and userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="orderNo !='' and orderNo !=null">
+                and order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="amount !='' and amount !=null">
+                and amount = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="realAmount !='' and realAmount !=null">
+                and real_amount = #{realAmount,jdbcType=DECIMAL}
+            </if>
+            <if test="fee !='' and fee !=null">
+                and fee = #{fee,jdbcType=DECIMAL}
+            </if>
+            <if test="createTime !=null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="timeLimit !='' and timeLimit !=null">
+                and time_limit = #{timeLimit,jdbcType=VARCHAR}
+            </if>
+            <if test="state !='' and state !=null">
+                and state = #{state,jdbcType=VARCHAR}
+            </if>
+            <if test="stateSuccess !='' and stateSuccess !=null">
+                and state_success = #{stateSuccess,jdbcType=VARCHAR}
+            </if>
+            <if test="cardId !='' and cardId !=null">
+                and card_id = #{cardId,jdbcType=BIGINT}
+            </if>
+            <if test="serviceFee !='' and serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
+            </if>
+            <if test="infoAuthFee !='' and infoAuthFee !=null">
+                and info_auth_fee = #{infoAuthFee,jdbcType=DECIMAL}
+            </if>
+            <if test="interest !='' and interest !=null">
+                and interest = #{interest,jdbcType=DECIMAL}
+            </if>
+            <if test="client !='' and client !=null">
+                and client = #{client,jdbcType=VARCHAR}
+            </if>
+            <if test="remark !=null and remark !=''">
+                and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="auditProcess !=null and auditProcess !=''">
+                and audit_process = #{auditProcess,jdbcType=INTEGER}
+            </if>
+            <if test="auditProcessTime !=null and auditProcessTime !=''">
+                and audit_process_time = #{auditProcessTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.rongdu.cashloan.core.domain.Borrow">
+    	<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+        insert into cl_borrow(user_id,order_no,amount,real_amount,fee,create_time,time_limit,state,state_success,card_id,service_fee,info_auth_fee,interest,client,remark)values(#{userId,jdbcType=BIGINT},#{orderNo,jdbcType=VARCHAR},#{amount,jdbcType=DECIMAL},#{realAmount,jdbcType=DECIMAL},#{fee,jdbcType=DECIMAL},#{createTime,jdbcType=TIMESTAMP},#{timeLimit,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{stateSuccess,jdbcType=VARCHAR},#{cardId,jdbcType=BIGINT},#{serviceFee,jdbcType=DECIMAL},#{infoAuthFee,jdbcType=DECIMAL},#{interest,jdbcType=DECIMAL},#{client,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{auditProcess,jdbcType=INTEGER},#{auditProcessTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.rongdu.cashloan.core.domain.Borrow">
+        update cl_borrow set 
+            user_id = #{userId,jdbcType=BIGINT},
+            order_no = #{orderNo,jdbcType=VARCHAR},
+            amount = #{amount,jdbcType=DECIMAL},
+            real_amount = #{realAmount,jdbcType=DECIMAL},
+            fee = #{fee,jdbcType=DECIMAL},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            time_limit = #{timeLimit,jdbcType=VARCHAR},
+            state = #{state,jdbcType=VARCHAR},
+            state_success = #{stateSuccess,jdbcType=VARCHAR},
+            card_id = #{cardId,jdbcType=BIGINT},
+            service_fee = #{serviceFee,jdbcType=DECIMAL},
+            info_auth_fee = #{infoAuthFee,jdbcType=DECIMAL},
+            interest = #{interest,jdbcType=DECIMAL},
+            client = #{client,jdbcType=VARCHAR},
+            remark = #{remark,jdbcType=VARCHAR},
+            audit_process = #{auditProcess,jdbcType=INTEGER},
+            audit_process_time = #{auditProcessTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_borrow
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="orderNo != null and orderNo != '' ">        
+                order_no = #{orderNo,jdbcType=VARCHAR},                
+            </if>
+            <if test="amount != null and amount != '' ">        
+                amount = #{amount,jdbcType=DECIMAL},                
+            </if>
+            <if test="realAmount != null and realAmount != '' ">        
+                real_amount = #{realAmount,jdbcType=DECIMAL},                
+            </if>
+            <if test="fee != null and fee != '' ">        
+                fee = #{fee,jdbcType=DECIMAL},                
+            </if>
+            <if test="createTime != null ">        
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="timeLimit != null and timeLimit != '' ">        
+                time_limit = #{timeLimit,jdbcType=VARCHAR},                
+            </if>
+            <if test="state != null and state != '' ">        
+                state = #{state,jdbcType=VARCHAR},                
+            </if>
+            <if test="stateSuccess != null and stateSuccess != '' ">
+               state_success = #{stateSuccess,jdbcType=VARCHAR},
+            </if>
+            <if test="cardId != null and cardId != '' ">        
+                card_id = #{cardId,jdbcType=BIGINT},                
+            </if>
+            <if test="serviceFee != null and serviceFee != '' ">        
+                service_fee = #{serviceFee,jdbcType=DECIMAL},                
+            </if>
+            <if test="infoAuthFee != null and infoAuthFee != '' ">        
+                info_auth_fee = #{infoAuthFee,jdbcType=DECIMAL},                
+            </if>
+            <if test="interest != null">
+                interest = #{interest,jdbcType=DECIMAL},                
+            </if>
+            <if test="client != null and client != '' ">        
+                client = #{client,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark != ''">        
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="auditProcess != null">
+                audit_process = #{auditProcess,jdbcType=INTEGER},
+            </if>
+            <if test="auditProcessTime != null">
+                audit_process_time = #{auditProcessTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow
+        <include refid="searchBy"/>
+    </select>
+    
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow
+        <include refid="searchBy"/>
+    </select>
+   
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchConditions">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+				and order_no like CONCAT('%', #{orderNo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="userName != null and userName != ''">
+				and user_name like CONCAT('%', #{userName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="realName != null and realName != ''">
+				and real_name like CONCAT('%', #{realName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone like CONCAT('%', #{phone,jdbcType=VARCHAR}, '%')
+			</if>
+            <if test="state !=null and state != ''">
+                and state = #{state,jdbcType=VARCHAR}
+            </if>
+            <if test="stateSuccess !=null and stateSuccess != ''">
+                and state_success = #{stateSuccess,jdbcType=VARCHAR}
+            </if>
+            <if test="remark !=null and remark != ''">
+                and remark like CONCAT('%', #{remark,jdbcType=VARCHAR}, '%')
+            </if>
+            
+        </trim>
+    </sql>
+               
+    <select id="selectByConditions" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow
+        <include refid="searchConditions"/>
+    </select>
+    
+    <select id="findByConsumerAndBorrow" parameterType="java.lang.String" resultMap="BaseResultMap">
+    	select
+        <include refid="Base_Column_List" />
+        from cl_borrow
+        where order_no = #{orderNo,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findValidValue" parameterType="java.lang.String" resultType="java.lang.String">
+    	${statement}
+    </select>
+ 
+</mapper>

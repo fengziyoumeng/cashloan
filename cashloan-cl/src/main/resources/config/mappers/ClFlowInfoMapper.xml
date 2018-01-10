@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_flow_info表:运营商认证通知详情表模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.ClFlowInfoMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.ClFlowInfo">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="p_code" property="pCode" jdbcType="VARCHAR" />
+        <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+        <result column="pic_name" property="picName" jdbcType="VARCHAR" />
+        <result column="p_name" property="pName" jdbcType="VARCHAR" />
+        <result column="p_type" property="pType" jdbcType="INTEGER" />
+        <result column="min_limit" property="minLimit" jdbcType="BIGINT" />
+        <result column="max_limit" property="maxLimit" jdbcType="BIGINT" />
+        <result column="min_day" property="minDay" jdbcType="INTEGER" />
+        <result column="max_day" property="maxDay" jdbcType="INTEGER" />
+        <result column="p_interest" property="pInterest" jdbcType="VARCHAR" />
+        <result column="p_condition" property="pCondition" jdbcType="VARCHAR" />
+        <result column="p_process" property="pProcess" jdbcType="VARCHAR" />
+        <result column="p_sort" property="pSort" jdbcType="INTEGER" />
+        <result column="p_state" property="pState" jdbcType="INTEGER" />
+        <result column="p_remark" property="pRemark" jdbcType="VARCHAR" />
+        <result column="p_http" property="pHttp" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="p_loan_max_time" property="pLoanMaxTime" jdbcType="INTEGER" />
+        <result column="p_loan_time_type" property="pLoanTimeType" jdbcType="INTEGER" />
+        <result column="p_loan_min_time" property="pLoanMinTime" jdbcType="INTEGER" />
+        <result column="p_today_click_count" property="pTodayClickCount" jdbcType="BIGINT" />
+        <result column="p_history_total_click_count" property="pHistoryTotalClickCount" jdbcType="BIGINT" />
+        <result column="p_pre_month_click_count" property="pPreMonthClickCount" jdbcType="BIGINT" />
+        <result column="p_pre_month_click_count_1" property="pPreMonthClickCount1" jdbcType="BIGINT" />
+        <result column="p_pre_month_click_count_3" property="pPreMonthClickCount3" jdbcType="BIGINT" />
+        <result column="p_pre_month_click_count_2" property="pPreMonthClickCount2" jdbcType="BIGINT" />
+        <result column="p_message" property="pMessage" jdbcType="VARCHAR" />
+        <result column="p_marks" property="pMarks" jdbcType="VARCHAR" />
+        <result column="p_tag" property="pTag" jdbcType="VARCHAR" />
+        <result column="p_borrow_num" property="pBorrowNum" jdbcType="BIGINT" />
+        <result column="p_hand_person" property="pHandPerson" jdbcType="VARCHAR" />
+        <result column="p_channel_price" property="pChannelPrice" jdbcType="DOUBLE" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,p_code,pic_url,pic_name,p_hand_person,p_channel_price,p_name,p_type,min_limit,max_limit,min_day,max_day,p_interest,p_condition,p_process,p_sort,p_state,p_remark,p_http,create_time,p_loan_max_time,p_loan_time_type,p_loan_min_time,p_today_click_count,p_history_total_click_count,p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2,p_tag,update_time,p_borrow_num,p_message,p_marks,type_sort
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="pHandPerson != null and pHandPerson != '' ">
+                and p_hand_person LIKE concat('%',#{pHandPerson},'%')
+            </if>
+            <if test="pCode != null and pCode != '' ">
+                and p_code = #{pCode,jdbcType=VARCHAR}
+            </if>
+            <if test="picUrl != null and picUrl != '' ">
+                and pic_url = #{picUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="picName != null and picName != '' ">
+                and pic_name = #{picName,jdbcType=VARCHAR}
+            </if>
+            <if test="pHandPerson != null and pHandPerson != '' ">
+                and p_hand_person = #{pHandPerson,jdbcType=VARCHAR}
+            </if>
+            <if test="pChannelPrice != null and pChannelPrice != '' ">
+                and p_channel_price = #{pChannelPrice,jdbcType=DOUBLE}
+            </if>
+            <if test="productName != null and productName != '' ">
+                and p_name LIKE concat('%',#{productName},'%')
+            </if>
+            <if test="pType != null and pType != '' ">
+                and p_type = #{pType,jdbcType=INTEGER}
+            </if>
+            <if test="minLimit != null and minLimit != '' ">
+                and min_limit = #{minLimit,jdbcType=BIGINT}
+            </if>
+            <if test="maxLimit != null and maxLimit != '' ">
+                and max_limit = #{maxLimit,jdbcType=BIGINT}
+            </if>
+            <if test="minDay != null and minDay != '' ">
+                and min_day = #{minDay,jdbcType=INTEGER}
+            </if>
+            <if test="maxDay != null and maxDay != '' ">
+                and max_day = #{maxDay,jdbcType=INTEGER}
+            </if>
+            <if test="pInterest != null and pInterest != '' ">
+                and p_interest = #{pInterest,jdbcType=VARCHAR}
+            </if>
+            <if test="pCondition != null and pCondition != '' ">
+                and p_condition = #{pCondition,jdbcType=VARCHAR}
+            </if>
+            <if test="pProcess != null and pProcess != '' ">
+                and p_process = #{pProcess,jdbcType=VARCHAR}
+            </if>
+            <if test="pSort != null and pSort != '' ">
+                and p_sort = #{pSort,jdbcType=INTEGER}
+            </if>
+            <if test="pState != null and pState != '' ">
+                and p_state = #{pState,jdbcType=INTEGER}
+            </if>
+            <if test="pRemark != null and pRemark != '' ">
+                and p_remark = #{pRemark,jdbcType=VARCHAR}
+            </if>
+            <if test="pHttp != null and pHttp != '' ">
+                and p_http = #{pHttp,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="pLoanMaxTime != null and pLoanMaxTime != '' ">
+                and p_loan_max_time = #{pLoanMaxTime,jdbcType=INTEGER}
+            </if>
+            <if test="pLoanTimeType != null and pLoanTimeType != '' ">
+                and p_loan_time_type = #{pLoanTimeType,jdbcType=INTEGER}
+            </if>
+            <if test="pLoanMinTime != null and pLoanMinTime != '' ">
+                and p_loan_min_time = #{pLoanMinTime,jdbcType=INTEGER}
+            </if>
+            <if test="pTodayClickCount != null and pTodayClickCount != '' ">
+                and p_today_click_count = #{pTodayClickCount,jdbcType=BIGINT}
+            </if>
+            <if test="pHistoryTotalClickCount != null and pHistoryTotalClickCount != '' ">
+                and p_history_total_click_count = #{pHistoryTotalClickCount,jdbcType=BIGINT}
+            </if>
+            <if test="pPreMonthClickCount != null and pPreMonthClickCount != '' ">
+                and p_pre_month_click_count = #{pPreMonthClickCount,jdbcType=BIGINT}
+            </if>
+            <if test="pPreMonthClickCount1 != null and pPreMonthClickCount1 != '' ">
+                and p_pre_month_click_count_1 = #{pPreMonthClickCount1,jdbcType=BIGINT}
+            </if>
+            <if test="pPreMonthClickCount2 != null and pPreMonthClickCount2 != '' ">
+                and p_pre_month_click_count_2 = #{pPreMonthClickCount2,jdbcType=BIGINT}
+            </if>
+            <if test="pPreMonthClickCount3 != null and pPreMonthClickCount3 != '' ">
+                and p_pre_month_click_count_3 = #{pPreMonthClickCount3,jdbcType=BIGINT}
+            </if>
+            <if test="pTag != null and pTag != '' ">
+                and p_tag = #{pTag,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null ">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="pBorrowNum != null and pBorrowNum != '' ">
+                and p_borrow_num = #{pBorrowNum,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.ClFlowInfo">
+        insert into cl_flow_info(p_code,pic_url,p_name,p_type,min_limit,max_limit,min_day,
+             max_day,p_interest,p_condition,p_process,p_sort,p_state,p_remark,p_http,create_time,
+             p_loan_max_time,p_loan_time_type,p_loan_min_time,p_today_click_count,p_history_total_click_count,
+             p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2,
+             p_tag,p_marks,p_message,pic_name,p_hand_person,p_channel_price,p_borrow_num,type_sort)
+        values(#{pCode,jdbcType=VARCHAR},#{picUrl,jdbcType=VARCHAR},#{pName,jdbcType=VARCHAR},
+            #{pType,jdbcType=INTEGER},#{minLimit,jdbcType=BIGINT},#{maxLimit,jdbcType=BIGINT},
+            #{minDay,jdbcType=INTEGER},#{maxDay,jdbcType=INTEGER},#{pInterest,jdbcType=VARCHAR},
+            #{pCondition,jdbcType=VARCHAR},#{pProcess,jdbcType=VARCHAR},#{pSort,jdbcType=INTEGER},
+            #{pState,jdbcType=INTEGER},#{pRemark,jdbcType=VARCHAR},#{pHttp,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP},#{pLoanMaxTime,jdbcType=INTEGER},#{pLoanTimeType,jdbcType=INTEGER},
+            #{pLoanMinTime,jdbcType=INTEGER},#{pTodayClickCount,jdbcType=INTEGER},
+            #{pHistoryTotalClickCount,jdbcType=INTEGER},#{pPreMonthClickCount,jdbcType=BIGINT},
+            #{pPreMonthClickCount1,jdbcType=BIGINT},#{pPreMonthClickCount3,jdbcType=BIGINT},
+            #{pPreMonthClickCount2,jdbcType=BIGINT},#{pTag,jdbcType=VARCHAR},#{pMarks,jdbcType=VARCHAR},
+            #{pMessage,jdbcType=VARCHAR},#{picName,jdbcType=VARCHAR},
+            #{pHandPerson,jdbcType=VARCHAR},#{pChannelPrice,jdbcType=DOUBLE},#{pBorrowNum,jdbcType=BIGINT},
+            #{typeSort,jdbcType=INTEGER}
+            )
+    </insert>
+
+    
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.ClFlowInfo">
+        update cl_flow_info
+            <set>
+                <if test="pCode != null and pCode != '' ">
+                    p_code = #{pCode,jdbcType=VARCHAR},
+                </if>
+                <if test="picUrl != null and picUrl != '' ">
+                    pic_url = #{picUrl,jdbcType=VARCHAR},
+                </if>
+                <if test="picName != null and picName != '' ">
+                    pic_name = #{picName,jdbcType=VARCHAR},
+                </if>
+                <if test="pHandPerson != null and pHandPerson != '' ">
+                    p_hand_person = #{pHandPerson,jdbcType=VARCHAR},
+                </if>
+                <if test="pChannelPrice != null and pChannelPrice != '' ">
+                    p_channel_price = #{pChannelPrice,jdbcType=DOUBLE},
+                </if>
+                <if test="pName != null and pName != '' ">
+                    p_name = #{pName,jdbcType=VARCHAR},
+                </if>
+                <if test="pType != null and pType != '' ">
+                    p_type = #{pType,jdbcType=INTEGER},
+                </if>
+                <if test="minLimit != null and minLimit != '' ">
+                    min_limit = #{minLimit,jdbcType=BIGINT},
+                </if>
+                <if test="maxLimit != null and maxLimit != '' ">
+                    max_limit = #{maxLimit,jdbcType=BIGINT},
+                </if>
+                <if test="minDay != null and minDay != '' ">
+                    min_day = #{minDay,jdbcType=INTEGER},
+                </if>
+                <if test="maxDay != null and maxDay != '' ">
+                    max_day = #{maxDay,jdbcType=INTEGER},
+                </if>
+                <if test="pInterest != null and pInterest != '' ">
+                    p_interest = #{pInterest,jdbcType=VARCHAR},
+                </if>
+                <if test="pCondition != null and pCondition != '' ">
+                    p_condition = #{pCondition,jdbcType=VARCHAR},
+                </if>
+                <if test="pProcess != null and pProcess != '' ">
+                    p_process = #{pProcess,jdbcType=VARCHAR},
+                </if>
+                <if test="pSort != null and pSort != '' ">
+                    p_sort = #{pSort,jdbcType=INTEGER},
+                </if>
+                <if test="typeSort != null and typeSort != '' ">
+                    type_sort = #{typeSort,jdbcType=INTEGER},
+                </if>
+                <if test="pState != null and pState != '' ">
+                    p_state = #{pState,jdbcType=INTEGER},
+                </if>
+                <if test="pRemark != null and pRemark != '' ">
+                    p_remark = #{pRemark,jdbcType=VARCHAR},
+                </if>
+                <if test="pHttp != null and pHttp != '' ">
+                    p_http = #{pHttp,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null ">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updateTime != null ">
+                    update_time = #{updateTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="pLoanMaxTime != null and pLoanMaxTime != '' ">
+                    p_loan_max_time = #{pLoanMaxTime,jdbcType=INTEGER},
+                </if>
+                <if test="pLoanTimeType != null and pLoanTimeType != '' ">
+                    p_loan_time_type = #{pLoanTimeType,jdbcType=INTEGER},
+                </if>
+                <if test="pLoanMinTime != null and pLoanMinTime != '' ">
+                    p_loan_min_time = #{pLoanMinTime,jdbcType=INTEGER},
+                </if>
+                <if test="pTodayClickCount != null">
+                    p_today_click_count = #{pTodayClickCount,jdbcType=BIGINT},
+                </if>
+                <if test="pHistoryTotalClickCount != null">
+                    p_history_total_click_count = #{pHistoryTotalClickCount,jdbcType=BIGINT},
+                </if>
+                <if test="pPreMonthClickCount != null ">
+                    p_pre_month_click_count = #{pPreMonthClickCount,jdbcType=BIGINT},
+                </if>
+                <if test="pPreMonthClickCount1 != null ">
+                    p_pre_month_click_count_1 = #{pPreMonthClickCount1,jdbcType=BIGINT},
+                </if>
+                <if test="pPreMonthClickCount3 != null">
+                    p_pre_month_click_count_3 = #{pPreMonthClickCount3,jdbcType=BIGINT},
+                </if>
+                <if test="pPreMonthClickCount2 != null">
+                    p_pre_month_click_count_2 = #{pPreMonthClickCount2,jdbcType=BIGINT}
+                </if>
+                <if test="pTag != null and pTag != '' ">
+                    p_tag = #{pTag,jdbcType=VARCHAR},
+                </if>
+                <if test="pBorrowNum != null and pBorrowNum != '' ">
+                    p_borrow_num = #{pBorrowNum,jdbcType=INTEGER},
+                </if>
+                <if test="pMessage != null and pMessage != '' ">
+                    p_message = #{pMessage,jdbcType=VARCHAR},
+                </if>
+                <if test="pMarks != null and pMarks != '' ">
+                    p_marks = #{pMarks,jdbcType=VARCHAR}
+                </if>
+
+            </set>
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_flow_info
+          <set>
+            <if test="pCode != null and pCode != '' ">        
+                p_code = #{pCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="picUrl != null and picUrl != '' ">        
+                pic_url = #{picUrl,jdbcType=VARCHAR},                
+            </if>
+            <if test="picName != null and picName != '' ">
+                pic_name = #{picName,jdbcType=VARCHAR},
+            </if>
+              <if test="pHandPerson != null and pHandPerson != '' ">
+                  and p_hand_person = #{pHandPerson,jdbcType=VARCHAR},
+              </if>
+              <if test="pChannelPrice != null and pChannelPrice != '' ">
+                  and p_channel_price = #{pChannelPrice,jdbcType=DOUBLE},
+              </if>
+            <if test="pName != null and pName != '' ">
+                p_name = #{pName,jdbcType=VARCHAR},                
+            </if>
+            <if test="pType != null and pType != '' ">        
+                p_type = #{pType,jdbcType=INTEGER},                
+            </if>
+            <if test="minLimit != null and minLimit != '' ">        
+                min_limit = #{minLimit,jdbcType=BIGINT},                
+            </if>
+            <if test="maxLimit != null and maxLimit != '' ">        
+                max_limit = #{maxLimit,jdbcType=BIGINT},                
+            </if>
+            <if test="minDay != null and minDay != '' ">        
+                min_day = #{minDay,jdbcType=INTEGER},                
+            </if>
+            <if test="maxDay != null and maxDay != '' ">        
+                max_day = #{maxDay,jdbcType=INTEGER},                
+            </if>
+            <if test="pInterest != null and pInterest != '' ">        
+                p_interest = #{pInterest,jdbcType=VARCHAR},                
+            </if>
+            <if test="pCondition != null and pCondition != '' ">        
+                p_condition = #{pCondition,jdbcType=VARCHAR},                
+            </if>
+            <if test="pProcess != null and pProcess != '' ">        
+                p_process = #{pProcess,jdbcType=VARCHAR},                
+            </if>
+            <if test="pSort != null and pSort != '' ">        
+                p_sort = #{pSort,jdbcType=INTEGER},                
+            </if>
+            <if test="pState != null and pState != '' ">
+                p_state = #{pState,jdbcType=INTEGER},                
+            </if>
+            <if test="pRemark != null and pRemark != '' ">        
+                p_remark = #{pRemark,jdbcType=VARCHAR},                
+            </if>
+            <if test="pHttp != null and pHttp != '' ">        
+                p_http = #{pHttp,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="pLoanMaxTime != null and pLoanMaxTime != '' ">
+                p_loan_max_time = #{pLoanMaxTime,jdbcType=INTEGER},                
+            </if>
+            <if test="pLoanTimeType != null and pLoanTimeType != '' ">        
+                p_loan_time_type = #{pLoanTimeType,jdbcType=INTEGER},                
+            </if>
+            <if test="pLoanMinTime != null and pLoanMinTime != '' ">        
+                p_loan_min_time = #{pLoanMinTime,jdbcType=INTEGER},                
+            </if>
+            <if test="pTodayClickCount != null and pTodayClickCount != '' ">        
+                p_today_click_count = #{pTodayClickCount,jdbcType=BIGINT},
+            </if>
+            <if test="pHistoryTotalClickCount != null and pHistoryTotalClickCount != '' ">        
+                p_history_total_click_count = #{pHistoryTotalClickCount,jdbcType=BIGINT},
+            </if>
+            <if test="pPreMonthClickCount != null and pPreMonthClickCount != '' ">
+                p_pre_month_click_count = #{pPreMonthClickCount,jdbcType=BIGINT},
+            </if>
+            <if test="pPreMonthClickCount1 != null and pPreMonthClickCount1 != '' ">        
+                p_pre_month_click_count_1 = #{pPreMonthClickCount1,jdbcType=BIGINT},                
+            </if>
+            <if test="pPreMonthClickCount3 != null and pPreMonthClickCount3 != '' ">        
+                p_pre_month_click_count_3 = #{pPreMonthClickCount3,jdbcType=BIGINT},                
+            </if>
+            <if test="pPreMonthClickCount2 != null and pPreMonthClickCount2 != '' ">        
+                p_pre_month_click_count_2 = #{pPreMonthClickCount2,jdbcType=BIGINT}                
+            </if>
+            <if test="pTag != null and pTag != '' ">
+                  p_tag = #{pTag,jdbcType=VARCHAR},
+            </if>
+            <if test="pBorrowNum != null and pBorrowNum != '' ">
+                  p_borrow_num = #{pBorrowNum,jdbcType=BIGINT},
+            </if>
+            <if test="pMessage != null and pMessage != '' ">
+                  p_message = #{pMessage,jdbcType=VARCHAR},
+              </if>
+              <if test="pMarks != null and pMarks != '' ">
+                  p_marks = #{pMarks,jdbcType=VARCHAR}
+              </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+    <select id="getPnameByPCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select p_name,pic_url from cl_flow_info
+        where p_code = #{pCode} limit 1
+    </select>
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_flow_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findName" resultType="java.lang.String" parameterType="java.lang.Long">
+        select p_name from cl_flow_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_flow_info
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_flow_info
+        <include refid="searchBy"/>
+        order by p_sort
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete
+        from cl_flow_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <sql id="hotResult">
+        id,pic_url,pic_name,p_hand_person,p_channel_price,p_name,min_limit,max_limit,p_interest,p_code,p_borrow_num,p_tag,p_message,p_type,p_marks,type_sort
+    </sql>
+    <!--获取热门推荐列表-->
+    <select id="getHot" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="hotResult"/>
+        FROM cl_flow_info
+        WHERE
+          p_state=10
+        AND (p_type <![CDATA[&]]> 1) = 1
+        ORDER BY p_sort ASC
+    </select>
+
+    <!--热门推荐分页-->
+    <select id="getAllHot" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="hotResult"/>
+        FROM cl_flow_info
+        WHERE
+          p_state=10
+        AND (p_type <![CDATA[&]]> 1) = 1
+        ORDER BY p_sort ASC
+        LIMIT #{current},#{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="long" >
+        SELECT
+          count(id)
+        FROM cl_flow_info
+        WHERE
+          p_state=10
+        AND (p_type <![CDATA[&]]> 1) = 1
+    </select>
+
+    <!--获取所以列表-->
+    <select id="getAll" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        SELECT
+        <include refid="hotResult"/>
+        FROM cl_flow_info
+        WHERE
+        p_state=10
+        <if test="limit == 1">
+            <![CDATA[ AND min_limit < 2000 ]]>
+        </if>
+        <if test="limit == 2">
+            <![CDATA[ AND min_limit<=5000 AND max_limit>=2000]]>
+        </if>
+        <if test="limit == 3">
+            <![CDATA[ AND max_limit >= 5000]]>
+        </if>
+        <if test="day == 1">
+            <![CDATA[ AND min_day <= 7 AND max_day >= 7]]>
+        </if>
+        <if test="day == 2">
+            <![CDATA[ AND min_day <= 15 AND max_day >= 15]]>
+        </if>
+        <if test="day == 3">
+            <![CDATA[ AND min_day <= 30 AND max_day >= 30]]>
+        </if>
+        <if test="day == 4">
+            <![CDATA[ AND min_day <= 180 AND max_day >= 30]]>
+        </if>
+        <if test="day == 5">
+            <![CDATA[ AND min_day <= 365 AND max_day >= 180]]>
+        </if>
+        <if test="day == 6">
+            <![CDATA[ AND min_day >= 365]]>
+        </if>
+        ORDER BY p_sort ASC
+    </select>
+
+    <sql id="detailResult">
+        id,p_code,pic_url,pic_name,p_hand_person,p_channel_price,p_name,min_day,max_day,p_tag,min_limit,max_limit,p_loan_time_type,p_loan_max_time,p_loan_min_time,p_interest,
+        p_condition,p_process,p_remark,p_http,p_borrow_num
+    </sql>
+
+    <!--获取详情-->
+    <select id="getDetail" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT
+        <include refid="detailResult"/>
+        FROM cl_flow_info
+        WHERE
+        id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getUrl" resultType="java.lang.String" parameterType="java.lang.Long" >
+        SELECT
+        p_http
+        FROM cl_flow_info
+        WHERE
+        id = #{id,jdbcType=BIGINT}
+    </select>
+
+
+    <select id="listSelectiveForUV" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        id,p_code,p_name,create_time,p_today_click_count,p_history_total_click_count,p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2,update_time,p_message,p_marks
+        from cl_flow_info
+        <where>
+            <if test="pCode!=null and pCode!='' and pCode!='null' ">p_code like '%${pCode}%'</if>
+            <if test="pName!=null and pName!='' and pName!='null' ">and p_name like '%${pName}%'</if>
+            <if test="pHandPerson!=null and pHandPerson!='' and pHandPerson!='null' ">and p_hand_person like '%${pHandPerson}%'</if>
+        </where>
+        order by p_today_click_count desc
+    </select>
+
+    <select id="getAllPCode" resultMap="BaseResultMap" >
+        select
+        id,p_code
+        from cl_flow_info
+    </select>
+
+    <select id="getAllPCodeForYesterday" resultMap="BaseResultMap" >
+        select
+        id,p_code,p_history_total_click_count,p_pre_month_click_count,p_pre_month_click_count_1,p_name
+        from cl_flow_info
+    </select>
+
+    <select id="getAllToMonth" resultMap="BaseResultMap" >
+        select
+        id,p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2
+        from cl_flow_info
+        WHERE
+        p_state=10
+    </select>
+
+
+    <select id="getAllList" resultMap="BaseResultMap" >
+        select
+        <include refid="hotResult"/>
+        from cl_flow_info
+        WHERE
+        p_state=10
+    </select>
+
+    <select id="getAllListOrderByTypeSort" resultMap="BaseResultMap" >
+        select
+        <include refid="hotResult"/>
+        from cl_flow_info
+        WHERE
+        p_state=10
+        ORDER BY type_sort
+    </select>
+
+    <select id="getAmountClick" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+          p_today_click_count,p_pre_month_click_count
+        from cl_flow_info WHERE p_code = #{pCode}
+    </select>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_flow_uv表:流量平台uv统计模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.TransverterMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.Transverter">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="switch_code" property="switchCode" jdbcType="BIGINT" />
+        <result column="channel" property="channel" jdbcType="VARBINARY" />
+    </resultMap>
+
+    <select id="getSwitchCode" resultMap="BaseResultMap">
+        select
+        id,switch_code,channel
+        from transverter
+        WHERE channel = #{channel}
+    </select>
+
+</mapper>

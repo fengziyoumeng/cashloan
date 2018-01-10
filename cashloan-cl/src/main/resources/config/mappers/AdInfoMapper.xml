@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rongdu.cashloan.cl.mapper.AdInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.AdInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ad_url" property="adUrl" jdbcType="VARCHAR" />
+    <result column="skip_url" property="skipUrl" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="site" property="site" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, ad_url, skip_url, title, message, site, sort, status, state
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from cl_ad_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.rongdu.cashloan.cl.domain.AdInfo" >
+    insert into cl_ad_info (id, ad_url, skip_url, 
+      title, message, site, 
+      sort, status, state
+      )
+    values (#{id,jdbcType=BIGINT}, #{adUrl,jdbcType=VARCHAR}, #{skipUrl,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{site,jdbcType=INTEGER}, 
+      #{sort,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.rongdu.cashloan.cl.domain.AdInfo" >
+    update cl_ad_info
+    set ad_url = #{adUrl,jdbcType=VARCHAR},
+      skip_url = #{skipUrl,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      site = #{site,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List"/>
+    from cl_ad_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from cl_ad_info
+  </select>
+</mapper>

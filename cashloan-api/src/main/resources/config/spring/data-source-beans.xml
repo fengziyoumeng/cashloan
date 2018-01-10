@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:rdb="http://www.dangdang.com/schema/ddframe/rdb"
+	   xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     	http://www.dangdang.com/schema/ddframe/rdb
+		http://www.dangdang.com/schema/ddframe/rdb/rdb.xsd">
+
+	<bean id="ResourceConfigurer"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/config/server.properties</value>
+				<value>classpath:config/rdb/conf.properties</value>
+				<value>classpath:config/sms.properties</value>
+				<value>classpath:config/redis.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+
+	<bean id="dataSourceNoSharding" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 初始化连接大小 0-->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最大使用连接数量 400-->
+		<property name="maxActive" value="400" />
+		<!-- 连接池最大空闲 20-->
+		<property name="maxIdle" value="20" />
+		<!-- 连接池最小空闲 5-->
+		<property name="minIdle" value="5" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="600000" />
+
+		<property name="validationQuery" value="select 1 from dual" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!--
+                  打开PSCache，并且指定每个连接上PSCache的大小
+                  如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false
+              -->
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+
+		<!-- 开启Druid的监控统计功能 -->
+		<!--<property name="filters" value="stat,wall,log4j" />-->
+		<!--<property name="filters" value="mergeStat" /> -->
+		<!-- Oracle连接是获取字段注释 -->
+
+	</bean>
+
+	<!--===============sharding jdbc begin===============-->
+	<bean id="master0" class="com.alibaba.druid.pool.DruidDataSource"
+		  init-method="init" destroy-method="close">
+		<property name="url" value="${rdb1.jdbc.url}" />
+		<property name="username" value="${rdb1.jdbc.username}" />
+		<property name="password" value="${rdb1.jdbc.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="400" />
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="20" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="5" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="600000" />
+
+		<property name="validationQuery" value="select 1 from dual" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false -->
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+				  value="20" />
+
+		<!-- 开启Druid的监控统计功能 -->
+		<!--<property name="filters" value="stat,wall,log4j" />-->
+		<!--<property name="filters" value="mergeStat" /> -->
+		<!-- Oracle连接是获取字段注释 -->
+
+	</bean>
+
+
+	<bean id="master1" class="com.alibaba.druid.pool.DruidDataSource"
+		  init-method="init" destroy-method="close">
+		<property name="url" value="${rdb2.jdbc.url}" />
+		<property name="username" value="${rdb2.jdbc.username}" />
+		<property name="password" value="${rdb2.jdbc.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="400" />
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="20" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="5" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="600000" />
+
+		<property name="validationQuery" value="select 1 from dual" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false -->
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+				  value="20" />
+
+		<!-- 开启Druid的监控统计功能 -->
+		<!--<property name="filters" value="stat,wall,log4j" />-->
+		<!--<property name="filters" value="mergeStat" /> -->
+		<!-- Oracle连接是获取字段注释 -->
+
+	</bean>
+
+
+
+	<!--<rdb:master-slave-data-source id="rbb_0" master-data-source-ref="master0" slave-data-sources-ref="master0"/>-->
+	<!--<rdb:master-slave-data-source id="rbb_1" master-data-source-ref="master1" slave-data-sources-ref="master1"/>-->
+
+	<!-- 按照ID奇偶分库分表-->
+	<rdb:strategy id="idDbSharding" sharding-columns="id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdDbAlgorithm"/>
+	<rdb:strategy id="idTbSharding" sharding-columns="id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdTbAlgorithm"/>
+
+	<rdb:strategy id="userIdDbSharding" sharding-columns="user_id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdDbAlgorithm"/>
+	<rdb:strategy id="userIdTbSharding" sharding-columns="user_id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdTbAlgorithm"/>
+
+
+	<rdb:strategy id="borrowIdDbSharding" sharding-columns="borrow_id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdDbAlgorithm"/>
+	<rdb:strategy id="borrowIdTbSharding" sharding-columns="borrow_id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdTbAlgorithm"/>
+
+
+	<rdb:strategy id="orderNoDbSharding" sharding-columns="order_no" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdDbAlgorithm"/>
+	<rdb:strategy id="orderNoTbSharding" sharding-columns="order_no" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdTbAlgorithm"/>
+
+	<rdb:strategy id="repayIdDbSharding" sharding-columns="repay_id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdDbAlgorithm"/>
+	<rdb:strategy id="repayIdTbSharding" sharding-columns="repay_id" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdTbAlgorithm"/>
+
+	<rdb:strategy id="consumerNoDbSharding" sharding-columns="consumer_no" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdDbAlgorithm"/>
+	<rdb:strategy id="consumerNoTbSharding" sharding-columns="consumer_no" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByIdTbAlgorithm"/>
+
+
+	<!-- 按照日期分库分表-->
+	<rdb:strategy id="dateDbSharding" sharding-columns="order_create_date" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByDateDbAlgorithm"/>
+	<rdb:strategy id="dateTbSharding" sharding-columns="order_create_date" algorithm-class="com.rongdu.cashloan.core.sharding.algorithm.SingleKeyByDateTbAlgorithm"/>
+
+
+	<rdb:data-source id="dataSourceRDB">
+
+		<!-- 生产时管理日志和监控 -->
+		<rdb:props>
+			<prop key="metrics.enable">true</prop>
+			<prop key="sql.show">true</prop>
+		</rdb:props>
+
+		<rdb:sharding-rule data-sources="master0,master1" default-data-source="master0">
+
+			<rdb:table-rules>
+				<!-- 按照cl_user的id进行模分库分表-->
+				<rdb:table-rule logic-table="cl_borrow" actual-tables="cl_borrow_${0..4}" database-strategy="idDbSharding" table-strategy="idTbSharding">
+					<rdb:generate-key-column column-name="id" column-key-generator-class="com.dangdang.ddframe.rdb.sharding.keygen.DefaultKeyGenerator"></rdb:generate-key-column>
+				</rdb:table-rule>
+				<rdb:table-rule logic-table="arc_credit" actual-tables="arc_credit_${0..2}" database-strategy="consumerNoDbSharding" table-strategy="consumerNoTbSharding">
+					<rdb:generate-key-column column-name="id" column-key-generator-class="com.dangdang.ddframe.rdb.sharding.keygen.DefaultKeyGenerator"></rdb:generate-key-column>
+				</rdb:table-rule>
+				<rdb:table-rule logic-table="cl_user" actual-tables="cl_user_${0..2}" database-strategy="idDbSharding" table-strategy="idTbSharding">
+					<rdb:generate-key-column column-name="id" column-key-generator-class="com.rongdu.cashloan.core.sharding.id.ClUserIdGenerator"></rdb:generate-key-column>
+				</rdb:table-rule>
+				<rdb:table-rule logic-table="cl_user_auth" actual-tables="cl_user_auth_${0..2}" database-strategy="userIdDbSharding" table-strategy="userIdTbSharding">
+					<rdb:generate-key-column column-name="id" column-key-generator-class="com.dangdang.ddframe.rdb.sharding.keygen.DefaultKeyGenerator"></rdb:generate-key-column>
+				</rdb:table-rule>
+				<rdb:table-rule logic-table="cl_user_base_info" actual-tables="cl_user_base_info_${0..2}" database-strategy="userIdDbSharding" table-strategy="userIdTbSharding">
+					<rdb:generate-key-column column-name="id" column-key-generator-class="com.dangdang.ddframe.rdb.sharding.keygen.DefaultKeyGenerator"></rdb:generate-key-column>
+				</rdb:table-rule>
+				<rdb:table-rule logic-table="cl_user_invite" actual-tables="cl_user_invite_${0..2}" database-strategy="userIdDbSharding" table-strategy="userIdTbSharding">
+					<rdb:generate-key-column column-name="id" column-key-generator-class="com.dangdang.ddframe.rdb.sharding.keygen.DefaultKeyGenerator"></rdb:generate-key-column>
+				</rdb:table-rule>
+
+				<!-- 按照日期分库分表-->
+
+				<!-- 只使用主表 -->
+				<rdb:table-rule logic-table="cl_opinion" data-source-names="master0"/>
+				<rdb:table-rule logic-table="cl_quartz_info" data-source-names="master0"/>
+				<rdb:table-rule logic-table="cl_quartz_log" data-source-names="master0"/>
+				<rdb:table-rule logic-table="cl_sms" data-source-names="master0"/>
+				<rdb:table-rule logic-table="cl_sms_tpl" data-source-names="master0"/>
+				<rdb:table-rule logic-table="arc_sys_dict" data-source-names="master0"/>
+				<rdb:table-rule logic-table="arc_sys_dict_detail" data-source-names="master0"/>
+			</rdb:table-rules>
+
+			<!-- 默认分库分表策略-->
+			<rdb:default-database-strategy sharding-columns="none" algorithm-class="com.dangdang.ddframe.rdb.sharding.api.strategy.database.NoneDatabaseShardingAlgorithm"/>
+			<rdb:default-table-strategy sharding-columns="none" algorithm-class="com.dangdang.ddframe.rdb.sharding.api.strategy.table.NoneTableShardingAlgorithm" />
+		</rdb:sharding-rule>
+	</rdb:data-source>
+
+
+
+	<!--<rdb:strategy id="databaseStrategy" sharding-columns="user_id" algorithm-class="com.dangdang.ddframe.rdb.sharding.spring.algorithm.SingleKeyModuloDatabaseShardingAlgorithm"/>-->
+	<!--<rdb:strategy id="tableStrategy" sharding-columns="order_id" algorithm-class="com.dangdang.ddframe.rdb.sharding.spring.algorithm.SingleKeyModuloTableShardingAlgorithm"/>-->
+	<!--<rdb:data-source id="shardingDataSource">-->
+	<!--<rdb:sharding-rule data-sources="dbtbl_0,dbtbl_1" default-data-source="dbtbl_0">-->
+	<!--<rdb:table-rules>-->
+	<!--<rdb:table-rule logic-table="t_order" actual-tables="t_order_${0..3}" table-strategy="tableStrategy"/>-->
+	<!--<rdb:table-rule logic-table="t_order_item" actual-tables="t_order_item_${0..3}" database-strategy="databaseStrategy" table-strategy="tableStrategy"/>-->
+	<!--</rdb:table-rules>-->
+	<!--<rdb:binding-table-rules>-->
+	<!--<rdb:binding-table-rule logic-tables="t_order, t_order_item"/>-->
+	<!--</rdb:binding-table-rules>-->
+	<!--<rdb:default-database-strategy sharding-columns="none" algorithm-class="com.dangdang.ddframe.rdb.sharding.api.strategy.database.NoneDatabaseShardingAlgorithm"/>-->
+	<!--</rdb:sharding-rule>-->
+	<!--<rdb:props>-->
+	<!--<prop key="metrics.enable">true</prop>-->
+	<!--</rdb:props>-->
+	<!--</rdb:data-source>-->
+
+
+	<!--===============sharding jdbc end===============-->
+	<bean id="dynamicDataSource" class="com.rongdu.cashloan.core.common.datasource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="dataSourceRDB" key="dataSourceRDB"></entry>
+				<entry value-ref="dataSourceNoSharding" key="dataSourceNoSharding"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceRDB">
+		</property>
+	</bean>
+
+	<aop:config>
+		<aop:aspect id="dataSourceAspect1" ref="dataSourceInterceptor">
+			<aop:pointcut id="daoOne" expression="execution(* com..service.*.*(..))"/>
+			<aop:before pointcut-ref="daoOne" method="setdataSourceOne" />
+		</aop:aspect>
+	</aop:config>
+
+	<aop:config>
+		<aop:aspect id="dataSourceAspect2" ref="dataSourceInterceptor">
+			<aop:pointcut id="daoTwo" expression="execution(* com..serviceNoSharding.*.*(..))"/>
+			<aop:before pointcut-ref="daoTwo" method="setdataSourceTwo" />
+		</aop:aspect>
+	</aop:config>
+
+
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+	<bean id="transactionTemplate"
+		  class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!--jdbcTemplate 定义：基于数组下标的ORM映射 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dynamicDataSource" />
+		</property>
+	</bean>
+	<!-- namedParameterJdbcTemplate 定义：基于bean属性名的ORM映射-->
+	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg type="org.springframework.jdbc.core.JdbcOperations">
+			<ref bean="jdbcTemplate"/>
+		</constructor-arg>
+	</bean>
+
+	<!-- MyBatis begin -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource"/>
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:/config/mappers/system/*.xml</value>
+				<value>classpath*:/config/mappers/*.xml</value>
+			</list>
+		</property>
+		<property name="configLocation" value="classpath:/config/spring/mybatis-config.xml"/>
+	</bean>
+
+	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.rongdu.cashloan,com.rongdu.creditrank"/>
+		<property name="annotationClass" value="com.rongdu.cashloan.core.common.mapper.RDBatisDao"/>
+	</bean>
+	<bean id="slaveSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!--<aop:config>-->
+	<!--<aop:aspect id="dataSourceAspect" ref="dataSourceInterceptor">-->
+	<!--<aop:pointcut id="daoOne" expression="execution(* com..service.*.*(..))"/>-->
+	<!--<aop:pointcut id="daoTwo" expression="execution(* com..serviceNoSharding.*.*(..))"/>-->
+	<!--<aop:before pointcut-ref="daoOne" method="setdataSourceOne" />-->
+	<!--<aop:before pointcut-ref="daoTwo" method="setdataSourceTwo" />-->
+	<!--</aop:aspect>-->
+	<!--</aop:config>-->
+
+	<!-- 拦截器方式配置事务 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="noShardingManagerMethod" expression="execution(* com..serviceNoSharding.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="noShardingManagerMethod" />
+	</aop:config>
+
+	<aop:config>
+		<aop:pointcut id="rdbManagerMethod" expression="execution(* com..service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="rdbManagerMethod" />
+	</aop:config>
+
+</beans>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- b_company_information表:渠道信息模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.CompanyInformationMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.CompanyInformation">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+        <result column="legal_person_name" property="legalPersonName" jdbcType="VARCHAR" />
+        <result column="ID_number" property="IDNumber" jdbcType="VARCHAR" />
+        <result column="contact_person" property="contactPerson" jdbcType="VARCHAR" />
+        <result column="contact_tel" property="contactTel" jdbcType="VARCHAR" />
+        <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+        <result column="license_pic" property="licensePic" jdbcType="VARCHAR" />
+        <result column="identity_front_pic" property="identityFrontPic" jdbcType="VARCHAR" />
+        <result column="identity_reverse_pic" property="identityReversePic" jdbcType="VARCHAR" />
+        <result column="hold_card_pic" property="holdCardPic" jdbcType="VARCHAR" />
+        <result column="company_type" property="companyType" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+        <result column="audit_state" property="auditState" jdbcType="INTEGER" />
+        <result column="audit_message" property="auditMessage" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="audit_person" property="auditPerson" jdbcType="VARCHAR" />
+        <result column="registered_capital" property="registeredCapital" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,company_name,legal_person_name,ID_number,contact_person,contact_tel,introduction,
+         license_pic,identity_front_pic,identity_reverse_pic,hold_card_pic,company_type,create_time,
+         update_time,audit_time,audit_state,audit_message,state,audit_person,registered_capital
+    </sql>
+
+    <sql id="audit_Column_List">
+        id,company_name,legal_person_name,ID_number,license_pic,contact_tel
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="auditState !='' and auditState !=null">
+                audit_state = #{auditState,jdbcType=INTEGER}
+            </if>
+            <!--<if test="userId !='' and userId !=null">
+                user_id = #{userId,jdbcType=INTEGER}
+            </if>-->
+        </trim>
+    </sql>
+      <!-- 基本的模糊sql查询条件公共引用 -->
+    <sql id="searchLikeBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="companyName !='' and companyName !=null">
+                company_name like  concat("%",#{companyName,jdbcType=VARCHAR},"%")
+            </if>
+        </trim>
+    </sql>
+    
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.CompanyInformation">
+        insert into b_company_information(user_id,company_name,company_address,legal_person_name,ID_number,contact_person,contact_tel,introduction,
+                    license_pic,identity_front_pic,identity_reverse_pic,hold_card_pic,create_time,update_time,audit_state,registered_capital)
+        values(#{userId,jdbcType=INTEGER},#{companyName,jdbcType=VARCHAR},#{companyAddress,jdbcType=VARCHAR},#{legalPersonName,jdbcType=VARCHAR},#{IDNumber,jdbcType=VARCHAR},
+              #{contactPerson,jdbcType=VARCHAR},#{contactTel,jdbcType=VARCHAR},#{introduction,jdbcType=VARCHAR},#{licensePic,jdbcType=VARCHAR},
+              #{identityFrontPic,jdbcType=VARCHAR},#{identityReversePic,jdbcType=VARCHAR},#{holdCardPic,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
+              #{updateTime,jdbcType=INTEGER},#{auditState,jdbcType=INTEGER},#{registered_capital,jdbcType=VARCHAR})
+    </insert>
+    
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.CompanyInformation">
+        update b_company_information set 
+            user_id  = #{userId,jdbcType=INTEGER},
+            company_name= #{companyName,jdbcType=VARCHAR},
+            company_address= #{companyAddress,jdbcType=VARCHAR},
+            legal_person_name= #{legalPersonName,jdbcType=VARCHAR},
+            ID_number = #{IDNumber,jdbcType=VARCHAR},
+            contact_person = #{contactPerson,jdbcType=VARCHAR},
+            contact_tel = #{contactTel,jdbcType=VARCHAR},
+            introduction = #{introduction,jdbcType=VARCHAR},
+            license_pic = #{licensePic,jdbcType=VARCHAR},
+            identity_front_pic = #{identityFrontPic,jdbcType=VARCHAR},
+            identity_reverse_pic = #{identityReversePic,jdbcType=VARCHAR},
+            hold_card_pic = #{holdCardPic,jdbcType=VARCHAR},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            audit_state = #{auditState,jdbcType=INTEGER},
+            registered_capital = #{registeredCapital,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update b_company_information
+          <set>
+            <if test="auditTime != null and auditTime != '' ">
+                audit_time = #{auditTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateAudit"  parameterType="com.rongdu.cashloan.cl.domain.CompanyInformation">
+        update b_company_information
+        <set>
+            audit_time = #{auditTime,jdbcType=TIMESTAMP},
+            audit_message = #{auditMessage,jdbcType=VARCHAR},
+            state = #{state,jdbcType=INTEGER},
+            audit_state = #{auditState,jdbcType=INTEGER},
+            audit_person = #{auditPerson,jdbcType=VARCHAR}
+        </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from b_company_information
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from b_company_information
+        <include refid="searchBy"/>
+    </select>
+
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from b_company_information
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="auditList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from b_company_information
+        <include refid="searchBy"/>
+        ORDER BY update_time
+    </select>
+
+    <select id="selectAuditStateByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="audit_Column_List" />
+        from b_company_information
+        WHERE user_id = #{userId jdbcType=INTEGER}
+    </select>
+
+
+
+</mapper>

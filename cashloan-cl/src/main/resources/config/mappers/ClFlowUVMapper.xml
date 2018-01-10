@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_flow_uv表:流量平台uv统计模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.ClFlowUVMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.ClFlowUV">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="flow_id" property="flowId" jdbcType="BIGINT" />
+        <result column="p_code" property="pCode" jdbcType="VARCHAR" />
+        <result column="count_date" property="countDate" jdbcType="TIMESTAMP" />
+        <result column="click_count" property="clickCount" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="p_name" property="pName" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,flow_id,p_code,count_date,click_count,create_time,update_time,p_name
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="flowId != null and flowId != '' ">
+                and flow_id = #{flowId,jdbcType=BIGINT}
+            </if>
+            <if test="pCode != null and pCode != '' ">
+                and p_code = #{pCode,jdbcType=VARCHAR}
+            </if>
+            <if test="countDate != null">
+                and count_date = #{countDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="clickCount != null and clickCount != '' ">
+                and click_count = #{clickCount,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="pName != null and pName != ''">
+                and p_name = #{pName,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.ClFlowUV">
+        insert into cl_flow_uv(flow_id,p_code,count_date,click_count,create_time,update_time,p_name)values(#{flowId,jdbcType=BIGINT},#{pCode,jdbcType=VARCHAR},#{countDate,jdbcType=TIMESTAMP},#{clickCount,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{pName,jdbcType=VARCHAR})
+    </insert>
+
+    
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.ClFlowUV">
+        update cl_flow_uv set 
+            flow_id = #{flowId,jdbcType=BIGINT},
+            p_code = #{pCode,jdbcType=VARCHAR},
+            count_date = #{countDate,jdbcType=TIMESTAMP},
+            click_count = #{clickCount,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            p_name = #{pName,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_flow_uv
+          <set>
+            <if test="flowId != null and flowId != '' ">        
+                flow_id = #{flowId,jdbcType=BIGINT},                
+            </if>
+            <if test="pCode != null and pCode != '' ">        
+                p_code = #{pCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="countDate != null">
+                count_date = #{countDate,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="clickCount != null and clickCount != '' ">
+                click_count = #{clickCount,jdbcType=BIGINT},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="">
+                p_name = #{pName,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_flow_uv
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_flow_uv
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_flow_uv
+        <include refid="searchBy"/>
+    </select>
+
+
+    <select id="getPreviousMonthClick" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        SELECT
+          SUM(click_count)
+        FROM
+          cl_flow_uv
+        WHERE
+        flow_id = #{flowId,jdbcType=BIGINT}
+        AND DATE_FORMAT(count_date,'%Y-%m') = #{countDate,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getClFlowUVByDate" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT click_count FROM cl_flow_uv
+        WHERE p_code = #{pCode} AND DATE_FORMAT(count_date,'%Y-%m-%d') = #{countDate,jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryNumberPlat" parameterType="map" resultType="java.lang.Integer">
+        select click_count
+        from cl_flow_uv where p_code = #{pCode}
+        and date_format(count_date, '%Y-%m-%d') = #{time}
+    </select>
+
+    <select id="listFlowUv" resultMap="BaseResultMap">
+        select p_code,p_name from cl_flow_uv  group by p_code,p_name order by p_code
+    </select>
+</mapper>

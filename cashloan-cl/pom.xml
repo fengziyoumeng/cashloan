@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.rongdu.framework</groupId>
+		<artifactId>cashloan</artifactId>
+		<version>1.0.1</version>
+	</parent>
+	<artifactId>cashloan-cl</artifactId>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+		<!--<dependency>-->
+			<!--<groupId>com.rongdu.framework</groupId>-->
+			<!--<artifactId>cashloan-rc</artifactId>-->
+			<!--<version>1.0.1</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.rongdu.framework</groupId>-->
+			<!--<artifactId>cashloan-cr</artifactId>-->
+			<!--<version>1.0.1</version>-->
+		<!--</dependency>-->
+		<dependency>
+			<groupId>com.rongdu.framework</groupId>
+			<artifactId>cashloan-core</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.rongdu.framework</groupId>-->
+			<!--<artifactId>cashloan-rule</artifactId>-->
+			<!--<version>1.0.1</version>-->
+		<!--</dependency>-->
+		
+		<dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz</artifactId>
+		    <version>1.8.6</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>tool.zmxy</groupId>
+			<artifactId>zmxy-sdk-java</artifactId>
+			<version>20170315132938</version>
+		</dependency>
+		<dependency>
+			<groupId>pay.alipay</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>20170324180803</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.erongdu.credit</groupId>
+		  <artifactId>apidemo</artifactId>
+		  <version>1.0.5</version>
+		</dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
+		<!-- sharding-jdbc -->
+		<!--<dependency>-->
+			<!--<groupId>com.dangdang</groupId>-->
+			<!--<artifactId>sharding-jdbc-config-spring</artifactId>-->
+			<!--<version>1.5.0.M3</version>-->
+		<!--</dependency>-->
+
+		<!--begin pantheon 20170622 引入同盾sdk-->
+		<dependency>
+			<groupId>cn.fraudmetrix</groupId>
+			<artifactId>riskservice-client</artifactId>
+			<version>1.4.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!--end-->
+
+		<!--begin pantheon 20170713 引入大汉三通短信通道sdk-->
+		<dependency>
+			<groupId>dahantc-http-json-api</groupId>
+			<artifactId>com.dahantc.api</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+		<!-- 极光推送 -->
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+        <!--end-->
+    </dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.3.2</version>
+				<configuration>
+					<verbose>false</verbose>
+					<overwrite>false</overwrite>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>utf8</encoding>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+</project>

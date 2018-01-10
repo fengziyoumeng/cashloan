@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="usr">
+
+    <select id="isPhoneExists" resultType="map">
+        select 1 from cl_user where login_name=#{phone}
+    </select>
+
+    <!--<select id="info" resultType="map">-->
+        <!--select-->
+            <!--u.invitation_code,-->
+            <!--u.login_name,-->
+            <!--lv.value profitRate,-->
+            <!--u.level,-->
+            <!--ua.*,-->
+            <!--c.*-->
+        <!--from arc_credit c-->
+        <!--join cl_user u on u.id=c.consumer_no-->
+        <!--left join arc_sys_config lv on lv.code=u.level-->
+        <!--left join cl_user_auth ua on ua.user_id=u.id-->
+        <!--where-->
+            <!--consumer_no=#{userId}-->
+    <!--</select>-->
+
+    <select id="info" resultType="map">
+        select
+        u.invitation_code,
+        u.login_name,
+        u.level,
+        ua.*,
+        c.*
+        from arc_credit c
+        join cl_user u on u.id=c.consumer_no
+        join cl_user_auth ua on ua.user_id=u.id
+        where
+        c.consumer_no=#{userId} and u.id=#{userId} and ua.user_id=#{userId}
+    </select>
+
+    <select id="infoH5" resultType="map">
+      select
+      u.*
+      from
+        cl_user_base_info u
+        where
+        u.user_id=#{userId}
+    </select>
+    <select id="infoTmp" resultType="map">
+        select * from arc_sys_config where code =#{code}
+    </select>
+
+    <select id="validateTradePwd" resultType="map">
+        select 1 from cl_user where id=#{userId} and trade_pwd=#{tradePwd}
+    </select>
+
+    <select id="inviteListCnt" resultType="map">
+        select
+            count(1) cnt
+        from cl_user_invite ui
+        join cl_user u on u.id=ui.invite_id
+        join arc_sys_config lv on lv.code=u.level
+        where
+        ui.user_id=#{userId}
+    </select>
+
+
+    <select id="inviteList" resultType="map">
+        select
+            ui.invite_id      inviteId,
+            ui.invite_name    inviteName,
+            ui.invite_time    inviteTime,
+            lv.code           level
+        from cl_user_invite ui
+        join cl_user u on u.id=ui.invite_id
+        join arc_sys_config lv on lv.code=u.level
+        where
+            ui.user_id=#{userId}
+        order by
+            ui.id desc
+        limit #{start},#{length}
+    </select>
+
+    <select id="validateUser" resultType="map">
+        select * from cl_user_base_info where user_id=#{userId}
+    </select>
+
+    <select id="queryUser" resultType="map">
+        select * from cl_user where id=#{userId}
+    </select>
+    <select id="queryUserByInvitation" resultType="map">
+        select * from cl_user where invitation_code=#{code}
+    </select>
+    <select id="queryUserByLoginName" resultType="map">
+        select * from cl_user where login_name=#{loginName}
+    </select>
+    <select id="getTradeState" resultType="map">
+        select
+            u.id,
+            u.trade_pwd,
+            info.real_name,
+            info.id_no
+        from cl_user u
+        join cl_user_base_info info on info.user_id=u.id
+        where u.id=#{userId}
+    </select>
+
+
+    <!-- ============注册相关=========== -->
+    <insert id="saveClUser" parameterType="map" keyProperty="id" useGeneratedKeys="true">
+        insert into cl_user(login_name,login_pwd,invitation_code,regist_time,uuid,level,register_client,channel_id,by_invitation_code) values
+        (
+        #{loginName,jdbcType=VARCHAR},
+        #{loginPwd,jdbcType=VARCHAR},
+        #{invitationCode,jdbcType=VARCHAR},
+        #{registTime,jdbcType=TIMESTAMP},
+        #{uuid,jdbcType=VARCHAR},
+        #{level,jdbcType=VARCHAR},
+        #{registerClient,jdbcType=VARCHAR},
+        #{channelId,jdbcType=BIGINT},
+        #{byInvitationCode,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="saveClUserBaseInfo" parameterType="map">
+        insert into cl_user_base_info(user_id,phone,register_coordinate,register_addr,state,real_name)
+        values
+        (
+            #{userId,jdbcType=BIGINT},
+            #{phone,jdbcType=VARCHAR},
+            #{registerCoordinate,jdbcType=VARCHAR},
+            #{registerAddr,jdbcType=VARCHAR},
+            #{state,jdbcType=VARCHAR},
+            #{realName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="saveArcCredit" parameterType="map">
+        insert into arc_credit(consumer_no,total,unuse,state)
+        values
+        (
+            #{consumerNo,jdbcType=VARCHAR},
+            #{total,jdbcType=DECIMAL},
+            #{unuse,jdbcType=DECIMAL},
+            #{state,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <insert id="saveClProfitAmount" parameterType="map">
+        insert into cl_profit_amount(user_id,state)
+        values
+        (
+            #{userId,jdbcType=BIGINT},
+            #{state,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <insert id="saveClUserAuth" parameterType="map">
+        insert into cl_user_auth
+        (
+          user_id,
+          id_state,
+          zhima_state,
+          phone_state,
+          contact_state,
+          bank_card_state,
+          work_info_state,
+          other_info_state,
+          living_identify_state,
+          tongdun_state,
+          new_version
+        )
+        values
+        (
+          #{userId,jdbcType=BIGINT},
+          #{idState,jdbcType=VARCHAR},
+          #{zhimaState,jdbcType=VARCHAR},
+          #{phoneState,jdbcType=VARCHAR},
+          #{contactState,jdbcType=VARCHAR},
+          #{bankCardState,jdbcType=VARCHAR},
+          #{workInfoState,jdbcType=VARCHAR},
+          #{otheInfoState,jdbcType=VARCHAR},
+          #{livingIdentifyState,jdbcType=VARCHAR},
+          #{tongdunState,jdbcType=VARCHAR},
+          #{newVersion,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="clUserInvite" parameterType="map">
+        insert into cl_user_invite
+        (
+            invite_id,
+            invite_name,
+            user_id,
+            user_name
+        )
+        values
+        (
+            #{inviteId,jdbcType=BIGINT},
+            #{inviteName,jdbcType=VARCHAR},
+            #{userId,jdbcType=BIGINT},
+            #{userName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateClUser" parameterType="map">
+        update cl_user set
+        login_pwd = #{loginPwd,jdbcType=VARCHAR},
+        loginpwd_modify_time = #{loginpwdModifyTime,jdbcType=TIMESTAMP}
+        where login_name = #{loginName ,jdbcType=VARCHAR}
+    </update>
+
+
+    <update id="updateClUserById" parameterType="map">
+        update cl_user
+        <set>
+            <if test="loginPwd != null and loginPwd != '' ">
+                login_pwd = #{loginPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="loginpwdModifyTime != null ">
+                loginpwd_modify_time = #{loginpwdModifyTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="tradePwd != null and tradePwd != '' ">
+                trade_pwd = #{tradePwd,jdbcType=VARCHAR},
+            </if>
+            <if test="tradepwdModifyTime != null ">
+                tradepwd_modify_time = #{tradepwdModifyTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+    <select id="queryUserByUserId" resultType="map">
+        select * from cl_user_base_info where user_id=#{userId}
+    </select>
+    <select id="registerCountByChannelId" resultType="com.rongdu.cashloan.cl.vo.ChannelForH5">
+        SELECT
+            count(clu.id) AS totalRegisterCount,
+            clu.channel_id AS channelId
+        FROM
+            cl_user clu
+        WHERE
+            clu.channel_id != '' AND
+            clu.regist_time &gt;= #{beginTime} AND
+            clu.regist_time &lt; #{endTime}
+        GROUP BY
+	        clu.channel_id
+    </select>
+
+    <select id="CountYesterdayByChannelId" resultType="com.rongdu.cashloan.cl.vo.ChannelForH5">
+        SELECT
+            count(clu.id) AS yesterdayRegisterCount,
+            clu.channel_id AS channelId
+        FROM
+            cl_user clu
+        WHERE
+            clu.channel_id != '' AND
+            clu.regist_time &gt;= #{beginTime} AND
+            clu.regist_time &lt; #{endTime}
+        GROUP BY
+	        clu.channel_id
+    </select>
+    <select id="CountTodayByChannelId" resultType="com.rongdu.cashloan.cl.vo.ChannelForH5">
+        SELECT
+            count(clu.id) AS todayRegisterCount,
+            clu.channel_id AS channelId
+        FROM
+            cl_user clu
+        WHERE
+            clu.channel_id != '' AND
+            clu.regist_time &gt;= #{beginTime} AND
+            clu.regist_time &lt; #{endTime}
+        GROUP BY
+	        clu.channel_id
+    </select>
+
+    <update id="updateBaserInfoByUserId" parameterType="map">
+        update cl_user_base_info
+        <set>
+            <if test="realName != null and realName != '' ">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_id = #{userId ,jdbcType=BIGINT}
+    </update>
+</mapper>

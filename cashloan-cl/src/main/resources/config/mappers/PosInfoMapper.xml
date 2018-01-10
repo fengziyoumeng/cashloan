@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.cashloan.cl.mapper.IPosMapper">
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.PosInfo">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="pos_plat_name" property="posPlatName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="listPosInfo" resultMap="BaseResultMap" parameterType="map">
+         select id,pos_plat_name from jj_pos
+    </select>
+
+</mapper>

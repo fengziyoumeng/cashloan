@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_flow_pic表:首页轮播图片模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.ExpressageMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.Expressage">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="flag" property="flag" jdbcType="INTEGER" />
+        <result column="creat_time" property="creatTime" jdbcType="DATE" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,consignee,tel,address,flag,creat_time
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test=" userId != null and userId != '' ">
+                user_id  = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="consignee != null and consignee != '' ">
+                and consignee = #{consignee,jdbcType=VARCHAR}
+            </if>
+            <if test="flag != null and flag != '' ">
+                and flag = #{flag,jdbcType=INTEGER}
+            </if>
+            <if test="creatTime != null">
+                and creat_time = #{creatTime,jdbcType=DATE}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.Expressage">
+        insert into cl_expressage(user_id,consignee,tel,address,flag,creat_time)values(
+        #{userId,jdbcType=BIGINT},#{consignee,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},#{flag,jdbcType=INTEGER},#{creatTime,jdbcType=DATE})
+    </insert>
+
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.Expressage">
+        update cl_expressage set
+            consignee = #{consignee,jdbcType=VARCHAR},
+            tel = #{tel,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
+            flag = #{flag,jdbcType=INTEGER},
+            creat_time = #{creatTime,jdbcType=DATE}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM cl_expressage
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_expressage
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_expressage
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_expressage
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listExpressages" parameterType="map" resultType="map">
+        select concat_ws('|',consignee,tel,address) as expressageInfo from cl_expressage
+        where DATE_FORMAT(creat_time,'%Y%m%d') = #{clear_date}
+    </select>
+
+    <select id="isExistByTel" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1) from cl_expressage
+        where tel = #{tel}
+    </select>
+</mapper>

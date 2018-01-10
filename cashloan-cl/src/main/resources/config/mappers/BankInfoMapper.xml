@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- bank_info表:信用卡模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.BankInfoMapper">
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.BankInfo">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+        <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+        <result column="skip_url" property="skipUrl" jdbcType="VARCHAR" />
+        <result column="show_type" property="showType" jdbcType="INTEGER" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,bank_name,logo_url,skip_url,message,show_type,state
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="bankName != null and bankName != '' ">
+                and bank_Name = #{bankName,jdbcType=VARCHAR}
+            </if>
+            <if test="message != null and message != '' ">
+                and message = #{message,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.BankInfo">
+        insert into bank_info(bank_name,logo_url,skip_url,show_type,message)VALUES
+        (
+            #{bankName,jdbcType=VARCHAR},#{logoUrl,jdbcType=VARCHAR},#{skipUrl,jdbcType=INTEGER},
+            #{showType,jdbcType=BIGINT},#{message,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.BankInfo">
+        update bank_info
+            <set>
+                <if test="bankName != null and bankName != '' ">
+                    bankName = #{bankName,jdbcType=VARCHAR},
+                </if>
+                <if test="logoUrl != null and logoUrl != '' ">
+                    logo_url = #{logoUrl,jdbcType=VARCHAR},
+                </if>
+                <if test="skipUrl != null and skipUrl != '' ">
+                    skip_url = #{skipUrl,jdbcType=VARCHAR},
+                </if>
+                <if test="showType != null and showType != '' ">
+                    show_type = #{showType,jdbcType=INTEGER},
+                </if>
+                <if test="message != null and message != '' ">
+                    message = #{message,jdbcType=BIGINT},
+                </if>
+            </set>
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update bank_info
+          <set>
+              <if test="bankName != null and bankName != '' ">
+                  bankName = #{bankName,jdbcType=VARCHAR},
+              </if>
+              <if test="logoUrl != null and logoUrl != '' ">
+                  logo_url = #{logoUrl,jdbcType=VARCHAR},
+              </if>
+              <if test="skipUrl != null and skipUrl != '' ">
+                  skip_url = #{skipUrl,jdbcType=VARCHAR},
+              </if>
+              <if test="showType != null and showType != '' ">
+                  show_type = #{showType,jdbcType=INTEGER},
+              </if>
+              <if test="message != null and message != '' ">
+                  message = #{message,jdbcType=BIGINT},
+              </if>
+          </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from bank_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findName" resultType="java.lang.String" parameterType="java.lang.Long">
+        select bank_name from bank_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from bank_info
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from bank_info
+        <include refid="searchBy"/>
+        order by p_type,p_sort
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete
+        from bank_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+
+    <select id="getListByType" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bank_info
+        WHERE
+          state=10
+        AND show_type=#{showType}
+
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bank_info
+        WHERE
+    </select>
+
+
+
+</mapper>

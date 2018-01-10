@@ -1,0 +1,23 @@
+/target/
+# Package Files #
+.settings
+.sonar
+.project
+.classpath
+.idea
+target
+node_modules
+build
+dev/*.html
+config/server.properties
+.externalToolBuilders
+sonar-project.properties
+.metadata
+**/*.iml
+conf.properties
+server.properties
+sms.properties
+redis.properties
+config/redis.properties
+config/vsftpd.properties
+config/generatorConfig.xml

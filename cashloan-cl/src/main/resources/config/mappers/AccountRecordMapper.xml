@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.cashloan.cl.mapper.IAccountRecordMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.AccountRecord">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="p_code" property="pCode" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="orders_name" property="ordersName" jdbcType="VARCHAR" />
+        <result column="amt_by_month" property="amtByMonth" jdbcType="DOUBLE" />
+        <result column="repay_type" property="repayType" jdbcType="INTEGER" />
+        <result column="total_periods" property="totalPeriods" jdbcType="INTEGER" />
+        <result column="current_periods" property="currentPeriods" jdbcType="INTEGER" />
+        <result column="repay_day" property="repayDay" jdbcType="VARCHAR" />
+        <result column="remain_repay_day" property="remainRepayDay" jdbcType="VARCHAR" />
+        <result column="last_repay_day" property="lastRepayDay" jdbcType="VARCHAR" />
+        <result column="repay_remind" property="repayRemind" jdbcType="VARCHAR" />
+        <result column="repay_status" property="repayStatus" jdbcType="INTEGER" />
+        <result column="is_enabled" property="isEnabled" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,p_code,user_id,user_name,orders_name,amt_by_month,repay_type,total_periods,current_periods,
+        repay_day,remain_repay_day,last_repay_day,repay_remind,repay_status,is_enabled,create_time
+    </sql>
+
+    <select id="listAccRecords" resultMap="BaseResultMap" parameterType="map">
+         select <include refid="Base_Column_List" />
+         from jj_account_record
+         <where>
+             <if test="pCode != null and pCode != '' and pCode != 'null'">
+                 p_code = #{pCode,jdbcType=VARCHAR}
+             </if>
+             <if test="userId != null and userId != '' ">
+                 and user_id = #{userId,jdbcType=VARCHAR}
+             </if>
+             and is_enabled = 1
+         </where>
+    </select>
+
+    <select id="queryTotalAmtByTh" resultType="map" parameterType="map">
+        select sum(amt_by_month) as totalAmt from jj_account_record
+        where DATE_FORMAT(create_time,'%Y-%m-%d') &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d')
+        and DATE_FORMAT(create_time,'%Y-%m-%d') &gt;= date_sub(curdate(),interval 30 day)
+        and user_id = #{userId,jdbcType=VARCHAR} and repay_status !=1 and is_enabled = 1
+    </select>
+
+    <select id="queryRecordsDetail" resultMap="BaseResultMap" parameterType="map">
+        select total_periods,current_periods,amt_by_month,repay_remind,last_repay_day
+        from jj_account_record
+        <where>
+            <if test="id != null and id != '' ">
+                id = #{id,jdbcType=BIGINT}
+            </if>
+            and is_enabled = 1
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.AccountRecord">
+        insert into jj_account_record(p_code,user_id,user_name,orders_name,amt_by_month,repay_type,
+        total_periods,current_periods,repay_day,remain_repay_day,last_repay_day,repay_remind,repay_status,is_enabled,create_time)
+        VALUES (#{pCode,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR},#{ordersName,jdbcType=VARCHAR},#{amtByMonth,jdbcType=DOUBLE}
+        ,#{repayType,jdbcType=INTEGER},#{totalPeriods,jdbcType=INTEGER},#{currentPeriods,jdbcType=INTEGER}
+        ,#{repayDay,jdbcType=VARCHAR},#{remainRepayDay,jdbcType=VARCHAR},#{lastRepayDay,jdbcType=VARCHAR},#{repayRemind,jdbcType=VARCHAR},#{repayStatus,jdbcType=INTEGER}
+        ,#{isEnabled,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <update id="updateRepayStatus" parameterType="map">
+        update jj_account_record
+        set repay_status = #{repayStatus}
+        where id = #{id}
+    </update>
+
+    <update id="deleteStatus" parameterType="java.lang.Long">
+        update jj_account_record
+        set is_enabled = 0
+        where id = #{id}
+    </update>
+
+    <update id="batchUpdateRemRepDay" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update jj_account_record set remain_repay_day = #{item.remainRepayDay} where id = #{item.id}
+        </foreach>
+    </update>
+</mapper>
