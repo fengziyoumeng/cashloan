@@ -44,7 +44,8 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
     @Override
     public void saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception {
         List<OperativeInfo> operativeInfos = companyProdDetail.getOperativeInfos();
-        if(companyProdDetail.getId()!=null){
+        if(companyProdDetail.getId()==null){
+            companyProdDetail.setCp_type(Integer.parseInt(String.valueOf(companyProdDetail.getType()).substring(0,2)));
             companyProdDetail.setStatus(1);
             companyProdDetailMapper.insertSelective(companyProdDetail);
             if(operativeInfos!=null && operativeInfos.size()>0){
@@ -96,8 +97,9 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
                         paraMap.put("parentId",26);
                         resultList = sysDictDetailMapper.queryItemValue(paraMap);
                         if(resultList.size()>0){
-                            cacheMap.put(String.valueOf(companyProd.getType()),companyProd.getType_name());
-                            cacheMap.put("detailType",resultList);
+                            cacheMap.put("type",String.valueOf(companyProd.getType()));
+                            cacheMap.put("type_name",companyProd.getType_name());
+                            cacheMap.put("detailType_list",resultList);
                             cacheComProdOrgTypeList.add(cacheMap);
                         }
                     }

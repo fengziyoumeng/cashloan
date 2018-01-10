@@ -9,6 +9,8 @@ public class CompanyProdDetail implements Serializable {
      */
     private Long id;
 
+    private Long proc_id;
+
     /**
      * B圈产品类型小分类
      */
@@ -95,6 +97,14 @@ public class CompanyProdDetail implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProc_id() {
+        return proc_id;
+    }
+
+    public void setProc_id(Long proc_id) {
+        this.proc_id = proc_id;
     }
 
     /**
@@ -321,6 +331,7 @@ public class CompanyProdDetail implements Serializable {
         CompanyProdDetail that = (CompanyProdDetail) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (proc_id != null ? !proc_id.equals(that.proc_id) : that.proc_id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (cp_type != null ? !cp_type.equals(that.cp_type) : that.cp_type != null) return false;
         if (org_id != null ? !org_id.equals(that.org_id) : that.org_id != null) return false;
@@ -341,6 +352,7 @@ public class CompanyProdDetail implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (proc_id != null ? proc_id.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (cp_type != null ? cp_type.hashCode() : 0);
         result = 31 * result + (org_id != null ? org_id.hashCode() : 0);
@@ -362,6 +374,7 @@ public class CompanyProdDetail implements Serializable {
     public String toString() {
         return "CompanyProdDetail{" +
                 "id=" + id +
+                ", proc_id=" + proc_id +
                 ", type=" + type +
                 ", cp_type=" + cp_type +
                 ", org_id=" + org_id +
