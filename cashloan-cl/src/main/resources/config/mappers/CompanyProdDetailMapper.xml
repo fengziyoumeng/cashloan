@@ -228,37 +228,46 @@
     from b_company_prod_detail
     <where>
       <if test="id != null">
-        #{id,jdbcType=BIGINT},
+        id = #{id,jdbcType=BIGINT},
       </if>
       <if test="type != null">
-        #{type,jdbcType=INTEGER},
+        and type = #{type,jdbcType=INTEGER},
       </if>
       <if test="cp_type != null">
-        #{cp_type,jdbcType=INTEGER},
+        and cp_type = #{cp_type,jdbcType=INTEGER},
       </if>
       <if test="org_id != null">
-        #{org_id,jdbcType=BIGINT},
+        and org_id = #{org_id,jdbcType=BIGINT},
       </if>
       <if test="proc_name != null">
-        #{proc_name,jdbcType=VARCHAR},
+        and proc_name = #{proc_name,jdbcType=VARCHAR},
       </if>
       <if test="logo_path != null">
-        #{logo_path,jdbcType=VARCHAR},
+        and logo_path = #{logo_path,jdbcType=VARCHAR},
       </if>
       <if test="official_url != null">
-        #{official_url,jdbcType=VARCHAR},
+        and official_url = #{official_url,jdbcType=VARCHAR},
       </if>
       <if test="proc_flag != null">
-        #{proc_flag,jdbcType=INTEGER},
+        and proc_flag = #{proc_flag,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        and status = #{status,jdbcType=INTEGER},
       </if>
       <if test="sort != null">
-        #{sort,jdbcType=INTEGER},
+        and sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="audit_person != null">
+        and audit_person = #{audit_person,jdbcType=VARCHAR},
+      </if>
+      <if test="audit_state != null">
+        and audit_state = #{audit_state,jdbcType=INTEGER},
+      </if>
+      <if test="audit_message != null">
+        and audit_message = #{audit_message,jdbcType=VARCHAR},
       </if>
       <if test="proc_info != null">
-        #{proc_info,jdbcType=LONGVARCHAR},
+        and proc_info = #{proc_info,jdbcType=LONGVARCHAR},
       </if>
     </where>
   </select>

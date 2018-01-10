@@ -16,4 +16,6 @@ public interface AdInfoMapper extends BaseMapper<AdInfo,Long> {
     List<AdInfo> selectAll();
 
     int updateByPrimaryKey(AdInfo record);
+
+    List<AdInfo> selectByAdInfo(AdInfo record);
 }
