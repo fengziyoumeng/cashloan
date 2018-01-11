@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CompanyProductServiceImpl implements ICompanyProductService {
@@ -54,6 +51,9 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             companyProdDetail.setCp_type(Integer.parseInt(String.valueOf(companyProdDetail.getType()).substring(0,2)));
             companyProdDetail.setStatus(1);
             companyProdDetail.setAudit_state(1);//资料审核中
+            companyProdDetail.setAudit_time(new Date());
+            companyProdDetail.setCreate_time(new Date());
+            companyProdDetail.setUpdate_time(new Date());
             companyProdDetailMapper.insertSelective(companyProdDetail);
             if(operativeInfos!=null && operativeInfos.size()>0){
                 for(OperativeInfo operativeInfo : operativeInfos){
@@ -166,7 +166,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
                 redisClient.setObject("cache_b_adinfo_img_list",bannerInfos);
             }
         }
-        resultMap.put("adPics",adInfos);//推荐产品
+        resultMap.put("adPics",adInfos);//广告图
 
         return resultMap;
     }

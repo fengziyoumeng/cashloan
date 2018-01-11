@@ -16,13 +16,16 @@
     <result column="audit_person" jdbcType="VARCHAR" property="audit_person" />
     <result column="audit_state" jdbcType="INTEGER" property="audit_state" />
     <result column="audit_message" jdbcType="VARCHAR" property="audit_message" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="audit_time" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time"  />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
     <result column="proc_info" jdbcType="LONGVARCHAR" property="proc_info" />
   </resultMap>
   <sql id="Base_Column_List">
     id, proc_id,type, cp_type, org_id, proc_name, logo_path, official_url, proc_flag, status,
-    sort, audit_person, audit_state, audit_message
+    sort, audit_person, audit_state, audit_message,audit_time,create_time,update_time
   </sql>
   <sql id="Blob_Column_List">
     proc_info
@@ -44,12 +47,14 @@
       org_id, proc_name, logo_path, 
       official_url, proc_flag, status, 
       sort, audit_person, audit_state, 
-      audit_message, proc_info)
+      audit_message, audit_time, create_time, update_time,
+      proc_info)
     values (#{id,jdbcType=BIGINT},#{proc_id,jdbcType=BIGINT},#{type,jdbcType=INTEGER}, #{cp_type,jdbcType=INTEGER},
       #{org_id,jdbcType=BIGINT}, #{proc_name,jdbcType=VARCHAR}, #{logo_path,jdbcType=VARCHAR}, 
       #{official_url,jdbcType=VARCHAR}, #{proc_flag,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
       #{sort,jdbcType=INTEGER}, #{audit_person,jdbcType=VARCHAR}, #{audit_state,jdbcType=INTEGER}, 
-      #{audit_message,jdbcType=VARCHAR}, #{proc_info,jdbcType=LONGVARCHAR})
+      #{audit_message,jdbcType=VARCHAR},#{audit_time,jdbcType=TIMESTAMP},#{create_time,jdbcType=TIMESTAMP},#{update_time,jdbcType=TIMESTAMP},
+      #{proc_info,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
     insert into b_company_prod_detail
@@ -95,6 +100,15 @@
       </if>
       <if test="audit_message != null">
         audit_message,
+      </if>
+      <if test="audit_time != null">
+        audit_time,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
       </if>
       <if test="proc_info != null">
         proc_info,
@@ -143,6 +157,15 @@
       <if test="audit_message != null">
         #{audit_message,jdbcType=VARCHAR},
       </if>
+      <if test="audit_time != null">
+        #{audit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
       <if test="proc_info != null">
         #{proc_info,jdbcType=LONGVARCHAR},
       </if>
@@ -190,6 +213,15 @@
       <if test="audit_message != null">
         audit_message = #{audit_message,jdbcType=VARCHAR},
       </if>
+      <if test="audit_time != null">
+        audit_time = #{audit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
       <if test="proc_info != null">
         proc_info = #{proc_info,jdbcType=LONGVARCHAR},
       </if>
@@ -211,6 +243,9 @@
       audit_person = #{audit_person,jdbcType=VARCHAR},
       audit_state = #{audit_state,jdbcType=INTEGER},
       audit_message = #{audit_message,jdbcType=VARCHAR},
+      audit_time = #{audit_time,jdbcType=TIMESTAMP},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
       proc_info = #{proc_info,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -228,7 +263,10 @@
       sort = #{sort,jdbcType=INTEGER},
       audit_person = #{audit_person,jdbcType=VARCHAR},
       audit_state = #{audit_state,jdbcType=INTEGER},
-      audit_message = #{audit_message,jdbcType=VARCHAR}
+      audit_message = #{audit_message,jdbcType=VARCHAR},
+      audit_time = #{audit_time,jdbcType=TIMESTAMP},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -280,6 +318,15 @@
       </if>
       <if test="audit_message != null">
         and audit_message = #{audit_message,jdbcType=VARCHAR}
+      </if>
+      <if test="audit_time != null">
+        and audit_time = #{audit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="create_time != null">
+        and create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        and update_time = #{update_time,jdbcType=TIMESTAMP},
       </if>
       <if test="proc_info != null">
         and proc_info = #{proc_info,jdbcType=LONGVARCHAR}

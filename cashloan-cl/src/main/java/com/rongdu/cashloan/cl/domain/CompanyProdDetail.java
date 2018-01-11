@@ -3,6 +3,7 @@ package com.rongdu.cashloan.cl.domain;
 import com.alibaba.fastjson.JSONArray;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class CompanyProdDetail implements Serializable {
@@ -98,6 +99,21 @@ public class CompanyProdDetail implements Serializable {
      * 公司简介
      */
     private String introduction;
+
+    /**
+     * 审核时间
+     */
+    private Date audit_time;
+
+    /**
+     * 创建时间
+     */
+    private Date create_time;
+
+    /**
+     * 更新时间
+     */
+    private Date update_time;
 
     /**
      * b_company_prod_detail
@@ -377,6 +393,30 @@ public class CompanyProdDetail implements Serializable {
         this.introduction = introduction;
     }
 
+    public Date getAudit_time() {
+        return audit_time;
+    }
+
+    public void setAudit_time(Date audit_time) {
+        this.audit_time = audit_time;
+    }
+
+    public Date getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Date create_time) {
+        this.create_time = create_time;
+    }
+
+    public Date getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(Date update_time) {
+        this.update_time = update_time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -408,7 +448,10 @@ public class CompanyProdDetail implements Serializable {
             return false;
         if (registeredCapital != null ? !registeredCapital.equals(that.registeredCapital) : that.registeredCapital != null)
             return false;
-        return introduction != null ? introduction.equals(that.introduction) : that.introduction == null;
+        if (introduction != null ? !introduction.equals(that.introduction) : that.introduction != null) return false;
+        if (audit_time != null ? !audit_time.equals(that.audit_time) : that.audit_time != null) return false;
+        if (create_time != null ? !create_time.equals(that.create_time) : that.create_time != null) return false;
+        return update_time != null ? update_time.equals(that.update_time) : that.update_time == null;
     }
 
     @Override
@@ -433,6 +476,9 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (companyAddress != null ? companyAddress.hashCode() : 0);
         result = 31 * result + (registeredCapital != null ? registeredCapital.hashCode() : 0);
         result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
+        result = 31 * result + (audit_time != null ? audit_time.hashCode() : 0);
+        result = 31 * result + (create_time != null ? create_time.hashCode() : 0);
+        result = 31 * result + (update_time != null ? update_time.hashCode() : 0);
         return result;
     }
 
@@ -459,6 +505,9 @@ public class CompanyProdDetail implements Serializable {
                 ", companyAddress='" + companyAddress + '\'' +
                 ", registeredCapital='" + registeredCapital + '\'' +
                 ", introduction='" + introduction + '\'' +
+                ", audit_time=" + audit_time +
+                ", create_time=" + create_time +
+                ", update_time=" + update_time +
                 '}';
     }
 }
