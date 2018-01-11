@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Scope("prototype")
@@ -28,7 +29,7 @@ public class CompanyProductController {
     private ICompanyProductService companyProductService;
 
     @RequestMapping("/save/prod/detail")
-    public void saveRecords(HttpServletResponse response, CompanyProdDetail companyProdDetail){
+    public void saveProDetail(HttpServletResponse response, CompanyProdDetail companyProdDetail){
         logger.info(String.format("保存公司产品>>前端传入的参数【%s】",companyProdDetail.toString()));
         Map<String,Object> result = new HashMap<String,Object>();
         try {
@@ -43,12 +44,29 @@ public class CompanyProductController {
         ServletUtils.writeToResponse(response,result);
     }
 
-    @RequestMapping("/query/prod/detail")
-    public void queryRecords(HttpServletResponse response){
+    @RequestMapping("/query/prod/bdata")
+    public void queryProdBdata(HttpServletResponse response){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
             Map<String, Object> resultMap = companyProductService.listHomeBdata();
             result.put(Constant.RESPONSE_DATA, resultMap);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+
+    @RequestMapping("/query/prod/details")
+    public void queryProdDetails(HttpServletResponse response,Integer cpType){
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            CompanyProdDetail companyProdDetail = new CompanyProdDetail();
+            companyProdDetail.setCp_type(cpType);
+            List<CompanyProdDetail> companyProdDetails = companyProductService.listCompanyprodDetail(companyProdDetail);
+            result.put(Constant.RESPONSE_DATA, companyProdDetails);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
         }catch (Exception e){

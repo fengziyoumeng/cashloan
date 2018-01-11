@@ -3,6 +3,7 @@ package com.rongdu.cashloan.cl.service.impl;
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
 import com.rongdu.cashloan.cl.service.ICompanyProductService;
+import com.rongdu.cashloan.core.common.util.OrderNoUtil;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
 import org.slf4j.Logger;
@@ -43,13 +44,16 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
 
     @Override
     public void saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception {
-        List<OperativeInfo> operativeInfos = companyProdDetail.getOperativeInfos();
+        long prod_id = Long.parseLong(OrderNoUtil.getSerialNumber());
+        List<OperativeInfo> operativeInfos = companyProdDetail.getOperativeInfoList();
         if(companyProdDetail.getId()==null){
+            companyProdDetail.setProc_id(prod_id);
             companyProdDetail.setCp_type(Integer.parseInt(String.valueOf(companyProdDetail.getType()).substring(0,2)));
             companyProdDetail.setStatus(1);
             companyProdDetailMapper.insertSelective(companyProdDetail);
             if(operativeInfos!=null && operativeInfos.size()>0){
                 for(OperativeInfo operativeInfo : operativeInfos){
+                    operativeInfo.setProc_id(prod_id);
                     operativeInfoMapper.insertSelective(operativeInfo);
                 }
             }
@@ -145,5 +149,12 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         resultMap.put("adPics",adInfos);//推荐产品
 
         return resultMap;
+    }
+
+    @Override
+    public List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail) {
+        companyProdDetail.setStatus(1);//上线
+        List<CompanyProdDetail> companyProdDetails = companyProdDetailMapper.listCompanyprodDetail(companyProdDetail);
+        return companyProdDetails;
     }
 }

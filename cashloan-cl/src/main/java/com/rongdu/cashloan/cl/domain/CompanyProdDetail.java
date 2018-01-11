@@ -1,5 +1,7 @@
 package com.rongdu.cashloan.cl.domain;
 
+import com.alibaba.fastjson.JSONArray;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -76,7 +78,8 @@ public class CompanyProdDetail implements Serializable {
      */
     private String proc_info;
 
-    private List<OperativeInfo> operativeInfos;
+    private String operativeInfos;
+    private List<OperativeInfo> OperativeInfoList;
 
     /**
      * b_company_prod_detail
@@ -315,12 +318,21 @@ public class CompanyProdDetail implements Serializable {
         this.proc_info = proc_info == null ? null : proc_info.trim();
     }
 
-    public List<OperativeInfo> getOperativeInfos() {
+    public String getOperativeInfos() {
         return operativeInfos;
     }
 
-    public void setOperativeInfos(List<OperativeInfo> operativeInfos) {
+    public void setOperativeInfos(String operativeInfos) {
         this.operativeInfos = operativeInfos;
+        setOperativeInfoList(JSONArray.parseArray(operativeInfos,OperativeInfo.class));
+    }
+
+    public List<OperativeInfo> getOperativeInfoList() {
+        return OperativeInfoList;
+    }
+
+    public void setOperativeInfoList(List<OperativeInfo> operativeInfoList) {
+        OperativeInfoList = operativeInfoList;
     }
 
     @Override
@@ -346,7 +358,9 @@ public class CompanyProdDetail implements Serializable {
         if (audit_message != null ? !audit_message.equals(that.audit_message) : that.audit_message != null)
             return false;
         if (proc_info != null ? !proc_info.equals(that.proc_info) : that.proc_info != null) return false;
-        return operativeInfos != null ? operativeInfos.equals(that.operativeInfos) : that.operativeInfos == null;
+        if (operativeInfos != null ? !operativeInfos.equals(that.operativeInfos) : that.operativeInfos != null)
+            return false;
+        return OperativeInfoList != null ? OperativeInfoList.equals(that.OperativeInfoList) : that.OperativeInfoList == null;
     }
 
     @Override
@@ -367,6 +381,7 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (audit_message != null ? audit_message.hashCode() : 0);
         result = 31 * result + (proc_info != null ? proc_info.hashCode() : 0);
         result = 31 * result + (operativeInfos != null ? operativeInfos.hashCode() : 0);
+        result = 31 * result + (OperativeInfoList != null ? OperativeInfoList.hashCode() : 0);
         return result;
     }
 
@@ -388,7 +403,8 @@ public class CompanyProdDetail implements Serializable {
                 ", audit_state=" + audit_state +
                 ", audit_message='" + audit_message + '\'' +
                 ", proc_info='" + proc_info + '\'' +
-                ", operativeInfos=" + operativeInfos +
+                ", operativeInfos='" + operativeInfos + '\'' +
+                ", OperativeInfoList=" + OperativeInfoList +
                 '}';
     }
 }
