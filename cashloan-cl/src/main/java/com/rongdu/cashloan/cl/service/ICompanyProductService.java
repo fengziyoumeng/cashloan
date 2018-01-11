@@ -10,4 +10,6 @@ public interface ICompanyProductService {
     void saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception;
 
     Map<String, Object> listHomeBdata();
+
+    List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail);
 }

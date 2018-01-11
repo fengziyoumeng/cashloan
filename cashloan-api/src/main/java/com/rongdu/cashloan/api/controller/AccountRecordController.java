@@ -52,7 +52,7 @@ public class AccountRecordController {
 
     @RequestMapping("/query/detail/record")
     public void queryRecordsDetail(HttpServletResponse response,String id){
-        logger.info(String.format("查询用户记账账单详情>>前端传入的参数id【】",id));
+        logger.info(String.format("查询用户记账账单详情>>前端传入的参数id【%s】",id));
         Map<String,Object> result = new HashMap<String,Object>();
         Map<String,Object> paramsMap = new HashMap<>();
         try {

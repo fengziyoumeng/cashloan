@@ -3,6 +3,8 @@ package com.rongdu.cashloan.cl.mapper;
 import com.rongdu.cashloan.cl.domain.OperativeInfo;
 import com.rongdu.cashloan.core.common.mapper.RDBatisDao;
 
+import java.util.List;
+
 @RDBatisDao
 public interface OperativeInfoMapper {
     /**
@@ -40,4 +42,6 @@ public interface OperativeInfoMapper {
      * @mbggenerated 2018-01-09
      */
     int updateByPrimaryKey(OperativeInfo record);
+
+    List<OperativeInfo> listOperativeInfo(OperativeInfo record);
 }
