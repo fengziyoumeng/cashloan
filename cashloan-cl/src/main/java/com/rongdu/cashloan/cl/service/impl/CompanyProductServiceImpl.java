@@ -53,6 +53,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             companyProdDetail.setProc_id(prod_id);
             companyProdDetail.setCp_type(Integer.parseInt(String.valueOf(companyProdDetail.getType()).substring(0,2)));
             companyProdDetail.setStatus(1);
+            companyProdDetail.setAudit_state(1);//资料审核中
             companyProdDetailMapper.insertSelective(companyProdDetail);
             if(operativeInfos!=null && operativeInfos.size()>0){
                 for(OperativeInfo operativeInfo : operativeInfos){
