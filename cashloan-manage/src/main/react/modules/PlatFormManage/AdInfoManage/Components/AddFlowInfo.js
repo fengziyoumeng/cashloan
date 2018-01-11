@@ -59,7 +59,7 @@ var AddFlowInfo = React.createClass({
         var title = props.title;
         var path = me.path
         var name = me.name
-        var url = "/act/category/saveorupdate.htm";
+        var url = "/act/adinfo/saveorupdate.htm";
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
                 return;
@@ -137,8 +137,7 @@ var AddFlowInfo = React.createClass({
             getFieldProps
         } = this.props.form;
         var imageUrl = this.state.imageUrl;
-        var imageOss = {...getFieldProps('iconUrl')}.value;
-        vlu = {...getFieldProps('pmessage')}.value;
+        var imageOss = {...getFieldProps('adUrl')}.value;
 
         var showImg
         if (imageOss == undefined || imageOss =='') {
@@ -173,25 +172,28 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="标题：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('title',{rules: [{required: true,message: '必填'}]})} type="text"/>
+                                    <Input disabled={!props.canEdit} placeholder={"可不填"} {...getFieldProps('title')} type="text"/>
                                 </FormItem>
                             </Col>
-
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="排序：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('sort',{rules: [{required: true,message: '必填'}]})}/>
+                                <FormItem  {...formItemLayout} label="信息：">
+                                    <Input disabled={!props.canEdit} placeholder={"可不填"} {...getFieldProps('message')} type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="跳转地址：">
-                                    <Input disabled={!props.canEdit} placeholder={"可不填"}  {...getFieldProps('skipUrl')} type="text"/>
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('skipUrl', {rules: [{required: true, message: '必填' }]})} type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="类型值：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('typeValue', {rules: [{required: true, message: '必填' }]})} type="text"/>
+                                <FormItem  {...formItemLayout} label="跳转类型：">
+                                    <Select disabled={!props.canEdit} {...getFieldProps('status', {rules: [{required: true, message: '必填' }]})} >
+                                        <Option value={1}>跳转</Option>
+                                        <Option value={2}>跳转到图片</Option>
+                                        <Option value={0}>不跳转</Option>
+                                    </Select>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -214,6 +216,11 @@ var AddFlowInfo = React.createClass({
                             </Col>
                         </Row>
                         <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="排序：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('sort',{rules: [{required: true,message: '必填'}]})}/>
+                                </FormItem>
+                            </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="上传图片：">
                                     <Upload

@@ -34,7 +34,11 @@
 
   <update id="updateByPrimaryKey" parameterType="com.rongdu.cashloan.cl.domain.AdInfo" >
     update cl_ad_info
-    set ad_url = #{adUrl,jdbcType=VARCHAR},
+    set
+      <if test="adUrl != null and adUrl != '' ">
+       ad_url = #{adUrl,jdbcType=VARCHAR},
+      </if>
+      ad_url = #{adUrl,jdbcType=VARCHAR},
       skip_url = #{skipUrl,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       message = #{message,jdbcType=VARCHAR},
