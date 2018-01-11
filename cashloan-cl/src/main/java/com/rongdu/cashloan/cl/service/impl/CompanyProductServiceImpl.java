@@ -42,6 +42,9 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
     @Resource
     private AdInfoMapper adInfoMapper;
 
+    @Resource
+    CompanyInformationMapper companyInformationMapper;
+
     @Override
     public void saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception {
         long prod_id = Long.parseLong(OrderNoUtil.getSerialNumber());
@@ -120,6 +123,21 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         companyProdDetail.setStatus(1);//上线
         companyProdDetail.setProc_flag(1);//推荐产品
         List<CompanyProdDetail> companyProdDetails = companyProdDetailMapper.listCompanyprodDetail(companyProdDetail);
+        if(companyProdDetails!=null && companyProdDetails.size()>0){
+            OperativeInfo operativeInfo = new OperativeInfo();
+            for(CompanyProdDetail companyProdDetail1 : companyProdDetails){
+                //获取企业相关信息
+                CompanyInformation companyInformation = companyInformationMapper.findByPrimary(companyProdDetail1.getOrg_id());
+                companyProdDetail1.setCompanyAddress(companyInformation.getCompanyAddress());
+                companyProdDetail1.setIntroduction(companyInformation.getIntroduction());
+                companyProdDetail1.setRegisteredCapital(companyInformation.getRegisteredCapital());
+
+                //获取运营信息
+                operativeInfo.setProc_id(companyProdDetail1.getProc_id());
+                List<OperativeInfo> operativeInfos = operativeInfoMapper.listOperativeInfo(operativeInfo);
+                companyProdDetail1.setOperativeInfoList(operativeInfos);
+            }
+        }
         resultMap.put("recommendProd",companyProdDetails);//推荐产品
 
         /*------------------------------------------------查询banner图------------------------------------------------------------------*/
@@ -134,7 +152,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
                 redisClient.setObject("cache_b_banner_img_list",bannerInfos);
             }
         }
-        resultMap.put("bannerPics",bannerInfos);//推荐产品
+        resultMap.put("bannerPics",bannerInfos);//banner图
 
         /*------------------------------------------------查询广告图--------------------------------------------------------------------*/
         List<AdInfo> adInfos = (List<AdInfo>)redisClient.getObject("cache_b_adinfo_img_list");
@@ -155,6 +173,21 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
     public List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail) {
         companyProdDetail.setStatus(1);//上线
         List<CompanyProdDetail> companyProdDetails = companyProdDetailMapper.listCompanyprodDetail(companyProdDetail);
+        if(companyProdDetails!=null && companyProdDetails.size()>0){
+            OperativeInfo operativeInfo = new OperativeInfo();
+            for(CompanyProdDetail comProdDetail : companyProdDetails){
+                //获取企业相关信息
+                CompanyInformation companyInformation = companyInformationMapper.findByPrimary(comProdDetail.getOrg_id());
+                comProdDetail.setCompanyAddress(companyInformation.getCompanyAddress());
+                comProdDetail.setIntroduction(companyInformation.getIntroduction());
+                comProdDetail.setRegisteredCapital(companyInformation.getRegisteredCapital());
+
+                //获取运营信息
+                operativeInfo.setProc_id(comProdDetail.getProc_id());
+                List<OperativeInfo> operativeInfos = operativeInfoMapper.listOperativeInfo(operativeInfo);
+                comProdDetail.setOperativeInfoList(operativeInfos);
+            }
+        }
         return companyProdDetails;
     }
 }

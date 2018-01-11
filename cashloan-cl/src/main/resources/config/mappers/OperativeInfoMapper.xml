@@ -125,4 +125,36 @@
       module = #{module,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listOperativeInfo" parameterType="com.rongdu.cashloan.cl.domain.OperativeInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from b_operative_info
+    <where>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="proc_id != null">
+        and proc_id = #{proc_id,jdbcType=BIGINT}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="tel != null">
+        and tel = #{tel,jdbcType=VARCHAR}
+      </if>
+      <if test="wx != null">
+        and wx = #{wx,jdbcType=VARCHAR}
+      </if>
+      <if test="qq != null">
+        and qq = #{qq,jdbcType=VARCHAR}
+      </if>
+      <if test="job != null">
+        and job = #{job,jdbcType=VARCHAR}
+      </if>
+      <if test="module != null">
+        and module = #{module,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
 </mapper>

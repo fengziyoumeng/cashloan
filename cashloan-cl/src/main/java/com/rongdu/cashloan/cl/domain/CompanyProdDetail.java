@@ -78,8 +78,26 @@ public class CompanyProdDetail implements Serializable {
      */
     private String proc_info;
 
+    /**
+     * 运营信息
+     */
     private String operativeInfos;
     private List<OperativeInfo> OperativeInfoList;
+
+    /**
+     * 企业地址
+     */
+    private String companyAddress;
+
+    /**
+     * 注册资金
+     */
+    private String registeredCapital;
+
+    /**
+     * 公司简介
+     */
+    private String introduction;
 
     /**
      * b_company_prod_detail
@@ -335,6 +353,30 @@ public class CompanyProdDetail implements Serializable {
         OperativeInfoList = operativeInfoList;
     }
 
+    public String getCompanyAddress() {
+        return companyAddress;
+    }
+
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress;
+    }
+
+    public String getRegisteredCapital() {
+        return registeredCapital;
+    }
+
+    public void setRegisteredCapital(String registeredCapital) {
+        this.registeredCapital = registeredCapital;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -360,7 +402,13 @@ public class CompanyProdDetail implements Serializable {
         if (proc_info != null ? !proc_info.equals(that.proc_info) : that.proc_info != null) return false;
         if (operativeInfos != null ? !operativeInfos.equals(that.operativeInfos) : that.operativeInfos != null)
             return false;
-        return OperativeInfoList != null ? OperativeInfoList.equals(that.OperativeInfoList) : that.OperativeInfoList == null;
+        if (OperativeInfoList != null ? !OperativeInfoList.equals(that.OperativeInfoList) : that.OperativeInfoList != null)
+            return false;
+        if (companyAddress != null ? !companyAddress.equals(that.companyAddress) : that.companyAddress != null)
+            return false;
+        if (registeredCapital != null ? !registeredCapital.equals(that.registeredCapital) : that.registeredCapital != null)
+            return false;
+        return introduction != null ? introduction.equals(that.introduction) : that.introduction == null;
     }
 
     @Override
@@ -382,6 +430,9 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (proc_info != null ? proc_info.hashCode() : 0);
         result = 31 * result + (operativeInfos != null ? operativeInfos.hashCode() : 0);
         result = 31 * result + (OperativeInfoList != null ? OperativeInfoList.hashCode() : 0);
+        result = 31 * result + (companyAddress != null ? companyAddress.hashCode() : 0);
+        result = 31 * result + (registeredCapital != null ? registeredCapital.hashCode() : 0);
+        result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
         return result;
     }
 
@@ -405,6 +456,9 @@ public class CompanyProdDetail implements Serializable {
                 ", proc_info='" + proc_info + '\'' +
                 ", operativeInfos='" + operativeInfos + '\'' +
                 ", OperativeInfoList=" + OperativeInfoList +
+                ", companyAddress='" + companyAddress + '\'' +
+                ", registeredCapital='" + registeredCapital + '\'' +
+                ", introduction='" + introduction + '\'' +
                 '}';
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 @Scope("prototype")
 @Controller
 @CrossOrigin
-@RequestMapping("/company")
+@RequestMapping("/api/company")
 public class CompanyProductController {
 
     public static final Logger logger = LoggerFactory.getLogger(CompanyProductController.class);
@@ -28,6 +28,11 @@ public class CompanyProductController {
     @Resource
     private ICompanyProductService companyProductService;
 
+    /**
+     * 保存上传产品
+     * @param response
+     * @param companyProdDetail
+     */
     @RequestMapping("/save/prod/detail")
     public void saveProDetail(HttpServletResponse response, CompanyProdDetail companyProdDetail){
         logger.info(String.format("保存公司产品>>前端传入的参数【%s】",companyProdDetail.toString()));
@@ -44,6 +49,10 @@ public class CompanyProductController {
         ServletUtils.writeToResponse(response,result);
     }
 
+    /**
+     * 查询B圈数据
+     * @param response
+     */
     @RequestMapping("/query/prod/bdata")
     public void queryProdBdata(HttpServletResponse response){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -59,12 +68,17 @@ public class CompanyProductController {
         ServletUtils.writeToResponse(response,result);
     }
 
+    /**
+     * 根据分类类型查询公司产品信息列表
+     * @param response
+     * @param cp_type 分类
+     */
     @RequestMapping("/query/prod/details")
-    public void queryProdDetails(HttpServletResponse response,Integer cpType){
+    public void queryProdDetails(HttpServletResponse response,Integer cp_type){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
             CompanyProdDetail companyProdDetail = new CompanyProdDetail();
-            companyProdDetail.setCp_type(cpType);
+            companyProdDetail.setCp_type(cp_type);
             List<CompanyProdDetail> companyProdDetails = companyProductService.listCompanyprodDetail(companyProdDetail);
             result.put(Constant.RESPONSE_DATA, companyProdDetails);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);

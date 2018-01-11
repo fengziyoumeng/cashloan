@@ -29,7 +29,7 @@
     
     <!--基本的sql查询字段 公共引用...-->
     <sql id="Base_Column_List">
-        id,user_id,company_name,legal_person_name,ID_number,contact_person,contact_tel,introduction,
+        id,user_id,company_name,company_address,legal_person_name,ID_number,contact_person,contact_tel,introduction,
          license_pic,identity_front_pic,identity_reverse_pic,hold_card_pic,company_type,create_time,
          update_time,audit_time,audit_state,audit_message,state,audit_person,registered_capital
     </sql>
