@@ -122,6 +122,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         CompanyProdDetail companyProdDetail = new CompanyProdDetail();
         companyProdDetail.setStatus(1);//上线
         companyProdDetail.setProc_flag(1);//推荐产品
+        companyProdDetail.setAudit_state(2);//审核通过
         List<CompanyProdDetail> companyProdDetails = companyProdDetailMapper.listCompanyprodDetail(companyProdDetail);
         if(companyProdDetails!=null && companyProdDetails.size()>0){
             OperativeInfo operativeInfo = new OperativeInfo();
@@ -172,6 +173,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
     @Override
     public List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail) {
         companyProdDetail.setStatus(1);//上线
+        companyProdDetail.setAudit_state(2);//审核通过
         List<CompanyProdDetail> companyProdDetails = companyProdDetailMapper.listCompanyprodDetail(companyProdDetail);
         if(companyProdDetails!=null && companyProdDetails.size()>0){
             OperativeInfo operativeInfo = new OperativeInfo();
