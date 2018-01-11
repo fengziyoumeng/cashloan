@@ -39,6 +39,7 @@ var ClickTrackManage = require('../../FlowInfo/ClickTrackManage/index');//点击
 var CompanyInfoManage = require('../../CompanyManage/CompanyInfoManage/index'); //公司入驻审核
 var CategoryImageManage = require('../../PlatFormManage/CategoryImageManage/index'); //分类图标管理
 var AdInfoManage = require('../../PlatFormManage/AdInfoManage/index'); //广告信息管理
+var CompanyServiceManage = require('../../CompanyManage/CompanyServiceManage/index'); //公司服务审核
 
 
 
@@ -83,6 +84,7 @@ module.exports = {
   ClickTrackManage,
   CompanyInfoManage,
   CategoryImageManage,
-  AdInfoManage
+  AdInfoManage,
+  CompanyServiceManage
 
 }

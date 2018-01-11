@@ -65,7 +65,7 @@ public class AliYunUtil {
 			if (null == file || file.length() == 0) {
 				throw new OSSException("请选择上传的文件");
 			}
-			String path=dirName+File.separatorChar+filename;
+			String path=dirName+"/"+filename;
 			client.putObject(BUCKET_NAMEH5, path, file);
 			return getH5Url(BUCKET_NAMEH5,path);
 		} catch (OSSException e) {

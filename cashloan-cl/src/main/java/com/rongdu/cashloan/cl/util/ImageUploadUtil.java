@@ -82,7 +82,7 @@ public class ImageUploadUtil {
                 //判断服务器上是否已经有图片，有则认为是重新上传，无则认为没有修改图片，不再上传oss
                 if (file.exists()) {
                     String imageName = imgTempPath.substring(imgTempPath.lastIndexOf(File.separator)+1);
-                    imgOSSPath = AliYunUtil.uploadH5File(dirName + File.separatorChar, imageName, file);
+                    imgOSSPath = AliYunUtil.uploadH5File(dirName + "/", imageName, file);
                 }
                 //上传成功后删除本地文件
                 File file1 = new File(imgTempPath);
@@ -94,5 +94,23 @@ public class ImageUploadUtil {
             e.printStackTrace();
         }
         return imgOSSPath;
+    }
+
+    /**
+     * 根据oss地地址以及目录来删除对应的文件
+     * @param ossPath
+     * @return
+     * @throws Exception
+     */
+    public static void  deleteImageOnOSS(String direct,String ossPath) throws Exception{
+        try {
+            if(StringUtil.isNotBlank(ossPath)){
+                String key = ossPath.substring(ossPath.indexOf(direct), ossPath.indexOf("?"));
+                String s = key.replaceAll("%5C", "\\\\");
+                AliYunUtil.deleteH5Object(s);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

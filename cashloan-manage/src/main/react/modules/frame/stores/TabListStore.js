@@ -100,7 +100,8 @@ export default Reflux.createStore({
 					'ClickTrackManage',
 					'CompanyInfoManage',
 					'CategoryImageManage',
-					'AdInfoManage'
+					'AdInfoManage',
+					'CompanyServiceManage'
 			];
 
 			var routeNames3 = [
