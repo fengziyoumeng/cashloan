@@ -20,7 +20,7 @@ import java.util.Map;
 @Scope("prototype")
 @Controller
 @CrossOrigin
-@RequestMapping("/company")
+@RequestMapping("/api/company")
 public class CompanyProductController {
 
     public static final Logger logger = LoggerFactory.getLogger(CompanyProductController.class);
@@ -71,14 +71,18 @@ public class CompanyProductController {
     /**
      * 根据分类类型查询公司产品信息列表
      * @param response
-     * @param cp_type 分类
+     * @param type 分类
      */
     @RequestMapping("/query/prod/details")
-    public void queryProdDetails(HttpServletResponse response,Integer cp_type){
+    public void queryProdDetails(HttpServletResponse response,String type){
         Map<String,Object> result = new HashMap<String,Object>();
+        CompanyProdDetail companyProdDetail = new CompanyProdDetail();
         try {
-            CompanyProdDetail companyProdDetail = new CompanyProdDetail();
-            companyProdDetail.setCp_type(cp_type);
+            if(type.length()==2){
+                companyProdDetail.setCp_type(Integer.parseInt(type));//分类
+            }else if(type.length()==3){
+                companyProdDetail.setType(Integer.parseInt(type));//子分类
+            }
             List<CompanyProdDetail> companyProdDetails = companyProductService.listCompanyprodDetail(companyProdDetail);
             result.put(Constant.RESPONSE_DATA, companyProdDetails);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);

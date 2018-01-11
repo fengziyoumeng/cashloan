@@ -161,6 +161,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         if(adInfos==null || adInfos.size()==0){
             logger.info("cache_b_adinfo_img_list从缓存中取值--金融圈子的ad图");
             AdInfo record = new AdInfo();
+            record.setState(10);
             adInfos = adInfoMapper.selectByAdInfo(record);
             if(adInfos.size()>0){
                 redisClient.setObject("cache_b_adinfo_img_list",bannerInfos);

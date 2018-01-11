@@ -60,7 +60,7 @@
 			parent_id 
 	    from arc_sys_dict_detail
 		<include refid="baseSysDictDetailWhereSql"/>
-		order by ID desc
+		order by ID
 	</select>
 	
 	<select id="getCount" resultType="java.lang.Long" parameterType="java.util.HashMap" >
@@ -195,7 +195,7 @@
 	</select>
 
 	<select id="queryItemValue" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT item_value
+		SELECT item_code,item_value
 		from arc_sys_dict_detail
 		where item_code like '${itemCode}%' and parent_id = #{parentId}
 	</select>

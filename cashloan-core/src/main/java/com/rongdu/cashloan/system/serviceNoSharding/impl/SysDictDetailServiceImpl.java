@@ -105,4 +105,9 @@ public class SysDictDetailServiceImpl extends BaseServiceImpl<SysDictDetail,Long
 	public List<String> listValue(Map<String, Object> param) {
 		return sysDictDetailMapper.listValue(param);
 	}
+
+	@Override
+	public List<SysDictDetail> getItemCodeAndVlueByParentId(Map<String, Object> paramMap) {
+		return sysDictDetailMapper.listSelective(paramMap);
+	}
 }

@@ -92,4 +92,6 @@ public interface SysDictDetailService extends BaseService<SysDictDetail,Long>{
 	List<SysDictDetail> listUpdateCode(Map<String, Object> data);
 
 	List<String> listValue(Map<String, Object> param);
+
+    List<SysDictDetail> getItemCodeAndVlueByParentId(Map<String, Object> paramMap);
 }
