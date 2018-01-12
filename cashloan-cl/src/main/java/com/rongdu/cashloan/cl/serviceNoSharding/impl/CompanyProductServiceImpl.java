@@ -79,6 +79,8 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
 
         /*------------------------------------------------查询类型------------------------------------------------------------------*/
         List<CompanyProd> companyProds = (List<CompanyProd>)redisClient.getObject("cache_comProd_type_list");
+        List<CompanyProd> companyProdServiceList = new ArrayList<CompanyProd>();//bigType=1的集合
+        List<CompanyProd> companyProdServiceOrgList = new ArrayList<CompanyProd>();//bigType=2的集合
         if(companyProds==null || companyProds.size()==0){
             logger.info("cache_comProd_type_list从缓存中取值--8个服务类型");
             companyProds = companyProdMapper.listCompanyProd(null);
@@ -86,7 +88,14 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
                 redisClient.setObject("cache_comProd_type_list",companyProds);
             }
         }
-        resultMap.put("serviceType",companyProds);//8个服务类型
+        for(CompanyProd companyProd : companyProds){
+            if(companyProd.getBig_type()==1){
+                companyProdServiceList.add(companyProd);
+            }else{
+                companyProdServiceOrgList.add(companyProd);
+            }
+        }
+        resultMap.put("serviceType",companyProdServiceList);//4个服务类型
 
         /*------------------------------------------------查询更多------------------------------------------------------------------*/
         //缓存中有从缓存中取出数据
@@ -97,21 +106,19 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             Map<String,Object> cacheMap = null;
             List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
             Map<String,Object> paraMap = null;
-            if(companyProds.size()>0){
-                for(CompanyProd companyProd : companyProds){
+            if(companyProdServiceOrgList.size()>0){
+                for(CompanyProd companyProd : companyProdServiceOrgList){
                     cacheMap = new HashMap<String,Object>();
-                    if(companyProd.getBig_type()==2){
-                        paraMap = new HashMap<String,Object>();
-                        paraMap.put("itemCode",companyProd.getType());
-                        paraMap.put("parentId",26);
-                        resultList = sysDictDetailMapper.queryItemValue(paraMap);
-                        if(resultList.size()>0){
-                            cacheMap.put("type",String.valueOf(companyProd.getType()));
-                            cacheMap.put("type_name",companyProd.getType_name());
-                            cacheMap.put("type_img_path",companyProd.getType_img_path());
-                            cacheMap.put("detailType_list",resultList);
-                            cacheComProdOrgTypeList.add(cacheMap);
-                        }
+                    paraMap = new HashMap<String,Object>();
+                    paraMap.put("itemCode",companyProd.getType());
+                    paraMap.put("parentId",26);
+                    resultList = sysDictDetailMapper.queryItemValue(paraMap);
+                    if(resultList.size()>0){
+                        cacheMap.put("type",String.valueOf(companyProd.getType()));
+                        cacheMap.put("type_name",companyProd.getType_name());
+                        cacheMap.put("type_img_path",companyProd.getType_img_path());
+                        cacheMap.put("detailType_list",resultList);
+                        cacheComProdOrgTypeList.add(cacheMap);
                     }
                 }
                 if(cacheComProdOrgTypeList.size()>0){
