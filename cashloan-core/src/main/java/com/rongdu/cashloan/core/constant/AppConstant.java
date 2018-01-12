@@ -124,6 +124,11 @@ public class AppConstant {
     public static final String REDIS_KEY_CLICK_FLOW_INFO = "FLOW:PALTFORM:CLICK:";
 
     /**
+     * 获取产品用户浏览数
+     */
+    public static final String REDIS_KEY_CLICK_BDATA_PROD_INFO = "BDATA:PRODFORM:CLICK:";
+
+    /**
      * 广播信息
      */
     public static final String REDIS_KEY_RADIO_FLOW_INFO = "FLOW:PALTFORM:RADIO:";

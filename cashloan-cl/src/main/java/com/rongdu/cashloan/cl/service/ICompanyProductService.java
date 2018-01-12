@@ -12,4 +12,6 @@ public interface ICompanyProductService {
     Map<String, Object> listHomeBdata();
 
     List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail);
+
+    Long getProdClickNum(String userId,String proc_id);
 }

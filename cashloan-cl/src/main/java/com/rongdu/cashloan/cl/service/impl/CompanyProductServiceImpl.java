@@ -3,7 +3,9 @@ package com.rongdu.cashloan.cl.service.impl;
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
 import com.rongdu.cashloan.cl.service.ICompanyProductService;
+import com.rongdu.cashloan.core.common.context.Global;
 import com.rongdu.cashloan.core.common.util.OrderNoUtil;
+import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
 import org.slf4j.Logger;
@@ -193,5 +195,12 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             }
         }
         return companyProdDetails;
+    }
+
+    @Override
+    public Long getProdClickNum(String userId, String proc_id) {
+        int expire = Global.getInt("appClickExpire");
+        Long prodClickNum = redisClient.incr(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + proc_id, expire * 86400);
+        return prodClickNum;
     }
 }
