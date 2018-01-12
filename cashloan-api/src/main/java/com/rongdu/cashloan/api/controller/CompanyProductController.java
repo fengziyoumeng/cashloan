@@ -98,13 +98,13 @@ public class CompanyProductController {
      * 获取产品用户浏览数
      * @param response
      * @param userId
-     * @param proc_id
+     * @param procId
      */
     @RequestMapping("/query/prod/click")
-    public void queryProdClick(HttpServletResponse response,String userId,String proc_id){
+    public void queryProdClick(HttpServletResponse response,String userId,String procId){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
-            Long prodClickNum = companyProductService.getProdClickNum(userId,proc_id);
+            Long prodClickNum = companyProductService.getProdClickNum(userId,procId);
             result.put(Constant.RESPONSE_DATA, prodClickNum);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");

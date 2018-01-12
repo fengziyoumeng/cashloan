@@ -198,8 +198,8 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
     }
 
     @Override
-    public Long getProdClickNum(String userId, String proc_id) {
-        Long prodClickNum = redisClient.incr(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + proc_id);
+    public Long getProdClickNum(String userId, String procId) {
+        Long prodClickNum = redisClient.incr(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + procId);
         return prodClickNum;
     }
 }
