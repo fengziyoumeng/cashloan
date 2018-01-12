@@ -1,9 +1,8 @@
-package com.rongdu.cashloan.cl.service.impl;
+package com.rongdu.cashloan.cl.serviceNoSharding.impl;
 
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
-import com.rongdu.cashloan.cl.service.ICompanyProductService;
-import com.rongdu.cashloan.core.common.context.Global;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
 import com.rongdu.cashloan.core.common.util.OrderNoUtil;
 import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
