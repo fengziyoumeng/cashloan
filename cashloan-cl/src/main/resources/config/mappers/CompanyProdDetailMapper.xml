@@ -348,5 +348,6 @@
         and proc_info = #{proc_info,jdbcType=LONGVARCHAR}
       </if>
     </where>
+    order by sort desc
   </select>
 </mapper>
