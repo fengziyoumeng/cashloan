@@ -108,6 +108,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
                         if(resultList.size()>0){
                             cacheMap.put("type",String.valueOf(companyProd.getType()));
                             cacheMap.put("type_name",companyProd.getType_name());
+                            cacheMap.put("type_img_path",companyProd.getType_img_path());
                             cacheMap.put("detailType_list",resultList);
                             cacheComProdOrgTypeList.add(cacheMap);
                         }
@@ -165,7 +166,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             record.setState(10);
             adInfos = adInfoMapper.selectByAdInfo(record);
             if(adInfos.size()>0){
-                redisClient.setObject("cache_b_adinfo_img_list",bannerInfos);
+                redisClient.setObject("cache_b_adinfo_img_list",adInfos);
             }
         }
         resultMap.put("adPics",adInfos);//广告图
