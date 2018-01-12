@@ -115,10 +115,20 @@ public class CompanyProdDetail implements Serializable {
      */
     private Date update_time;
 
+    private Long show_click_num;
+
     /**
      * b_company_prod_detail
      */
     private static final long serialVersionUID = 1L;
+
+    public Long getShow_click_num() {
+        return show_click_num;
+    }
+
+    public void setShow_click_num(Long show_click_num) {
+        this.show_click_num = show_click_num;
+    }
 
     /**
      * 
@@ -451,7 +461,8 @@ public class CompanyProdDetail implements Serializable {
         if (introduction != null ? !introduction.equals(that.introduction) : that.introduction != null) return false;
         if (audit_time != null ? !audit_time.equals(that.audit_time) : that.audit_time != null) return false;
         if (create_time != null ? !create_time.equals(that.create_time) : that.create_time != null) return false;
-        return update_time != null ? update_time.equals(that.update_time) : that.update_time == null;
+        if (update_time != null ? !update_time.equals(that.update_time) : that.update_time != null) return false;
+        return show_click_num != null ? show_click_num.equals(that.show_click_num) : that.show_click_num == null;
     }
 
     @Override
@@ -479,6 +490,7 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (audit_time != null ? audit_time.hashCode() : 0);
         result = 31 * result + (create_time != null ? create_time.hashCode() : 0);
         result = 31 * result + (update_time != null ? update_time.hashCode() : 0);
+        result = 31 * result + (show_click_num != null ? show_click_num.hashCode() : 0);
         return result;
     }
 
@@ -508,6 +520,7 @@ public class CompanyProdDetail implements Serializable {
                 ", audit_time=" + audit_time +
                 ", create_time=" + create_time +
                 ", update_time=" + update_time +
+                ", show_click_num=" + show_click_num +
                 '}';
     }
 }

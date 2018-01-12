@@ -199,8 +199,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
 
     @Override
     public Long getProdClickNum(String userId, String proc_id) {
-        int expire = Global.getInt("appClickExpire");
-        Long prodClickNum = redisClient.incr(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + proc_id, expire * 86400);
+        Long prodClickNum = redisClient.incr(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + proc_id);
         return prodClickNum;
     }
 }

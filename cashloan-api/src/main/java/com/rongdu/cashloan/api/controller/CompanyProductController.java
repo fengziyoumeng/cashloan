@@ -100,8 +100,8 @@ public class CompanyProductController {
      * @param userId
      * @param proc_id
      */
-    @RequestMapping("/query/prod/details")
-    public void queryProdDetails(HttpServletResponse response,String userId,String proc_id){
+    @RequestMapping("/query/prod/click")
+    public void queryProdClick(HttpServletResponse response,String userId,String proc_id){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
             Long prodClickNum = companyProductService.getProdClickNum(userId,proc_id);
