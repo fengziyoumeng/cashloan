@@ -3,6 +3,7 @@ package com.rongdu.cashloan.cl.domain;
 import com.alibaba.fastjson.JSONArray;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class CompanyProdDetail implements Serializable {
@@ -67,6 +68,10 @@ public class CompanyProdDetail implements Serializable {
      * 审核状态 1-资料审核中2-审核通过3-审核拒绝
      */
     private Integer audit_state;
+    /**
+     * 审核时间
+     */
+    private Date audit_time;
 
     /**
      * 
@@ -83,7 +88,8 @@ public class CompanyProdDetail implements Serializable {
      */
     private String operativeInfos;
     private List<OperativeInfo> OperativeInfoList;
-
+    private CompanyProd companyProd;
+    private CompanyInformation companyInfo;
     /**
      * 企业地址
      */
@@ -98,6 +104,8 @@ public class CompanyProdDetail implements Serializable {
      * 公司简介
      */
     private String introduction;
+
+    private Date update_time;
 
     /**
      * b_company_prod_detail
@@ -377,6 +385,38 @@ public class CompanyProdDetail implements Serializable {
         this.introduction = introduction;
     }
 
+    public CompanyProd getCompanyProd() {
+        return companyProd;
+    }
+
+    public void setCompanyProd(CompanyProd companyProd) {
+        this.companyProd = companyProd;
+    }
+
+    public Date getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(Date update_time) {
+        this.update_time = update_time;
+    }
+
+    public CompanyInformation getCompanyInfo() {
+        return companyInfo;
+    }
+
+    public void setCompanyInfo(CompanyInformation companyInfo) {
+        this.companyInfo = companyInfo;
+    }
+
+    public Date getAudit_time() {
+        return audit_time;
+    }
+
+    public void setAudit_time(Date audit_time) {
+        this.audit_time = audit_time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -452,13 +492,17 @@ public class CompanyProdDetail implements Serializable {
                 ", sort=" + sort +
                 ", audit_person='" + audit_person + '\'' +
                 ", audit_state=" + audit_state +
+                ", audit_time=" + audit_time +
                 ", audit_message='" + audit_message + '\'' +
                 ", proc_info='" + proc_info + '\'' +
                 ", operativeInfos='" + operativeInfos + '\'' +
                 ", OperativeInfoList=" + OperativeInfoList +
+                ", companyProd=" + companyProd +
+                ", companyInfo=" + companyInfo +
                 ", companyAddress='" + companyAddress + '\'' +
                 ", registeredCapital='" + registeredCapital + '\'' +
                 ", introduction='" + introduction + '\'' +
+                ", update_time=" + update_time +
                 '}';
     }
 }

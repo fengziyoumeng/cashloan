@@ -71,7 +71,7 @@ export default React.createClass({
             loading: true
         });
         Utils.ajaxData({
-            url: '/act/model/companyservice/auditList.htm',
+            url: '/act/model/companyservice/alllist.htm',
             data: params,
             callback: (result) => {
                 // console.info("=======>"+JSON.stringify(result.data));
@@ -108,6 +108,12 @@ export default React.createClass({
                 return value.companyName;
             }
         },{
+            title: 'LOGO',
+            dataIndex: "logo_path",
+            render: function (value,record) {
+                return  <img src={value} alt=""  style={{width: '50px',marginLeft:'5px'}}/>;
+            }
+        },{
             title: '服务名称',
             dataIndex: 'proc_name'
         },{
@@ -115,12 +121,6 @@ export default React.createClass({
             dataIndex: "companyProd",
             render: function (value,record) {
                 return value.type_name;
-            }
-        },{
-            title: 'LOGO',
-            dataIndex: "logo_path",
-            render: function (value,record) {
-                return  <img src={value} alt=""  style={{width: '50px',marginLeft:'5px'}}/>;
             }
         },{
             title: '审核状态',
@@ -152,7 +152,7 @@ export default React.createClass({
             dataIndex: "",
             render(text, record) {
                 return <div style={{ textAlign: "left" }}>
-                    <a href="#" onClick={me.showModal.bind(null, '资质审核', record, true)}>立即审核</a>
+                    <a href="#" onClick={me.showModal.bind(null, '修改信息', record, true)}>修改信息</a>
                 </div>
             }}];
 

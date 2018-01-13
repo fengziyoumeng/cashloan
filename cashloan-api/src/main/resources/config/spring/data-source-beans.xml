@@ -278,8 +278,7 @@
 				<entry value-ref="dataSourceNoSharding" key="dataSourceNoSharding"></entry>
 			</map>
 		</property>
-		<property name="defaultTargetDataSource" ref="dataSourceRDB">
-		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceRDB"></property>
 	</bean>
 
 	<aop:config>

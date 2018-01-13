@@ -152,12 +152,6 @@ public class FlowController extends BaseController {
                              @RequestParam(value = "current") int current,
                              @RequestParam(value = "pageSize") int pageSize ) throws Exception {
         Map<String, Object> params = JsonUtil.parse(searchParams, Map.class);
-        //List<ClFlowInfo> list = clFlowInfoService.getAllProdctListForUV(params,current,pageSize);
-//        Map<String,Object> result = new HashMap<String,Object>();
-//        result.put(Constant.RESPONSE_DATA, list);
-//        result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
-//        result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
-//        ServletUtils.writeToResponse(response,result);
         if(params!=null){
             params.put("pCode",String.valueOf(params.get("realName")));
             params.put("pName",String.valueOf(params.get("phone")));

@@ -40,6 +40,7 @@ var CompanyInfoManage = require('../../CompanyManage/CompanyInfoManage/index'); 
 var CategoryImageManage = require('../../PlatFormManage/CategoryImageManage/index'); //分类图标管理
 var AdInfoManage = require('../../PlatFormManage/AdInfoManage/index'); //广告信息管理
 var CompanyServiceManage = require('../../CompanyManage/CompanyServiceManage/index'); //公司服务审核
+var CompanyServiceEditManage = require('../../CompanyManage/CompanyServiceEditManage/index'); //公司服务修改
 
 
 
@@ -85,6 +86,7 @@ module.exports = {
   CompanyInfoManage,
   CategoryImageManage,
   AdInfoManage,
-  CompanyServiceManage
+  CompanyServiceManage,
+  CompanyServiceEditManage
 
 }

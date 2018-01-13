@@ -17,12 +17,41 @@
     <result column="audit_state" jdbcType="INTEGER" property="audit_state" />
     <result column="audit_message" jdbcType="VARCHAR" property="audit_message" />
   </resultMap>
+
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
     <result column="proc_info" jdbcType="LONGVARCHAR" property="proc_info" />
   </resultMap>
+
+  <resultMap extends="BaseResultMap" id="ResultMapWithType" type="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="proc_info" jdbcType="LONGVARCHAR" property="proc_info" />
+    <association property="companyProd" javaType="com.rongdu.cashloan.cl.domain.CompanyProd" columnPrefix="bcp_">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="big_type"  property="big_type" />
+      <result column="type"  property="type" />
+      <result column="type_name"  property="type_name" />
+      <result column="type_img_path"  property="type_img_path" />
+      <result column="sort"  property="sort" />
+    </association>
+    <association property="companyInfo" javaType="com.rongdu.cashloan.cl.domain.CompanyInformation" columnPrefix="bci_">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="company_name"  property="companyName" />
+    </association>
+    <collection property="OperativeInfoList" ofType="com.rongdu.cashloan.cl.domain.OperativeInfo" columnPrefix="boi_">
+      <result column="id" property="id"></result>
+      <result column="proc_id"  property="proc_id" />
+      <result column="name"  property="name" />
+      <result column="tel"  property="tel" />
+      <result column="wx"  property="wx" />
+      <result column="qq"  property="qq" />
+      <result column="job"  property="job" />
+      <result column="module"  property="module" />
+    </collection>
+  </resultMap>
+
   <sql id="Base_Column_List">
     id, proc_id,type, cp_type, org_id, proc_name, logo_path, official_url, proc_flag, status,
-    sort, audit_person, audit_state, audit_message
+    sort, audit_person, audit_state, audit_message,update_time
   </sql>
   <sql id="Blob_Column_List">
     proc_info
@@ -231,6 +260,15 @@
       audit_message = #{audit_message,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="serviceAudit" parameterType="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
+    update b_company_prod_detail
+    set
+      audit_time = #{audit_time,jdbcType=TIMESTAMP},
+      audit_person = #{audit_person,jdbcType=VARCHAR},
+      audit_state = #{audit_state,jdbcType=INTEGER},
+      audit_message = #{audit_message,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 
   <select id="listCompanyprodDetail" parameterType="com.rongdu.cashloan.cl.domain.CompanyProdDetail" resultMap="ResultMapWithBLOBs">
     select
@@ -286,4 +324,57 @@
       </if>
     </where>
   </select>
+
+  <!--<select id="getAuditList" resultMap="AuditResultMap">
+    select
+      <include refid="Base_Column_List" />
+    FROM b_company_prod_detail bcpd
+    LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
+    WHERE audit_state = 1
+    ORDER BY update_time ASC
+  </select>-->
+
+  <select id="getAuditList" resultMap="ResultMapWithType">
+    select
+      bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
+      bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
+      bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
+      boi.id as boi_id,boi.proc_id as boi_proc_id,boi.name as boi_name,boi.tel as boi_tel,
+      boi.wx as boi_wx,boi.qq as boi_qq,boi.job as boi_job,boi.module as boi_module,
+      bcp.id as bcp_id,bcp.big_type as bcp_big_type,bcp.type as bcp_type,bcp.type_name AS bcp_type_name,
+      bcp.type_img_path as bcp_type_img_path,bcp.sort as bcp_sort,
+      bci.id AS bci_id,bci.company_name AS bci_company_name
+    FROM b_company_prod_detail bcpd
+    LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
+    LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
+    LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
+    WHERE bcpd.audit_state = 1
+    ORDER BY update_time ASC
+  </select>
+
+  <select id="getAllListBySearch" resultMap="ResultMapWithType">
+    select
+      bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
+      bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
+      bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
+      boi.id as boi_id,boi.proc_id as boi_proc_id,boi.name as boi_name,boi.tel as boi_tel,
+      boi.wx as boi_wx,boi.qq as boi_qq,boi.job as boi_job,boi.module as boi_module,
+      bcp.id as bcp_id,bcp.big_type as bcp_big_type,bcp.type as bcp_type,bcp.type_name AS bcp_type_name,
+      bcp.type_img_path as bcp_type_img_path,bcp.sort as bcp_sort,
+      bci.id AS bci_id,bci.company_name AS bci_company_name
+    FROM b_company_prod_detail bcpd
+    LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
+    LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
+    LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
+    <where>
+      <if test="companyName != null and companyName !=''">
+        and bci.company_name LIKE concat('%',#{companyName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="serviceName != null and serviceName !=''">
+        and bcpd.proc_name LIKE concat('%',#{serviceName,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    ORDER BY update_time ASC
+  </select>
+
 </mapper>

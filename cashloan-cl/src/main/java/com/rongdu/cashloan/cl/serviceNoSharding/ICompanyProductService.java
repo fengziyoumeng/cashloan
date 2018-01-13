@@ -1,4 +1,4 @@
-package com.rongdu.cashloan.cl.service;
+package com.rongdu.cashloan.cl.serviceNoSharding;
 
 import com.rongdu.cashloan.cl.domain.CompanyProdDetail;
 
@@ -12,4 +12,10 @@ public interface ICompanyProductService {
     Map<String, Object> listHomeBdata();
 
     List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail);
+
+    List<CompanyProdDetail> getCompanyproductAuditList();
+
+    List<CompanyProdDetail> getAllList(String searchParams,int current,int pageSize);
+
+    void serviceAudit(String data);
 }

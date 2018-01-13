@@ -49,6 +49,14 @@ Utils.ajaxData({
     }
 });
 
+function writeObj(obj){
+    var description = "";
+    for(var i in obj){
+        var property=obj[i];
+        description+=i+" = "+property+"\n";
+    }
+    alert(description);
+}
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -82,7 +90,7 @@ var AddFlowInfo = React.createClass({
         var title = props.title;
         var path = me.path
         var name = me.name
-        var url = "/act/model/company/auditresult.htm";
+        var url = "/act/model/companyservice/auditresult.htm";
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
                 return;
@@ -116,7 +124,7 @@ var AddFlowInfo = React.createClass({
         e.preventDefault();
         var me = this;
         var props = me.props;
-        var url = "/act/model/company/auditresult.htm";
+        var url = "/act/model/companyservice/auditresult.htm";
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
                 return;
@@ -126,7 +134,6 @@ var AddFlowInfo = React.createClass({
                 form: JSON.stringify(objectAssign({'pass': 'no'}, values, {}
                 ))
             });
-
             Utils.ajaxData({
                 url: url,
                 data: data,
@@ -187,19 +194,51 @@ var AddFlowInfo = React.createClass({
         } = this.props.form;
         var imageUrl = this.state.imageUrl;
 
-        var licensePic = {...getFieldProps('licensePic')}.value;
-        var identityFrontPic = {...getFieldProps('identityFrontPic')}.value;
-        var identityReversePic = {...getFieldProps('identityReversePic')}.value;
-        var holdCardPic = {...getFieldProps('holdCardPic')}.value;
+        var companyInfo = getFieldProps("companyInfo").value;
+        var companyProd = getFieldProps("companyProd").value;
+        var operativeInfoList = getFieldProps("operativeInfoList").value;
 
-        var introduction = {...getFieldProps('introduction')}.value;
-        var companyName={...getFieldProps('companyName')}.value;
-        var legalPersonName={...getFieldProps('legalPersonName')}.value;
-        var idnumber={...getFieldProps('idnumber')}.value;
-        var contactPerson={...getFieldProps('contactPerson')}.value;
-        var contactTel={...getFieldProps('contactTel')}.value;
+        var name1;
+        var tel1;
+        var wx1;
+        var qq1;
+        var job1;
+        var module1;
 
+        var name2;
+        var tel2;
+        var wx2;
+        var qq2;
+        var job2;
+        var module2;
 
+        var companyName;
+        var companyType;
+
+        if(companyInfo) {
+            companyName = companyInfo.companyName;
+        }
+        if(companyProd){
+            companyType = companyProd.type_name;
+        }
+        if(operativeInfoList){
+            if(operativeInfoList[0]){
+                name1 = operativeInfoList[0].name;
+                tel1 = operativeInfoList[0].tel;
+                wx1 = operativeInfoList[0].wx;
+                qq1 = operativeInfoList[0].qq;
+                job1 = operativeInfoList[0].job;
+                module1 = operativeInfoList[0].module;
+            }
+            if(operativeInfoList[1]){
+                name2 = operativeInfoList[1].name;
+                tel2 = operativeInfoList[1].tel;
+                wx2 = operativeInfoList[1].wx;
+                qq2 = operativeInfoList[1].qq;
+                job2 = operativeInfoList[1].job;
+                module2 = operativeInfoList[1].module;
+            }
+        }
         var props = this.props;
         var state = this.state;
 
@@ -217,88 +256,111 @@ var AddFlowInfo = React.createClass({
         };
         return (
             <Modal title={props.title} visible={props.visible} onCancel={this.handleCancel} width="1100" footer={modalBtns}>
-                {/*<div style={{ background: '#ECECEC', padding: '30px' }}>
-                    <Card title="公司简介" bordered={false} style={{ width: 300 }}>
-                        <p>企业名称:{companyName}</p>
-                        <p>法人姓名:{legalPersonName}</p>
-                        <p>身份证号:{idnumber}</p>
-                        <p>企业联系人:{contactPerson}</p>
-                        <p>联系人电话:{contactTel}</p>
-                        <p>公司简介:{introduction}</p>
-                    </Card>
-                </div>*/}
-
-
                 <Form horizontal form={this.props.form}>
                     <Input  {...getFieldProps('id', {initialValue: ''})} type="hidden"/>
-
                     <div className="navLine-wrap-left">
                         <h2>基本信息</h2>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="企业名称：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('companyName')} type="text"/>
+                                <FormItem  {...formItemLayout} label="公司名称：">
+                                    <Input disabled={props.canEdit}  value ={companyName} type="text"/>
                                 </FormItem>
                             </Col>
 
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="法人姓名：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('legalPersonName')}/>
+                                <FormItem  {...formItemLayout} label="分类：">
+                                    <Input disabled={props.canEdit}  value = {companyType} />
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="身份证号：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('idnumber')} type="text"/>
+                                <FormItem  {...formItemLayout} label="LOGO：">
+                                    <img src={{...getFieldProps('logo_path')}.value} style={{width: '80px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="企业联系人：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('contactPerson')} type="text"/>
+                                <FormItem  {...formItemLayout} label="产品服务介绍：">
+                                    <Input disabled={props.canEdit} rows={5}  {...getFieldProps('proc_info')} type="textarea"/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <h3>联系人1</h3>
+                        <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="姓名：">
+                                    <Input disabled={props.canEdit}  value = {name1}  type="text"/>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="手机：">
+                                    <Input  disabled={props.canEdit}  value = {tel1}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="联系人手机号：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('contactTel')}  type="text"/>
+                                <FormItem  {...formItemLayout} label="微信：">
+                                    <Input disabled={props.canEdit}  value = {wx1}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="公司简介：">
-                                    <Input rows={6} disabled={props.canEdit}  {...getFieldProps('introduction')}  type="textarea"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-
-
-                        <h2>图片资料</h2>
-                        <Row>
-                            <Col span="12">
-                                <FormItem  {...formItemLayout} label="营业执照：">
-                                    <img src={licensePic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem  {...formItemLayout} label="手持身份证：">
-                                    <img src={holdCardPic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
+                                <FormItem  {...formItemLayout} label="QQ：">
+                                    <Input  disabled={props.canEdit}  value = {qq1}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="身份证正面：">
-                                    <img src={identityFrontPic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
+                                <FormItem  {...formItemLayout} label="职位：">
+                                    <Input disabled={props.canEdit}  value={job1}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="身份证反面：">
-                                    <img src={identityReversePic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
+                                <FormItem  {...formItemLayout} label="负责模块：">
+                                    <Input  disabled={props.canEdit}  value={module1}  type="text"/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <h3>联系人2</h3>
+                        <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="姓名：">
+                                    <Input disabled={props.canEdit}  value = {name2}  type="text"/>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="手机：">
+                                    <Input  disabled={props.canEdit}  value = {tel2}  type="text"/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="微信：">
+                                    <Input disabled={props.canEdit}  value = {wx2}  type="text"/>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="QQ：">
+                                    <Input disabled={props.canEdit}  value = {qq2}  type="text"/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="职位：">
+                                    <Input disabled={props.canEdit}  value={job2}  type="text"/>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="负责模块：">
+                                    <Input  disabled={props.canEdit}  value={module2}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
 
+                        <h2>审核</h2>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="审核理由：">
@@ -312,7 +374,7 @@ var AddFlowInfo = React.createClass({
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="审核人：">
-                                    <Input rows={3} disabled={!props.canEdit}  {...getFieldProps('auditPerson',{
+                                    <Input  disabled={!props.canEdit}  {...getFieldProps('auditPerson',{
                                         rules: [{
                                             required: true,
                                             message: '必填'

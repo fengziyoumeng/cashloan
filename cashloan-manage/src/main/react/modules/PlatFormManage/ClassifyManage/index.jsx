@@ -16,10 +16,10 @@ export default React.createClass({
     },
     render() {
         return <div>
-                    <div>
-                        <SeachForm passParams={this.passParams}/>
-                    </div>
-                    <List params={this.state.params}/>
-               </div>
+                <div>
+                    <SeachForm passParams={this.passParams}/>
+                </div>
+                <List params={this.state.params}/>
+            </div>
     }
 });

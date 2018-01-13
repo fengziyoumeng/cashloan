@@ -1,8 +1,10 @@
-package com.rongdu.cashloan.cl.service.impl;
+package com.rongdu.cashloan.cl.serviceNoSharding.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
-import com.rongdu.cashloan.cl.service.ICompanyProductService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
+import com.rongdu.cashloan.core.common.util.JsonUtil;
 import com.rongdu.cashloan.core.common.util.OrderNoUtil;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
@@ -11,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CompanyProductServiceImpl implements ICompanyProductService {
@@ -192,5 +191,57 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             }
         }
         return companyProdDetails;
+    }
+
+    @Override
+    public List<CompanyProdDetail> getCompanyproductAuditList() {
+        List<CompanyProdDetail> companyProdDetailList = null;
+        try{
+            companyProdDetailList = companyProdDetailMapper.getAuditList();
+        }catch (Exception e){
+            logger.info("获取公司服务审核列表失败",e);
+            throw e;
+        }
+        return companyProdDetailList;
+    }
+
+    @Override
+    public List<CompanyProdDetail> getAllList(String searchParams, int current, int pageSize) {
+        List<CompanyProdDetail> allListBySearch = null;
+        try{
+            PageHelper.startPage(current,pageSize);
+            Map params = JsonUtil.parse(searchParams, Map.class);
+            allListBySearch = companyProdDetailMapper.getAllListBySearch(params);
+        }catch (Exception e){
+            logger.info("查询失败",e);
+            throw e;
+        }
+        return allListBySearch;
+    }
+
+    @Override
+    public void serviceAudit(String data) {
+        try{
+            CompanyProdDetail companyProdDetail = JsonUtil.parse(data, CompanyProdDetail.class);
+            Map map = JsonUtil.parse(data, Map.class);
+            String auditState = map.get("pass") != null ? map.get("pass").toString() :"";
+            String auditMessage = map.get("auditMessage") != null ? map.get("auditMessage").toString() :"";
+            String auditPerson = map.get("auditPerson") != null ? map.get("auditPerson").toString() :"";
+
+            if(auditState.equals("no")){
+                companyProdDetail.setAudit_state(3);
+            }else if(auditState.equals("ok")){
+                companyProdDetail.setAudit_state(2);
+            }
+
+            companyProdDetail.setAudit_message(auditMessage);
+            companyProdDetail.setAudit_person(auditPerson);
+            companyProdDetail.setAudit_time(new Date());
+
+            companyProdDetailMapper.serviceAudit(companyProdDetail);
+        }catch (Exception e){
+            logger.info("审核失败",e);
+            throw e;
+        }
     }
 }

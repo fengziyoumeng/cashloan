@@ -4,6 +4,7 @@ import com.rongdu.cashloan.cl.domain.CompanyProdDetail;
 import com.rongdu.cashloan.core.common.mapper.RDBatisDao;
 
 import java.util.List;
+import java.util.Map;
 
 @RDBatisDao
 public interface CompanyProdDetailMapper {
@@ -50,4 +51,10 @@ public interface CompanyProdDetailMapper {
     int updateByPrimaryKey(CompanyProdDetail record);
 
     List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail record);
+
+    List<CompanyProdDetail> getAuditList();
+
+    List<CompanyProdDetail> getAllListBySearch(Map params);
+
+    void serviceAudit(CompanyProdDetail companyProdDetail);
 }

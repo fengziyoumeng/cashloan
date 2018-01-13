@@ -1,7 +1,7 @@
 package com.rongdu.cashloan.api.controller;
 
 import com.rongdu.cashloan.cl.domain.CompanyProdDetail;
-import com.rongdu.cashloan.cl.service.ICompanyProductService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
 import com.rongdu.cashloan.core.common.context.Constant;
 import com.rongdu.cashloan.core.common.util.ServletUtils;
 import org.slf4j.Logger;
