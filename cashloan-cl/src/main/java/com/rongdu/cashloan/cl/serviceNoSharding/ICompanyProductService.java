@@ -1,4 +1,4 @@
-package com.rongdu.cashloan.cl.service;
+package com.rongdu.cashloan.cl.serviceNoSharding;
 
 import com.rongdu.cashloan.cl.domain.CompanyProdDetail;
 

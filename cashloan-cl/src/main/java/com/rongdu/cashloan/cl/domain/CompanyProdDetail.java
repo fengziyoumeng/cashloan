@@ -68,10 +68,6 @@ public class CompanyProdDetail implements Serializable {
      * 审核状态 1-资料审核中2-审核通过3-审核拒绝
      */
     private Integer audit_state;
-    /**
-     * 审核时间
-     */
-    private Date audit_time;
 
     /**
      * 
