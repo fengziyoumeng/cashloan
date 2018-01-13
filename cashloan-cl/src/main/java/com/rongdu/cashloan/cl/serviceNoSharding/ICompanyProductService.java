@@ -1,4 +1,4 @@
-package com.rongdu.cashloan.cl.serviceNoSharding;
+package com.rongdu.cashloan.cl.service;
 
 import com.rongdu.cashloan.cl.domain.CompanyProdDetail;
 
@@ -12,6 +12,8 @@ public interface ICompanyProductService {
     Map<String, Object> listHomeBdata();
 
     List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail companyProdDetail);
+
+    Long getProdClickNum(String userId, String proc_id);
 
     List<CompanyProdDetail> getCompanyproductAuditList();
 

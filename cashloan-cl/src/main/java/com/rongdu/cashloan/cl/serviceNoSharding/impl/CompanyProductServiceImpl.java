@@ -6,6 +6,7 @@ import com.rongdu.cashloan.cl.mapper.*;
 import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
 import com.rongdu.cashloan.core.common.util.OrderNoUtil;
+import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
 import org.slf4j.Logger;
@@ -53,6 +54,9 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             companyProdDetail.setCp_type(Integer.parseInt(String.valueOf(companyProdDetail.getType()).substring(0,2)));
             companyProdDetail.setStatus(1);
             companyProdDetail.setAudit_state(1);//资料审核中
+            companyProdDetail.setAudit_time(new Date());
+            companyProdDetail.setCreate_time(new Date());
+            companyProdDetail.setUpdate_time(new Date());
             companyProdDetailMapper.insertSelective(companyProdDetail);
             if(operativeInfos!=null && operativeInfos.size()>0){
                 for(OperativeInfo operativeInfo : operativeInfos){
@@ -77,6 +81,8 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
 
         /*------------------------------------------------查询类型------------------------------------------------------------------*/
         List<CompanyProd> companyProds = (List<CompanyProd>)redisClient.getObject("cache_comProd_type_list");
+        List<CompanyProd> companyProdServiceList = new ArrayList<CompanyProd>();//bigType=1的集合
+        List<CompanyProd> companyProdServiceOrgList = new ArrayList<CompanyProd>();//bigType=2的集合
         if(companyProds==null || companyProds.size()==0){
             logger.info("cache_comProd_type_list从缓存中取值--8个服务类型");
             companyProds = companyProdMapper.listCompanyProd(null);
@@ -84,7 +90,14 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
                 redisClient.setObject("cache_comProd_type_list",companyProds);
             }
         }
-        resultMap.put("serviceType",companyProds);//8个服务类型
+        for(CompanyProd companyProd : companyProds){
+            if(companyProd.getBig_type()==1){
+                companyProdServiceList.add(companyProd);
+            }else{
+                companyProdServiceOrgList.add(companyProd);
+            }
+        }
+        resultMap.put("serviceType",companyProdServiceList);//4个服务类型
 
         /*------------------------------------------------查询更多------------------------------------------------------------------*/
         //缓存中有从缓存中取出数据
@@ -95,20 +108,19 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             Map<String,Object> cacheMap = null;
             List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
             Map<String,Object> paraMap = null;
-            if(companyProds.size()>0){
-                for(CompanyProd companyProd : companyProds){
+            if(companyProdServiceOrgList.size()>0){
+                for(CompanyProd companyProd : companyProdServiceOrgList){
                     cacheMap = new HashMap<String,Object>();
-                    if(companyProd.getBig_type()==2){
-                        paraMap = new HashMap<String,Object>();
-                        paraMap.put("itemCode",companyProd.getType());
-                        paraMap.put("parentId",26);
-                        resultList = sysDictDetailMapper.queryItemValue(paraMap);
-                        if(resultList.size()>0){
-                            cacheMap.put("type",String.valueOf(companyProd.getType()));
-                            cacheMap.put("type_name",companyProd.getType_name());
-                            cacheMap.put("detailType_list",resultList);
-                            cacheComProdOrgTypeList.add(cacheMap);
-                        }
+                    paraMap = new HashMap<String,Object>();
+                    paraMap.put("itemCode",companyProd.getType());
+                    paraMap.put("parentId",26);
+                    resultList = sysDictDetailMapper.queryItemValue(paraMap);
+                    if(resultList.size()>0){
+                        cacheMap.put("type",String.valueOf(companyProd.getType()));
+                        cacheMap.put("type_name",companyProd.getType_name());
+                        cacheMap.put("type_img_path",companyProd.getType_img_path());
+                        cacheMap.put("detailType_list",resultList);
+                        cacheComProdOrgTypeList.add(cacheMap);
                     }
                 }
                 if(cacheComProdOrgTypeList.size()>0){
@@ -160,12 +172,13 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         if(adInfos==null || adInfos.size()==0){
             logger.info("cache_b_adinfo_img_list从缓存中取值--金融圈子的ad图");
             AdInfo record = new AdInfo();
+            record.setState(10);
             adInfos = adInfoMapper.selectByAdInfo(record);
             if(adInfos.size()>0){
-                redisClient.setObject("cache_b_adinfo_img_list",bannerInfos);
+                redisClient.setObject("cache_b_adinfo_img_list",adInfos);
             }
         }
-        resultMap.put("adPics",adInfos);//推荐产品
+        resultMap.put("adPics",adInfos);//广告图
 
         return resultMap;
     }
@@ -191,6 +204,12 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
             }
         }
         return companyProdDetails;
+    }
+
+    @Override
+    public Long getProdClickNum(String userId, String procId) {
+        Long prodClickNum = redisClient.incr(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + procId);
+        return prodClickNum;
     }
 
     @Override

@@ -71,19 +71,45 @@ public class CompanyProductController {
     /**
      * 根据分类类型查询公司产品信息列表
      * @param response
-     * @param cp_type 分类
+     * @param type 分类
      */
     @RequestMapping("/query/prod/details")
-    public void queryProdDetails(HttpServletResponse response,Integer cp_type){
+    public void queryProdDetails(HttpServletResponse response,String type){
         Map<String,Object> result = new HashMap<String,Object>();
+        CompanyProdDetail companyProdDetail = new CompanyProdDetail();
         try {
-            CompanyProdDetail companyProdDetail = new CompanyProdDetail();
-            companyProdDetail.setCp_type(cp_type);
+            if(type.length()==2){
+                companyProdDetail.setCp_type(Integer.parseInt(type));//分类
+            }else if(type.length()==3){
+                companyProdDetail.setType(Integer.parseInt(type));//子分类
+            }
             List<CompanyProdDetail> companyProdDetails = companyProductService.listCompanyprodDetail(companyProdDetail);
             result.put(Constant.RESPONSE_DATA, companyProdDetails);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
         }catch (Exception e){
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+
+    /**
+     * 获取产品用户浏览数
+     * @param response
+     * @param userId
+     * @param procId
+     */
+    @RequestMapping("/query/prod/click")
+    public void queryProdClick(HttpServletResponse response,String userId,String procId){
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            Long prodClickNum = companyProductService.getProdClickNum(userId,procId);
+            result.put(Constant.RESPONSE_DATA, prodClickNum);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
+            e.printStackTrace();
             result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
         }

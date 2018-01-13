@@ -105,12 +105,35 @@ public class CompanyProdDetail implements Serializable {
      */
     private String introduction;
 
+    /**
+     * 审核时间
+     */
+    private Date audit_time;
+
+    /**
+     * 创建时间
+     */
+    private Date create_time;
+
+    /**
+     * 更新时间
+     */
     private Date update_time;
+
+    private Long show_click_num;
 
     /**
      * b_company_prod_detail
      */
     private static final long serialVersionUID = 1L;
+
+    public Long getShow_click_num() {
+        return show_click_num;
+    }
+
+    public void setShow_click_num(Long show_click_num) {
+        this.show_click_num = show_click_num;
+    }
 
     /**
      * 
@@ -385,12 +408,20 @@ public class CompanyProdDetail implements Serializable {
         this.introduction = introduction;
     }
 
-    public CompanyProd getCompanyProd() {
-        return companyProd;
+    public Date getAudit_time() {
+        return audit_time;
     }
 
-    public void setCompanyProd(CompanyProd companyProd) {
-        this.companyProd = companyProd;
+    public void setAudit_time(Date audit_time) {
+        this.audit_time = audit_time;
+    }
+
+    public Date getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Date create_time) {
+        this.create_time = create_time;
     }
 
     public Date getUpdate_time() {
@@ -401,20 +432,20 @@ public class CompanyProdDetail implements Serializable {
         this.update_time = update_time;
     }
 
+    public CompanyProd getCompanyProd() {
+        return companyProd;
+    }
+
+    public void setCompanyProd(CompanyProd companyProd) {
+        this.companyProd = companyProd;
+    }
+
     public CompanyInformation getCompanyInfo() {
         return companyInfo;
     }
 
     public void setCompanyInfo(CompanyInformation companyInfo) {
         this.companyInfo = companyInfo;
-    }
-
-    public Date getAudit_time() {
-        return audit_time;
-    }
-
-    public void setAudit_time(Date audit_time) {
-        this.audit_time = audit_time;
     }
 
     @Override
@@ -448,7 +479,11 @@ public class CompanyProdDetail implements Serializable {
             return false;
         if (registeredCapital != null ? !registeredCapital.equals(that.registeredCapital) : that.registeredCapital != null)
             return false;
-        return introduction != null ? introduction.equals(that.introduction) : that.introduction == null;
+        if (introduction != null ? !introduction.equals(that.introduction) : that.introduction != null) return false;
+        if (audit_time != null ? !audit_time.equals(that.audit_time) : that.audit_time != null) return false;
+        if (create_time != null ? !create_time.equals(that.create_time) : that.create_time != null) return false;
+        if (update_time != null ? !update_time.equals(that.update_time) : that.update_time != null) return false;
+        return show_click_num != null ? show_click_num.equals(that.show_click_num) : that.show_click_num == null;
     }
 
     @Override
@@ -473,6 +508,10 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (companyAddress != null ? companyAddress.hashCode() : 0);
         result = 31 * result + (registeredCapital != null ? registeredCapital.hashCode() : 0);
         result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
+        result = 31 * result + (audit_time != null ? audit_time.hashCode() : 0);
+        result = 31 * result + (create_time != null ? create_time.hashCode() : 0);
+        result = 31 * result + (update_time != null ? update_time.hashCode() : 0);
+        result = 31 * result + (show_click_num != null ? show_click_num.hashCode() : 0);
         return result;
     }
 
@@ -502,7 +541,10 @@ public class CompanyProdDetail implements Serializable {
                 ", companyAddress='" + companyAddress + '\'' +
                 ", registeredCapital='" + registeredCapital + '\'' +
                 ", introduction='" + introduction + '\'' +
+                ", audit_time=" + audit_time +
+                ", create_time=" + create_time +
                 ", update_time=" + update_time +
+                ", show_click_num=" + show_click_num +
                 '}';
     }
 }
