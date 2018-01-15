@@ -20,4 +20,6 @@ public interface ICompanyProductService {
     List<CompanyProdDetail> getAllList(String searchParams,int current,int pageSize);
 
     void serviceAudit(String data);
+
+    void updateProdClickNum();
 }
