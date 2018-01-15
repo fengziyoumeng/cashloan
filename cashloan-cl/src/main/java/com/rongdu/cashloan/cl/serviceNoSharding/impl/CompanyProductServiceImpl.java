@@ -140,6 +140,12 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
         if(companyProdDetails!=null && companyProdDetails.size()>0){
             OperativeInfo operativeInfo = new OperativeInfo();
             for(CompanyProdDetail companyProdDetail1 : companyProdDetails){
+                //取浏览量缓存数据，有就覆盖返回，没有就用数据库中查出来的
+                String numString = redisClient.get(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + companyProdDetail1.getProc_id());
+                if(StringUtils.isNotBlank(numString)){
+                    companyProdDetail1.setShow_click_num(Long.parseLong(numString));
+                }
+
                 //获取企业相关信息
                 CompanyInformation companyInformation = companyInformationMapper.findByPrimary(companyProdDetail1.getOrg_id());
                 companyProdDetail1.setCompanyAddress(companyInformation.getCompanyAddress());
