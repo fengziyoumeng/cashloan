@@ -118,10 +118,19 @@ public class CompanyProdDetail implements Serializable {
 
     private Long show_click_num;
 
+    private String flag_msg;
     /**
      * b_company_prod_detail
      */
     private static final long serialVersionUID = 1L;
+
+    public String getFlag_msg() {
+        return flag_msg;
+    }
+
+    public void setFlag_msg(String flag_msg) {
+        this.flag_msg = flag_msg;
+    }
 
     public Long getShow_click_num() {
         return show_click_num;
@@ -471,6 +480,8 @@ public class CompanyProdDetail implements Serializable {
             return false;
         if (OperativeInfoList != null ? !OperativeInfoList.equals(that.OperativeInfoList) : that.OperativeInfoList != null)
             return false;
+        if (companyProd != null ? !companyProd.equals(that.companyProd) : that.companyProd != null) return false;
+        if (companyInfo != null ? !companyInfo.equals(that.companyInfo) : that.companyInfo != null) return false;
         if (companyAddress != null ? !companyAddress.equals(that.companyAddress) : that.companyAddress != null)
             return false;
         if (registeredCapital != null ? !registeredCapital.equals(that.registeredCapital) : that.registeredCapital != null)
@@ -479,7 +490,9 @@ public class CompanyProdDetail implements Serializable {
         if (audit_time != null ? !audit_time.equals(that.audit_time) : that.audit_time != null) return false;
         if (create_time != null ? !create_time.equals(that.create_time) : that.create_time != null) return false;
         if (update_time != null ? !update_time.equals(that.update_time) : that.update_time != null) return false;
-        return show_click_num != null ? show_click_num.equals(that.show_click_num) : that.show_click_num == null;
+        if (show_click_num != null ? !show_click_num.equals(that.show_click_num) : that.show_click_num != null)
+            return false;
+        return flag_msg != null ? flag_msg.equals(that.flag_msg) : that.flag_msg == null;
     }
 
     @Override
@@ -501,6 +514,8 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (proc_info != null ? proc_info.hashCode() : 0);
         result = 31 * result + (operativeInfos != null ? operativeInfos.hashCode() : 0);
         result = 31 * result + (OperativeInfoList != null ? OperativeInfoList.hashCode() : 0);
+        result = 31 * result + (companyProd != null ? companyProd.hashCode() : 0);
+        result = 31 * result + (companyInfo != null ? companyInfo.hashCode() : 0);
         result = 31 * result + (companyAddress != null ? companyAddress.hashCode() : 0);
         result = 31 * result + (registeredCapital != null ? registeredCapital.hashCode() : 0);
         result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
@@ -508,6 +523,7 @@ public class CompanyProdDetail implements Serializable {
         result = 31 * result + (create_time != null ? create_time.hashCode() : 0);
         result = 31 * result + (update_time != null ? update_time.hashCode() : 0);
         result = 31 * result + (show_click_num != null ? show_click_num.hashCode() : 0);
+        result = 31 * result + (flag_msg != null ? flag_msg.hashCode() : 0);
         return result;
     }
 
@@ -527,7 +543,6 @@ public class CompanyProdDetail implements Serializable {
                 ", sort=" + sort +
                 ", audit_person='" + audit_person + '\'' +
                 ", audit_state=" + audit_state +
-                ", audit_time=" + audit_time +
                 ", audit_message='" + audit_message + '\'' +
                 ", proc_info='" + proc_info + '\'' +
                 ", operativeInfos='" + operativeInfos + '\'' +
@@ -541,6 +556,7 @@ public class CompanyProdDetail implements Serializable {
                 ", create_time=" + create_time +
                 ", update_time=" + update_time +
                 ", show_click_num=" + show_click_num +
+                ", flag_msg='" + flag_msg + '\'' +
                 '}';
     }
 }
