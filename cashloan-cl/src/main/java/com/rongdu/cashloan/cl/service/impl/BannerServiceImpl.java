@@ -70,9 +70,10 @@ public class BannerServiceImpl implements BannerService {
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void deleteById(Long id,String imgPath)throws Exception {
 		try{
 			bannerInfoMapper.deleteByPrimaryKey(id);
+			ImageUploadUtil.deleteImageOnOSS("Banner",imgPath);
 		}catch (Exception e){
 			logger.info("删除失败",e);
 			throw e;

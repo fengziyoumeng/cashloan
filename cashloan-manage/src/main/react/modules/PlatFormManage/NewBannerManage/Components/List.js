@@ -115,8 +115,7 @@ export default React.createClass({
                     url: "/act/newbannerInfo/delete.htm",
                     data: {
                         id: record.id,
-                        code: record.code,
-                        picName:record.picName
+                        imgPath: record.banner_url,
                     },
                     method: 'post',
                     callback: (result) => {

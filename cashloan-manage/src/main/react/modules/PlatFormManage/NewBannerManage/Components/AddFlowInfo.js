@@ -196,21 +196,12 @@ var AddFlowInfo = React.createClass({
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="跳转类型：">
-                                    <Select disabled={!props.canEdit} {...getFieldProps('status', {rules: [{required: true, message: '必填' }]})} >
-                                        <Option value={'1'}>跳转</Option>
-                                        <Option value={'2'}>跳转到图片</Option>
-                                        <Option value={'3'}>不跳转</Option>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
                                 <FormItem  {...formItemLayout} label="排序：">
                                     <Input disabled={!props.canEdit}  {...getFieldProps('sort',{rules: [{required: true,message: '必填'}]})}/>
                                 </FormItem>
                             </Col>
+                        </Row>
+                        <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="上传图片：">
                                     <Upload
@@ -225,6 +216,14 @@ var AddFlowInfo = React.createClass({
                                                 <Icon type="plus" className="avatar-uploader-trigger"/>
                                         }
                                     </Upload>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="启用状态：">
+                                    <Select disabled={!props.canEdit} {...getFieldProps('state', {rules: [{required: true, message: '必填' }]})} >
+                                        <Option value={'10'}>是</Option>
+                                        <Option value={'20'}>否</Option>
+                                    </Select>
                                 </FormItem>
                             </Col>
                         </Row>

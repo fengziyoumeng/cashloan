@@ -43,10 +43,11 @@ public class BannerController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/act/newbannerInfo/delete.htm")
-    public void deleteBanner(Long id) throws Exception {
+    public void deleteBanner(@RequestParam(value = "id") Long id,
+                             @RequestParam(value = "imgPath")String imgPath) throws Exception {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            bannerService.deleteById(id);
+            bannerService.deleteById(id,imgPath);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "删除成功");
             ServletUtils.writeToResponse(response, result);
@@ -68,11 +69,11 @@ public class BannerController extends BaseController {
         try {
             bannerService.saveOrUpdate(data);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
-            result.put(Constant.RESPONSE_CODE_MSG, "删除成功");
+            result.put(Constant.RESPONSE_CODE_MSG, "保存成功");
             ServletUtils.writeToResponse(response, result);
         } catch (Exception e) {
             result.put(Constant.RESPONSE_CODE, Constant.FAIL_CODE_VALUE);
-            result.put(Constant.RESPONSE_CODE_MSG, "删除失败");
+            result.put(Constant.RESPONSE_CODE_MSG, "保存失败");
             ServletUtils.writeToResponse(response, result);
         }
     }

@@ -180,7 +180,9 @@ var AddFlowInfo = React.createClass({
     setVlue(vlu) {
         this.setState({"i_val": vlu});
     },
+    fangda(){
 
+    },
     render() {
         const {
             getFieldProps
@@ -277,7 +279,7 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="营业执照：">
-                                    <img src={licensePic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
+                                    <img src={licensePic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}} onclick={this.fangda}/>
                                 </FormItem>
                             </Col>
                             <Col span="12">

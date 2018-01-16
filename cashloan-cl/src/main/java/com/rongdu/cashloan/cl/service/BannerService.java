@@ -23,6 +23,6 @@ public interface BannerService  {
 
     void saveOrUpdate(String data) throws Exception;
 
-    void deleteById(Long id);
+    void deleteById(Long id,String imgPath) throws Exception;
 
 }
