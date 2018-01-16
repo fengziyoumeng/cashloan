@@ -8,21 +8,6 @@ import Lookdetails from './Lookdetails'
 import AddFlowInfo from './AddFlowInfo'
 import AssignPermissions from './AssignPermissions'
 var confirm = Modal.confirm;
-
-var typeList = [];
-
-Utils.ajaxData({
-    url: '/act/flowControl/getMutilCheckBox.htm',
-    method: 'get',
-    type: 'json',
-    data : {
-        "typeCode":"COM_PROD_SON_TYPE"
-    },
-    callback: (result) => {
-        typeList = result.data;
-    }
-});
-
 export default React.createClass({
     getInitialState() {
         return {
@@ -45,61 +30,35 @@ export default React.createClass({
         var pagination = this.state.pagination;
         this.fetch();
     },
-    //新窗口
+    //新增跟修改弹窗
     showModal(title, record, canEdit) {
         var record = record;
-        var data ='';
-        if(title=="修改"){
-            data = record;
+        if (title == '修改') {
+            var record = record;
+            this.refs.AddFlowInfo.setFieldsValue(record);
+            console.log(record);
+        } else if (title == '新增') {
+            record = null
         }
-
-        this.refs.AddFlowInfo.setFieldsValue(record);
         this.setState({
             canEdit: canEdit,
             visible: true,
             title: title,
-            record: data
+            record: record
         });
     },
-    getTypeList(){
-        return typeList;
-    },
-    deleteRecord(title, record, canEdit){
-        var me = this;
-        confirm({
-            title:"删除后不可恢复,确定要删除吗?",
-            onOk:function(){
-                Utils.ajaxData({
-                    url:"/act/categoryimage/delete.htm",
-                    data:{
-                        id:record.id,
-                        imgPath:record.type_img_path
-                    },
-                    method:"post",
-                    callback:function(result){
-                        Modal.success({
-                            title:result.msg
-                        });
-                        me.refreshList();
-                    }
-                })
-            },
-            onCancel:function(){}
+    //打开分配弹窗
+    showAssignModal(title, record) {
+        this.setState({
+            assignVisible: true,
+            title: title,
+            record: record
         });
     },
     rowKey(record) {
         return record.id;
     },
-    componentWillReceiveProps(nextProps, nextState) {
-        this.setState({
-            params: nextProps.params,
-        });
-        this.fetch(nextProps.params);
-    },
-    componentDidMount() {
-        this.fetch();
 
-    },
     //分页
     handleTableChange(pagination, filters, sorter) {
         const pager = this.state.pagination;
@@ -107,8 +66,11 @@ export default React.createClass({
         this.setState({
             pagination: pager,
         });
+        this.fetch({
+            pageSize: pagination.pageSize,
+            current: pagination.current
+        });
     },
-    //获取数据
     fetch(params = {
         pageSize: 10,
         current: 1
@@ -117,9 +79,10 @@ export default React.createClass({
             loading: true
         });
         Utils.ajaxData({
-            url: '/act/model/categoryimage/getall.htm',
+            url: '/act/newbannerinfo/getall.htm',
             data: params,
             callback: (result) => {
+                 console.log(result)
                 const pagination = this.state.pagination;
                 pagination.total = result.totalCount;
                 if (!pagination.current) {
@@ -134,62 +97,109 @@ export default React.createClass({
             }
         });
     },
-    //清空列表
     clearList() {
         this.setState({
             selectedRowKeys: [],
         });
     },
-    //刷新列表
     refreshList() {
+        this.fetch();
+    },
+    delete(record) {
+        //console.log(record)
+        var me = this;
+        confirm({
+            title: '确认要删除这项内容,不可恢复！',
+            onOk: function () {
+                Utils.ajaxData({
+                    url: "/act/newbannerInfo/delete.htm",
+                    data: {
+                        id: record.id,
+                        code: record.code,
+                        picName:record.picName
+                    },
+                    method: 'post',
+                    callback: (result) => {
+                        Modal.success({
+                            title: result.msg,
+                        });
+                        me.refreshList();
+                    }
+                });
+            },
+            onCancel: function () { }
+        });
+    },
+    componentDidMount() {
         this.fetch();
     },
     render() {
         var me = this;
+        const {
+            loading,
+            selectedRowKeys
+        } = this.state;
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
+        const hasSelected = selectedRowKeys.length > 0;
         var columns = [{
             title: '位置',
-            dataIndex: "big_type",
-            render:function(value,record){
-                if(value === 1){
-                    return "金融圈子导航栏";
-                }else if(value === 2){
-                    return "金融圈子大分类";
+            dataIndex: "site",
+            render: function (value) {
+                if (value == 0){
+                    return "金融圈子";
+                }if  (value == 1){
+                    return "首页";
                 }
             }
         },{
-            title: '图片',
-            dataIndex: 'type_img_path',
-            render:function(value,record){
-                return <img src={value} alt=""  style={{width: '50px',marginLeft:'1px'}}/>
+            title: '预览',
+            dataIndex: 'banner_url',
+            render: function (value) {
+               return  <img src={value} alt=""  style={{width: '80px',marginLeft:'40px'}}/>;
             }
-        },{
-            title: '标题',
-            dataIndex: "type_name",
-        }/*,{
-            title: '二级分类',
-            dataIndex: "type",
-            render:function(value,record){
-                for(var index=0;index<typeList.length;index++){
-                    var code = typeList[index].itemCode.substring(0,2);
-                    if( code == value){
-                        return typeList[index].itemValue;
-                    }
+        }, {
+            title: '跳转类型',
+            dataIndex: "status",
+            render: function (value) {
+                if (value == 0){
+                    return "不跳转";
+                }if  (value == 1){
+                    return "跳转";
+                }if  (value == 2){
+                    return "跳转到图片";
+                }if  (value == 3){
+                    return "区分app与h5";
                 }
             }
-        }*/,{
+        },{
+            title: '跳转地址',
+            dataIndex: "skip_url"
+        },{
             title: '排序',
-            dataIndex: "sort",
+            dataIndex: "sort"
+        }, {
+            title: '状态',
+            dataIndex: "state"  ,
+            render: function (value) {
+                if (value == 10)
+                    return "启用";
+                else return "禁用";
+            }
         },{
             title: '操作',
             dataIndex: "",
             render(text, record) {
                 return <div style={{ textAlign: "left" }}>
-                    <a href="#" onClick={me.showModal.bind(null, '修改', record, true)}>修改</a>
+                    <a href="#" onClick={me.showModal.bind(null, '修改', record, true) }>修改 </a>
                     <span className="ant-divider"></span>
-                    <a href="#" onClick={me.deleteRecord.bind(null, '删除', record, true)}>删除</a>
+                    <a href="#" onClick={me.delete.bind(null, record) }>删除</a>
+                    <span className="ant-divider"></span>
                 </div>
-            }}];
-
+            }
+        }];
         var state = this.state;
         return (
             <div className="block-panel">

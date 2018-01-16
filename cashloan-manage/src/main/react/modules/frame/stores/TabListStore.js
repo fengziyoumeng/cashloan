@@ -97,6 +97,7 @@ export default Reflux.createStore({
 					'ChannelH5Manage',
 					'ChannelH5ManageTwo',
 					'BannerManage',
+					'NewBannerManage',
 					'ClickTrackManage',
 					'CompanyInfoManage',
 					'CategoryImageManage',

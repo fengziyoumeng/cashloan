@@ -56,10 +56,10 @@ public class AdInfoServiceImpl implements AdInfoService{
         Map map = JsonUtil.parse(data, Map.class);
         String adUrl = (String)map.get("path");
         try{
-            String ossImage = null;
-            if(StringUtil.isNotBlank(adUrl)){
-                ossImage = ImageUploadUtil.uploadOSSDeleteTemp(adUrl, "adInfoImage");
-            }
+            String oldImgPath = adInfo.getAdUrl();
+            //传入oldImgPath是为了更新的时候用原来的key做新图片的key直接覆盖原文件，就不用删除老文件
+            String ossImage = ImageUploadUtil.uploadOSSDeleteTemp(adUrl, "adInfoImage",oldImgPath);
+
             if(StringUtil.isNotBlank(ossImage)){
                 adInfo.setAdUrl(ossImage);
             }

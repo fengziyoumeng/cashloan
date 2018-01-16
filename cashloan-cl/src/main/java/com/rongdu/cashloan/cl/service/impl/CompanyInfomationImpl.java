@@ -29,7 +29,7 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
                 CompanyInformation companyInfo = new CompanyInformation();
                 companyInfo.setUserId(companyInformation.getUserId());
                 companyInfo.setCompanyName(companyInformation.getCompanyName());
-                companyInfo.setCompanyAddress(companyInformation.getCompanyAddress());
+//                companyInfo.setCompanyAddress(companyInformation.getCompanyAddress());
                 companyInfo.setLegalPersonName(companyInformation.getLegalPersonName());
                 companyInfo.setIDNumber(companyInformation.getIDNumber());
                 companyInfo.setContactPerson(companyInformation.getContactPerson());

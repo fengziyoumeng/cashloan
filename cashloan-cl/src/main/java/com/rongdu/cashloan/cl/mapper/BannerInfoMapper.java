@@ -44,4 +44,7 @@ public interface BannerInfoMapper {
     int updateByPrimaryKey(BannerInfo record);
 
     List<BannerInfo> selectByBannerInfo(BannerInfo record);
+
+    List<BannerInfo> selectAll();
+
 }
