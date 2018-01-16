@@ -4,11 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
 import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
+import com.rongdu.cashloan.cl.util.ImageUploadUtil;
+import com.rongdu.cashloan.core.common.util.Base64;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
 import com.rongdu.cashloan.core.common.util.OrderNoUtil;
 import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,8 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 
-@Service
-public class CompanyProductServiceImpl implements ICompanyProductService {
+@Service("companyProductService")
+public class CompanyProductServiceImpl implements ICompanyProductService{
 
     public static final Logger logger = LoggerFactory.getLogger(CompanyProductServiceImpl.class);
 
@@ -50,6 +53,9 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         long prod_id = Long.parseLong(OrderNoUtil.getSerialNumber());
         List<OperativeInfo> operativeInfos = companyProdDetail.getOperativeInfoList();
         if(companyProdDetail.getId()==null){
+            //把传过来的图片路径用base64解密后上传到阿里云,返回的地址保存到对应字段中去
+            String logo_path = ImageUploadUtil.uploadOSSDeleteTemp(Base64.decodeStr(companyProdDetail.getLogo_path()), "companyInfoPic");
+            companyProdDetail.setLogo_path(logo_path);
             companyProdDetail.setProc_id(prod_id);
             companyProdDetail.setCp_type(Integer.parseInt(String.valueOf(companyProdDetail.getType()).substring(0,2)));
             companyProdDetail.setStatus(1);
@@ -139,6 +145,12 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         if(companyProdDetails!=null && companyProdDetails.size()>0){
             OperativeInfo operativeInfo = new OperativeInfo();
             for(CompanyProdDetail companyProdDetail1 : companyProdDetails){
+                //取浏览量缓存数据，有就覆盖返回，没有就用数据库中查出来的
+                String numString = redisClient.get(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + companyProdDetail1.getProc_id());
+                if(StringUtils.isNotBlank(numString)){
+                    companyProdDetail1.setShow_click_num(Long.parseLong(numString));
+                }
+
                 //获取企业相关信息
                 CompanyInformation companyInformation = companyInformationMapper.findByPrimary(companyProdDetail1.getOrg_id());
                 companyProdDetail1.setCompanyAddress(companyInformation.getCompanyAddress());
@@ -191,6 +203,12 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         if(companyProdDetails!=null && companyProdDetails.size()>0){
             OperativeInfo operativeInfo = new OperativeInfo();
             for(CompanyProdDetail comProdDetail : companyProdDetails){
+                //取浏览量缓存数据，有就覆盖返回，没有就用数据库中查出来的
+                String numString = redisClient.get(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + comProdDetail.getProc_id());
+                if(StringUtils.isNotBlank(numString)){
+                    comProdDetail.setShow_click_num(Long.parseLong(numString));
+                }
+
                 //获取企业相关信息
                 CompanyInformation companyInformation = companyInformationMapper.findByPrimary(comProdDetail.getOrg_id());
                 comProdDetail.setCompanyAddress(companyInformation.getCompanyAddress());
@@ -261,6 +279,23 @@ public class CompanyProductServiceImpl implements ICompanyProductService {
         }catch (Exception e){
             logger.info("审核失败",e);
             throw e;
+        }
+    }
+
+    @Override
+    public void updateProdClickNum() {
+        CompanyProdDetail companyProdDetail = new CompanyProdDetail();
+        companyProdDetail.setStatus(1);//上线
+        companyProdDetail.setAudit_state(2);//审核通过
+        List<CompanyProdDetail> companyProdDetails = companyProdDetailMapper.listCompanyprodDetail(companyProdDetail);
+        if(companyProdDetails!=null && companyProdDetails.size()>0){
+            for(CompanyProdDetail comProdDetail : companyProdDetails){
+                String numString = redisClient.get(AppConstant.REDIS_KEY_CLICK_BDATA_PROD_INFO + comProdDetail.getProc_id());
+                if(StringUtils.isNotBlank(numString)){
+                    comProdDetail.setShow_click_num(Long.parseLong(numString));
+                    companyProdDetailMapper.updateByPrimaryKeySelective(comProdDetail);
+                }
+            }
         }
     }
 }

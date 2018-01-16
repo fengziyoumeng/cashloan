@@ -2,14 +2,10 @@ package com.rongdu.cashloan.manage.job_new;
 
 import com.rongdu.cashloan.cl.domain.ClFlowInfo;
 import com.rongdu.cashloan.cl.service.ClFlowInfoService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
+import com.rongdu.cashloan.cl.threads.SingleThreadPool;
 import com.rongdu.cashloan.core.common.exception.ServiceException;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.rongdu.cashloan.manage.domain.QuartzInfo;
 import com.rongdu.cashloan.manage.domain.QuartzLog;
 import com.rongdu.cashloan.manage.service.QuartzInfoService;
@@ -23,6 +19,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import tool.util.BeanUtil;
 import tool.util.DateUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Lazy(value = false)
@@ -62,6 +64,15 @@ public class TodayQuartz
     }
 
     private String executeContent() throws ServiceException {
+        SingleThreadPool.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                ICompanyProductService companyProductService = (ICompanyProductService)BeanUtil.getBean("companyProductService");
+                companyProductService.updateProdClickNum();
+                logger.info("===>结束执行定期持久化今日产品用户浏览量数据到数据库任务");
+            }
+        });
+
         logger.info("开始启动TodayQuartz...");
         logger.info("===>开始执行定期持久化今日数据到数据库...");
         ClFlowInfoService clFlowInfoService = (ClFlowInfoService)BeanUtil.getBean("clFlowInfoService");

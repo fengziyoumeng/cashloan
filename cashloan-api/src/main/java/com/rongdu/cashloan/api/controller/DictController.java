@@ -38,7 +38,7 @@ import java.util.Map;
 @Scope("prototype")
 @Controller
 @CrossOrigin
-@RequestMapping("/dict")
+@RequestMapping("/api/dict")
 public class DictController extends BaseController {
 
 	@Resource
