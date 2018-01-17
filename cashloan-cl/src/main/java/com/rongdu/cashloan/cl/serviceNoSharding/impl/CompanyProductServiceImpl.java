@@ -257,6 +257,27 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
     }
 
     @Override
+    public List<CompanyProdDetail> selectAllStateList(Long userId, Integer auditState) {
+        List<CompanyProdDetail> companyProdDetails = null;
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("userId",userId);
+        params.put("auditState",auditState);
+        try{
+            /*Object object = redisClient.getObject(AppConstant.REDIS_KEY_AUDIT_STATE_LIST + userId + ":" + auditState);
+            if(object != null){
+                List<CompanyProdDetail> prodDetails = (List<CompanyProdDetail>)object;
+                return prodDetails;
+            }*/
+            companyProdDetails = companyProdDetailMapper.getAuditStateList(params);
+//            redisClient.setObject(AppConstant.REDIS_KEY_AUDIT_STATE_LIST+userId+":"+auditState,companyProdDetails,1000*3600*24);
+        }catch (Exception e){
+            logger.info("获取服务审核状态列表失败",e);
+            throw e;
+        }
+        return companyProdDetails;
+    }
+
+    @Override
     public void serviceAudit(String data) {
         try{
             CompanyProdDetail companyProdDetail = JsonUtil.parse(data, CompanyProdDetail.class);

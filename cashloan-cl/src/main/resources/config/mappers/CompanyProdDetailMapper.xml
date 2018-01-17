@@ -54,6 +54,16 @@
     </collection>
   </resultMap>
 
+  <resultMap extends="BaseResultMap" id="AuditStateMap" type="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="proc_info" jdbcType="LONGVARCHAR" property="proc_info" />
+    <association property="companyInfo" javaType="com.rongdu.cashloan.cl.domain.CompanyInformation" columnPrefix="bci_">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="company_name"  property="companyName" />
+      <result column="registered_capital"  property="registeredCapital" />
+    </association>
+  </resultMap>
+
   <sql id="Base_Column_List">
     id, proc_id,type, cp_type, org_id, proc_name, logo_path, official_url, proc_flag, status,
     sort, audit_person, audit_state, audit_message,audit_time,create_time,update_time,show_click_num,flag_msg
@@ -445,6 +455,19 @@
       </if>
     </where>
     ORDER BY update_time ASC
+  </select>
+
+  <select id="getAuditStateList" resultMap="AuditStateMap">
+    select
+      bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
+      bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
+      bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
+      bcpd.creat_time,
+      bci.id AS bci_id,bci.company_name AS bci_company_name,bci.registered_capital AS bci_registered_capital
+    FROM b_company_prod_detail bcpd
+    LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
+    WHERE bci.user_id =#{userId} AND bcpd.audit_state = #{auditState}
+    ORDER BY bcpd.update_time DESC
   </select>
 
 </mapper>

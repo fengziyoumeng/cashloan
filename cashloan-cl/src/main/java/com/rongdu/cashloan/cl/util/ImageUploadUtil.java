@@ -83,7 +83,7 @@ public class ImageUploadUtil {
                 if (file.exists()) {
                     String imageName = imgTempPath.substring(imgTempPath.lastIndexOf(File.separator)+1);
                     //如果有oldPath，则认为是更新，则直接取oldPath的key作为新文件的key覆盖原来的文件
-                    if(StringUtil.isNotBlank(oldPath[0])){
+                    if(oldPath !=null && oldPath.length>0 && StringUtil.isNotBlank(oldPath[0])){
                         imageName = oldPath[0].substring(oldPath[0].indexOf(dirName), oldPath[0].indexOf("?"));
                         imageName = imageName.replaceAll(dirName+"/","");
                     }

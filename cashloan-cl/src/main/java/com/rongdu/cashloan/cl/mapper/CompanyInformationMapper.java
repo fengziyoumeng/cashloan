@@ -29,5 +29,5 @@ public interface CompanyInformationMapper extends BaseMapper<CompanyInformation,
 
     void updateAudit(CompanyInformation companyInformation);
 
-    CompanyInformation selectAuditStateByUserId(Long userId);
+    List<CompanyInformation> selectAuditStateByUserId(Long userId);
 }
