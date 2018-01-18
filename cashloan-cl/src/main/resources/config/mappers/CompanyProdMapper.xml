@@ -129,4 +129,11 @@
       </if>
     </where>
   </select>
+
+  <select id="listSelective" parameterType="com.rongdu.cashloan.cl.domain.CompanyProd" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from b_company_prod
+  </select>
+
 </mapper>

@@ -106,7 +106,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.rongdu.cashloan.cl.domain.BannerInfo">
     update cl_banner_info
-    set banner_url = #{banner_url,jdbcType=VARCHAR},
+    set
+      <if test="banner_url !=null">
+       banner_url = #{banner_url,jdbcType=VARCHAR},
+      </if>
       skip_url = #{skip_url,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=VARCHAR},
       site = #{site,jdbcType=VARCHAR},
@@ -142,5 +145,10 @@
         and state = #{state,jdbcType=VARCHAR}
       </if>
     </where>
+  </select>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cl_banner_info
   </select>
 </mapper>

@@ -74,7 +74,7 @@ public class ImageUploadUtil {
      * @param dirName oss目录
      * @return 保存到oss中的url路径
      */
-    public static String  uploadOSSDeleteTemp(String imgTempPath,String dirName) throws Exception{
+    public static String  uploadOSSDeleteTemp(String imgTempPath,String dirName,String ...oldPath) throws Exception{
         String imgOSSPath = "";
         try {
             if (StringUtil.isNotEmpty(imgTempPath)) {
@@ -82,7 +82,12 @@ public class ImageUploadUtil {
                 //判断服务器上是否已经有图片，有则认为是重新上传，无则认为没有修改图片，不再上传oss
                 if (file.exists()) {
                     String imageName = imgTempPath.substring(imgTempPath.lastIndexOf(File.separator)+1);
-                    imgOSSPath = AliYunUtil.uploadH5File(dirName + "/", imageName, file);
+                    //如果有oldPath，则认为是更新，则直接取oldPath的key作为新文件的key覆盖原来的文件
+                    if(oldPath !=null && oldPath.length>0 && StringUtil.isNotBlank(oldPath[0])){
+                        imageName = oldPath[0].substring(oldPath[0].indexOf(dirName), oldPath[0].indexOf("?"));
+                        imageName = imageName.replaceAll(dirName+"/","");
+                    }
+                    imgOSSPath = AliYunUtil.uploadH5File(dirName, imageName, file);
                 }
                 //上传成功后删除本地文件
                 File file1 = new File(imgTempPath);
@@ -98,8 +103,8 @@ public class ImageUploadUtil {
 
     /**
      * 根据oss地地址以及目录来删除对应的文件
-     * @param ossPath
-     * @return
+     * @param direct 要删除的文件所在的目录
+     * @param ossPath 图片在oss上的url
      * @throws Exception
      */
     public static void  deleteImageOnOSS(String direct,String ossPath) throws Exception{

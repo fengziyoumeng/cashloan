@@ -80,7 +80,7 @@ public class CompanyInformationController extends BaseController {
      * @param response
      * @param
      */
-    @RequestMapping("/company/auditstate.htm")
+    @RequestMapping("/api/company/auditstate.htm")
     public void CompanyAuditState(HttpServletResponse response,Long userId){
         Map<String,Object> result = new HashMap<>();
         try {

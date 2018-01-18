@@ -59,7 +59,7 @@ var AddFlowInfo = React.createClass({
         var title = props.title;
         var path = me.path
         var name = me.name
-        var url = "/act/category/saveorupdate.htm";
+        var url = "/act/newbannerInfo/saveOrUpdate.htm";
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
                 return;
@@ -137,8 +137,7 @@ var AddFlowInfo = React.createClass({
             getFieldProps
         } = this.props.form;
         var imageUrl = this.state.imageUrl;
-        var imageOss = {...getFieldProps('type_img_path')}.value;
-        vlu = {...getFieldProps('pmessage')}.value;
+        var imageOss = {...getFieldProps('banner_url')}.value;
 
         var showImg
         if (imageOss == undefined || imageOss =='') {
@@ -172,29 +171,33 @@ var AddFlowInfo = React.createClass({
                         <h2>基本信息</h2>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="标题：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('type_name',{rules: [{required: true,message: '必填'}]})} type="text"/>
+                                <FormItem  {...formItemLayout} label="位置：">
+                                    <Select disabled={!props.canEdit} {...getFieldProps('site', {rules: [{required: true, message: '必填' }]})} >
+                                        <Option value={'1'}>首页</Option>
+                                        <Option value={'0'}>金融圈子</Option>
+                                    </Select>
                                 </FormItem>
                             </Col>
-
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="排序：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('sort',{rules: [{required: true,message: '必填'}]})}/>
+                                <FormItem  {...formItemLayout} label="跳转方式：">
+                                    <Select disabled={!props.canEdit} {...getFieldProps('status', {rules: [{required: true, message: '必填' }]})} >
+                                        <Option value={'0'}>不跳</Option>
+                                        <Option value={'1'}>跳转</Option>
+                                        <Option value={'2'}>跳转到图片</Option>
+                                        <Option value={'3'}>区分app与h5</Option>
+                                    </Select>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="指定二级分类值：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('type', {rules: [{required: true, message: '必填' }]})} type="text"/>
+                                <FormItem  {...formItemLayout} label="跳转地址：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('skip_url', {rules: [{required: true, message: '必填' }]})} type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="位置：">
-                                    <Select disabled={!props.canEdit} {...getFieldProps('big_type', {rules: [{required: true, message: '必填' }]})} >
-                                        <Option value={1}>金融圈子导航栏</Option>
-                                        <Option value={2}>金融圈子大分类</Option>
-                                    </Select>
+                                <FormItem  {...formItemLayout} label="排序：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('sort',{rules: [{required: true,message: '必填'}]})}/>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -213,6 +216,14 @@ var AddFlowInfo = React.createClass({
                                                 <Icon type="plus" className="avatar-uploader-trigger"/>
                                         }
                                     </Upload>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="启用状态：">
+                                    <Select disabled={!props.canEdit} {...getFieldProps('state', {rules: [{required: true, message: '必填' }]})} >
+                                        <Option value={'10'}>是</Option>
+                                        <Option value={'20'}>否</Option>
+                                    </Select>
                                 </FormItem>
                             </Col>
                         </Row>

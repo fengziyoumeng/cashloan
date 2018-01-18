@@ -29,7 +29,7 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
                 CompanyInformation companyInfo = new CompanyInformation();
                 companyInfo.setUserId(companyInformation.getUserId());
                 companyInfo.setCompanyName(companyInformation.getCompanyName());
-                companyInfo.setCompanyAddress(companyInformation.getCompanyAddress());
+//                companyInfo.setCompanyAddress(companyInformation.getCompanyAddress());
                 companyInfo.setLegalPersonName(companyInformation.getLegalPersonName());
                 companyInfo.setIDNumber(companyInformation.getIDNumber());
                 companyInfo.setContactPerson(companyInformation.getContactPerson());
@@ -126,14 +126,23 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
 
     @Override
     public CompanyInformation selectAuditState(Long userId) {
-        CompanyInformation companyInfo = null;
+        List<CompanyInformation> companyInfo = null;
         try{
             companyInfo = CompanyInfomationMapper.selectAuditStateByUserId(userId);
+            if(companyInfo.size()>1){
+                return companyInfo.get(companyInfo.size()-1);
+            }else if(companyInfo.size()==0){
+                CompanyInformation companyInformation = new CompanyInformation();
+                companyInformation.setAuditState(0);
+                return companyInformation;
+            }else if(companyInfo.size()==1){
+                return companyInfo.get(0);
+            }
         }catch (Exception e){
             logger.info("获取审核状态失败",e);
             throw e;
         }
-        return companyInfo;
+        return null;
     }
 
 }

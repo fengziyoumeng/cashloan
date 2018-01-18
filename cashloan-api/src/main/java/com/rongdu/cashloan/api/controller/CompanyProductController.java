@@ -115,4 +115,25 @@ public class CompanyProductController {
         }
         ServletUtils.writeToResponse(response,result);
     }
+
+    /**
+     * 获取服务的状态列表
+     * @param response
+     * @param userId
+     */
+    @RequestMapping("/all/product/auditstate.htm")
+    public void auditStateList(HttpServletResponse response,Long userId,Integer auditState){
+        Map<String,Object> result = new HashMap<>();
+        try {
+            List<CompanyProdDetail> companyProdDetailList = companyProductService.selectAllStateList(userId, auditState);
+            result.put(Constant.RESPONSE_DATA, companyProdDetailList);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
 }

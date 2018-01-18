@@ -45,4 +45,8 @@ public interface CompanyProdMapper {
 
     //------------------------------------------------------------
     List<CompanyProd> listCompanyProd (CompanyProd record);
+
+    List<CompanyProd> listSelective ();
+
+
 }

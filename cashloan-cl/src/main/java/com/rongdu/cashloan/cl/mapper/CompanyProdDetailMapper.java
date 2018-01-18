@@ -56,5 +56,7 @@ public interface CompanyProdDetailMapper {
 
     List<CompanyProdDetail> getAllListBySearch(Map params);
 
+    List<CompanyProdDetail> getAuditStateList(Map params);
+
     void serviceAudit(CompanyProdDetail companyProdDetail);
 }
