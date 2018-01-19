@@ -22,6 +22,7 @@ let treeData = [];
 var tagList = [];
 var processList = [];
 var sortList = [];
+var imagesList = [];
 var vlu = '';
 
 
@@ -59,6 +60,18 @@ Utils.ajaxData({
     },
     callback: (result) => {
         processList = result.data;
+    }
+});
+
+Utils.ajaxData({
+    url: '/act/flowControl/getMutilCheckBox.htm',
+    method: 'get',
+    type: 'json',
+    data : {
+        "typeCode":"FLOWINFO_BACKGROUND_IMAGE"
+    },
+    callback: (result) => {
+        imagesList = result.data;
     }
 });
 
@@ -160,6 +173,11 @@ var AddFlowInfo = React.createClass({
     },
     getSortList() {
         return sortList.map((item, index) => {
+            return <Option key={item.itemCode}>{item.itemValue}</Option>
+        })
+    },
+    getBackgroundImageList() {
+        return imagesList.map((item, index) => {
             return <Option key={item.itemCode}>{item.itemValue}</Option>
         })
     },
@@ -301,8 +319,15 @@ var AddFlowInfo = React.createClass({
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="标记（填一个字符）：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('pmarks',{rules: [{message: '限一个字符!', max: 1 }]})}  type="text"/>
+                                <FormItem  {...formItemLayout} label="标记（填2个字符）：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('pmarks',{rules: [{message: '限2个字符!', max: 2 }]})}  type="text"/>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="标记（填2个字符）：">
+                                    <Select disabled={!props.canEdit} {...getFieldProps('backgroundImage')}>
+                                        {this.getBackgroundImageList()}
+                                    </Select>
                                 </FormItem>
                             </Col>
                         </Row>

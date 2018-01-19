@@ -38,6 +38,7 @@
         <result column="p_borrow_num" property="pBorrowNum" jdbcType="BIGINT" />
         <result column="p_hand_person" property="pHandPerson" jdbcType="VARCHAR" />
         <result column="p_channel_price" property="pChannelPrice" jdbcType="DOUBLE" />
+        <result column="background_image" property="backgroundImage" jdbcType="VARCHAR" />
     </resultMap>
     
     <!--基本的sql查询字段 公共引用...-->
@@ -429,7 +430,7 @@
     </delete>
 
     <sql id="hotResult">
-        id,pic_url,pic_name,p_hand_person,p_channel_price,p_name,min_limit,max_limit,p_interest,p_code,p_borrow_num,p_tag,p_message,p_type,p_marks,type_sort
+        id,pic_url,pic_name,p_hand_person,p_channel_price,p_name,min_limit,max_limit,p_interest,p_code,p_borrow_num,p_tag,p_message,p_type,p_marks,type_sort,p_http,background_image
     </sql>
     <!--获取热门推荐列表-->
     <select id="getHot" resultMap="BaseResultMap" >
@@ -469,7 +470,7 @@
         <include refid="hotResult"/>
         FROM cl_flow_info
         WHERE
-        p_state=10
+        p_state=10 AND (p_type <![CDATA[&]]> 32) = 0
         <if test="limit == 1">
             <![CDATA[ AND min_limit < 2000 ]]>
         </if>

@@ -356,7 +356,7 @@ public class ClFlowInfoServiceImpl implements ClFlowInfoService {
 
     @Override
     public Page<ClFlowInfo> getAll(int current, Map param) throws Exception {
-        List<ClFlowInfo> infos;
+        List<ClFlowInfo> infos = null;
         String key = null;
         try {
             // 数据非空判断

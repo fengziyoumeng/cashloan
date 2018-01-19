@@ -219,17 +219,6 @@ var AddFlowInfo = React.createClass({
         };
         return (
             <Modal title={props.title} visible={props.visible} onCancel={this.handleCancel} width="1100" footer={modalBtns}>
-                {/*<div style={{ background: '#ECECEC', padding: '30px' }}>
-                    <Card title="公司简介" bordered={false} style={{ width: 300 }}>
-                        <p>企业名称:{companyName}</p>
-                        <p>法人姓名:{legalPersonName}</p>
-                        <p>身份证号:{idnumber}</p>
-                        <p>企业联系人:{contactPerson}</p>
-                        <p>联系人电话:{contactTel}</p>
-                        <p>公司简介:{introduction}</p>
-                    </Card>
-                </div>*/}
-
 
                 <Form horizontal form={this.props.form}>
                     <Input  {...getFieldProps('id', {initialValue: ''})} type="hidden"/>
@@ -279,39 +268,60 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="营业执照：">
-                                    <img src={licensePic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}} onclick={this.fangda}/>
+                                    <img src={licensePic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}} onclick={this.fangda}/>
                                 </FormItem>
                             </Col>
+                        </Row>
+                        <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="手持身份证：">
-                                    <img src={holdCardPic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
+                                    <img src={holdCardPic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="身份证正面：">
-                                    <img src={identityFrontPic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem  {...formItemLayout} label="身份证反面：">
-                                    <img src={identityReversePic} alt="" className="avatar" style={{width: '300px',marginLeft: '5px'}}/>
+                                    <img src={identityFrontPic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
                         </Row>
-
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="审核理由：">
-                                    <Input rows={3} disabled={!props.canEdit}  {...getFieldProps('auditMessage',{
-                                        rules: [{
-                                            required: true,
-                                            message: '必填'
-                                        }]
-                                    })}  type="textarea"/>
+                                <FormItem  {...formItemLayout} label="身份证反面：">
+                                    <img src={identityReversePic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
+                        </Row>
+                        <Row>
+                            <Col span="11">
+                                <FormItem  {...formItemLayout} label="注册资金：">
+                                    <Input  disabled={!props.canEdit} style={{width: 120, textAlign: 'center'}}  {...getFieldProps('registerCapital',{rules: [{ required: true, message: '必填'}]})} />
+                                    <span style={{marginLeft: 10}}>万</span>
+                                </FormItem>
+                            </Col>
+                            <Col span="11">
+                                <FormItem  {...formItemLayout} label="公司地址：">
+                                    <Input rows={2} disabled={!props.canEdit}  {...getFieldProps('companyAddress',{
+                                        rules: [{ required: true, message: '必填'}]})}  type="text"/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="不通过原因（可多选）：">
+                                    <Select disabled={!props.canEdit} multiple {...getFieldProps('auditMessage', {rules: [{type: "array" }]})} >
+                                        <Option value={1}>企业名称不通过</Option>
+                                        <Option value={2}>法人姓名不通过</Option>
+                                        <Option value={3}>法人身份证不通过</Option>
+                                        <Option value={4}>联系人手机号不通过</Option>
+                                        <Option value={5}>营业执照不通过</Option>
+                                        <Option value={6}>身份证正面照不通过</Option>
+                                        <Option value={7}>身份证反面照不通过</Option>
+                                        <Option value={8}>手持身份证照不通过</Option>
+                                    </Select>
+                                </FormItem>
+                        </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="审核人：">
                                     <Input rows={3} disabled={!props.canEdit}  {...getFieldProps('auditPerson',{
@@ -322,7 +332,6 @@ var AddFlowInfo = React.createClass({
                                     })}  type="text"/>
                                 </FormItem>
                             </Col>
-
                         </Row>
                     </div>
                 </Form>

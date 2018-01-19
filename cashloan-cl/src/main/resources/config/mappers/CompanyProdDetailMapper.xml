@@ -462,7 +462,7 @@
       bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
       bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
       bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
-      bcpd.creat_time,
+      bcpd.create_time,
       bci.id AS bci_id,bci.company_name AS bci_company_name,bci.registered_capital AS bci_registered_capital
     FROM b_company_prod_detail bcpd
     LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
