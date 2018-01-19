@@ -47,7 +47,7 @@ public class AppDbSession{
 		return true;
 	}
 
-	public Object access(String ticketId,int platformType) {
+	public Object access(String ticketId) {
 		//判断session是否存在
 		Ticket ticket = null;
 		if( redisClient.exists(AppConstant.REDIS_KEY_LOGIN_TICKETID_FOR_TICKETDATA + ticketId)){
@@ -62,7 +62,6 @@ public class AppDbSession{
 		//更新最新访问时间和重置失效时间
 		Date now = new Date();
 		ticket.setLastAccessTime(now);
-		ticket.setPlatformType(platformType);
 		int expireTime = Global.getInt("session_expire");
 		if(expireTime ==0){
 			expireTime = 604800;
