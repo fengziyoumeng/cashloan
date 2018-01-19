@@ -173,6 +173,11 @@ public class ApiInterceptor implements HandlerInterceptor {
 					}
 				}
 			}
+
+			if("3".equals(mobileType)) {
+				return true;
+			}
+
 		}
 
 		String token = request.getHeader("token");
@@ -180,10 +185,36 @@ public class ApiInterceptor implements HandlerInterceptor {
 		logger.info("*******传入的token："+token+"**********"+"传入的signMsg："+signMsg+"********");
 
 		Map<String, Object> rec = new LinkedHashMap<String, Object>();
-		String _signMsg = md5(Global.getValue("app_key") + (token == null ? "" : token) + paramsString(requestMap));
-		logger.info("*******md5加密后的_signMsg："+_signMsg+"**********");
+		String _signMsg;
+		// 登录后的请求地址都带有/act/
+		boolean flag;
+		if (uri.contains("/act/")) {
+			if (StringUtil.isEmpty(token) || StringUtil.isEmpty(signMsg)) {
+				rec.put("code", 400);
+				rec.put("msg", "没有token或signMsg");
+				JsonUtil.writeJson(rec, response);
+				return false;
+			}
 
-		boolean flag = _signMsg.equalsIgnoreCase(signMsg);
+			_signMsg = md5(Global.getValue("app_key") + token + paramsString(requestMap));
+			logger.info("*******md5加密后的_signMsg："+_signMsg+"**********");
+			flag = _signMsg.equalsIgnoreCase(signMsg);
+
+//			// 不需要登录的地址可能没有token
+		} else {
+			if (StringUtil.isEmpty(signMsg)) {
+				rec.put("code", 400);
+				rec.put("msg", "没有signMsg");
+				JsonUtil.writeJson(rec, response);
+				return false;
+			}
+
+			_signMsg = md5(Global.getValue("app_key") + (token == null ? "" : token) + paramsString(requestMap));
+			logger.info("*******md5加密后的_signMsg："+_signMsg+"**********");
+			flag = _signMsg.equalsIgnoreCase(signMsg);
+		}
+
+		// 根据地址是否带/act/生成的_signMsg，校验
 		if (!flag) {
 			rec.put("code", 400);
 			rec.put("msg", "验签不通过");
@@ -191,13 +222,9 @@ public class ApiInterceptor implements HandlerInterceptor {
 			return false;
 		}
 
-		if(StringUtils.isBlank(mobileType)){
-			mobileType = "3";
-		}
-
 		// 如果带有token，则说明已经登陆，将用户数据放入session中
-		if (StringUtil.isNotBlank(token)) {
-			Object result = session.access(token,Integer.parseInt(mobileType));
+		if (StringUtil.isNotBlank(token) && uri.contains("/act/")) {
+			Object result = session.access(token);
 			if (result instanceof Ticket) {
 				Ticket sessionBean = (Ticket) result;
 				request.getSession().setAttribute("userData", sessionBean);  //放置的是tiket
