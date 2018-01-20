@@ -217,15 +217,6 @@ var AddFlowInfo = React.createClass({
         };
         return (
             <Modal title={props.title} visible={props.visible} onCancel={this.handleCancel} width="1100" footer={modalBtns}>
-
-                <Lightbox
-                    images={[{ src: 'http://example.com/img1.jpg' }, { src: 'http://example.com/img2.jpg' }]}
-                    isOpen={this.state.lightboxIsOpen}
-                    onClickPrev={this.gotoPrevious}
-                    onClickNext={this.gotoNext}
-                    onClose={this.closeLightbox}
-                />
-
                 <Form horizontal form={this.props.form}>
                     <Input  {...getFieldProps('id', {initialValue: ''})} type="hidden"/>
 
