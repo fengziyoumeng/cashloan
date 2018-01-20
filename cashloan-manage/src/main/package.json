@@ -15,6 +15,7 @@
     "echarts": "^3.4.0",
     "react": "0.14.x",
     "react-dom": "0.14.x",
+    "react-images": "^0.5.14",
     "reflux": "^0.4.1",
     "reqwest": "^2.0.5"
   },

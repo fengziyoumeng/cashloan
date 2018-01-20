@@ -1,5 +1,8 @@
 import React from 'react';
 import {Col, Form, Input, Modal, Row, Select} from 'antd';
+// import Lightbox from 'react-native-lightbox';
+import Lightbox from 'react-images';
+
 
 const { TextArea } = Input;
 const createForm = Form.create;
@@ -55,6 +58,7 @@ function getBase64(img, callback) {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 }
+
 
 var AddFlowInfo = React.createClass({
     getInitialState() {
@@ -180,9 +184,6 @@ var AddFlowInfo = React.createClass({
     setVlue(vlu) {
         this.setState({"i_val": vlu});
     },
-    fangda(){
-
-    },
     render() {
         const {
             getFieldProps
@@ -219,17 +220,14 @@ var AddFlowInfo = React.createClass({
         };
         return (
             <Modal title={props.title} visible={props.visible} onCancel={this.handleCancel} width="1100" footer={modalBtns}>
-                {/*<div style={{ background: '#ECECEC', padding: '30px' }}>
-                    <Card title="公司简介" bordered={false} style={{ width: 300 }}>
-                        <p>企业名称:{companyName}</p>
-                        <p>法人姓名:{legalPersonName}</p>
-                        <p>身份证号:{idnumber}</p>
-                        <p>企业联系人:{contactPerson}</p>
-                        <p>联系人电话:{contactTel}</p>
-                        <p>公司简介:{introduction}</p>
-                    </Card>
-                </div>*/}
 
+                <Lightbox
+                    images={[{ src: 'http://example.com/img1.jpg' }, { src: 'http://example.com/img2.jpg' }]}
+                    isOpen={this.state.lightboxIsOpen}
+                    onClickPrev={this.gotoPrevious}
+                    onClickNext={this.gotoNext}
+                    onClose={this.closeLightbox}
+                />
 
                 <Form horizontal form={this.props.form}>
                     <Input  {...getFieldProps('id', {initialValue: ''})} type="hidden"/>
