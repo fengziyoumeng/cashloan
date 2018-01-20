@@ -83,10 +83,10 @@ public class BaseJunit4Test implements ApplicationContextAware {
         redisClient.hset(AppConstant.SMS_TEMPLATE + "FINDREG", "tpl",   "您的找回登陆密码的验证码是:%s请在1分钟内输入【急借号】");
         redisClient.hset(AppConstant.SMS_TEMPLATE + "FINDREG", "state",   "10");
         redisClient.hset(AppConstant.SMS_TEMPLATE + "FINDREG", "type_name",   "找回登陆密码");
-//        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "number", "SMS0012139737");
-//        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "tpl",   "您的注册验证码是:%s请在1分钟内输入【急借号】");
-//        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "state",   "10");
-//        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "type_name",   "注册验证码");
+        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "number", "SMS0012139737");
+        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "tpl",   "您的注册验证码是:%s请在1分钟内输入【急借号】");
+        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "state",   "10");
+        redisClient.hset(AppConstant.SMS_TEMPLATE + "REGISTER", "type_name",   "注册验证码");
     }
     @Test
     public void test6() {

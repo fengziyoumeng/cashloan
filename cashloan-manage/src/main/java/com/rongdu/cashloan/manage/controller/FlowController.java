@@ -249,6 +249,7 @@ public class FlowController extends BaseController {
         String handPerson = dataMap.get("pHandPerson")!=null ? dataMap.get("pHandPerson").toString():"";
         String channelPrice = dataMap.get("pChannelPrice")!=null ? dataMap.get("pChannelPrice").toString():"";
         String typeSort = dataMap.get("typeSort")!=null ? dataMap.get("typeSort").toString():"";
+        String backgroundImage = dataMap.get("backgroundImage")!=null ? dataMap.get("backgroundImage").toString():"";
 
         String imgPath= dataMap.get("path")!=null?dataMap.get("path").toString():"";
         String imgName= dataMap.get("name")!=null?dataMap.get("name").toString():"";
@@ -262,8 +263,9 @@ public class FlowController extends BaseController {
         flowInfo.setPMarks( pMarks );
         flowInfo.setPMessage( pMessage );
         flowInfo.setPState( pState == null?-1:Integer.parseInt(pState) );
-        flowInfo.setPHttp( pHttp );
+        flowInfo.setPHttp( pHttp.trim() );
         flowInfo.setPCode( pCode );
+        flowInfo.setBackgroundImage(backgroundImage);
         flowInfo.setPSort( pSort == null?-1:Integer.parseInt(pSort) );
         flowInfo.setTypeSort( typeSort == null?-1:Integer.parseInt(typeSort) );
         flowInfo.setPicUrl(picUrl);

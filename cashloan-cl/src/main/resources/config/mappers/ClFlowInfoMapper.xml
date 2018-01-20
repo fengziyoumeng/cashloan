@@ -43,7 +43,7 @@
     
     <!--基本的sql查询字段 公共引用...-->
     <sql id="Base_Column_List">
-        id,p_code,pic_url,pic_name,p_hand_person,p_channel_price,p_name,p_type,min_limit,max_limit,min_day,max_day,p_interest,p_condition,p_process,p_sort,p_state,p_remark,p_http,create_time,p_loan_max_time,p_loan_time_type,p_loan_min_time,p_today_click_count,p_history_total_click_count,p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2,p_tag,update_time,p_borrow_num,p_message,p_marks,type_sort
+        id,p_code,pic_url,pic_name,p_hand_person,p_channel_price,p_name,p_type,min_limit,max_limit,min_day,max_day,p_interest,p_condition,p_process,p_sort,p_state,p_remark,p_http,create_time,p_loan_max_time,p_loan_time_type,p_loan_min_time,p_today_click_count,p_history_total_click_count,p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2,p_tag,update_time,p_borrow_num,p_message,p_marks,type_sort,background_image
     </sql>
     
     <!-- 基本的sql查询条件公共引用 -->
@@ -157,7 +157,7 @@
              max_day,p_interest,p_condition,p_process,p_sort,p_state,p_remark,p_http,create_time,
              p_loan_max_time,p_loan_time_type,p_loan_min_time,p_today_click_count,p_history_total_click_count,
              p_pre_month_click_count,p_pre_month_click_count_1,p_pre_month_click_count_3,p_pre_month_click_count_2,
-             p_tag,p_marks,p_message,pic_name,p_hand_person,p_channel_price,p_borrow_num,type_sort)
+             p_tag,p_marks,p_message,pic_name,p_hand_person,p_channel_price,p_borrow_num,type_sort,background_image)
         values(#{pCode,jdbcType=VARCHAR},#{picUrl,jdbcType=VARCHAR},#{pName,jdbcType=VARCHAR},
             #{pType,jdbcType=INTEGER},#{minLimit,jdbcType=BIGINT},#{maxLimit,jdbcType=BIGINT},
             #{minDay,jdbcType=INTEGER},#{maxDay,jdbcType=INTEGER},#{pInterest,jdbcType=VARCHAR},
@@ -170,7 +170,7 @@
             #{pPreMonthClickCount2,jdbcType=BIGINT},#{pTag,jdbcType=VARCHAR},#{pMarks,jdbcType=VARCHAR},
             #{pMessage,jdbcType=VARCHAR},#{picName,jdbcType=VARCHAR},
             #{pHandPerson,jdbcType=VARCHAR},#{pChannelPrice,jdbcType=DOUBLE},#{pBorrowNum,jdbcType=BIGINT},
-            #{typeSort,jdbcType=INTEGER}
+            #{typeSort,jdbcType=INTEGER},#{backgroundImage,jdbcType=VARCHAR}
             )
     </insert>
 
@@ -278,9 +278,11 @@
                     p_message = #{pMessage,jdbcType=VARCHAR},
                 </if>
                 <if test="pMarks != null and pMarks != '' ">
-                    p_marks = #{pMarks,jdbcType=VARCHAR}
+                    p_marks = #{pMarks,jdbcType=VARCHAR},
                 </if>
-
+                <if test="backgroundImage != null and backgroundImage != '' ">
+                    background_image = #{backgroundImage,jdbcType=VARCHAR},
+                </if>
             </set>
         where id = #{id ,jdbcType=BIGINT}
     </update>
@@ -383,12 +385,15 @@
                   p_borrow_num = #{pBorrowNum,jdbcType=BIGINT},
             </if>
             <if test="pMessage != null and pMessage != '' ">
-                  p_message = #{pMessage,jdbcType=VARCHAR},
-              </if>
-              <if test="pMarks != null and pMarks != '' ">
-                  p_marks = #{pMarks,jdbcType=VARCHAR}
-              </if>
-        </set>    
+                p_message = #{pMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="pMarks != null and pMarks != '' ">
+                p_marks = #{pMarks,jdbcType=VARCHAR},
+            </if>
+            <if test="backgroundImage != null and backgroundImage != '' ">
+                background_image = #{backgroundImage,jdbcType=VARCHAR}
+            </if>
+          </set>
         where id = #{id ,jdbcType=INTEGER}
     </update>
 

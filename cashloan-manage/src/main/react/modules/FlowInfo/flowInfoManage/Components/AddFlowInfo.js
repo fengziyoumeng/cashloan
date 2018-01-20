@@ -319,12 +319,12 @@ var AddFlowInfo = React.createClass({
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="标记（填2个字符）：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('pmarks',{rules: [{message: '限2个字符!', max: 2 }]})}  type="text"/>
+                                <FormItem  {...formItemLayout} label="标记（限1个字符）：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('pmarks',{rules: [{message: '限1个字符!', max: 1 }]})}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="标记（填2个字符）：">
+                                <FormItem  {...formItemLayout} label="角标背景图颜色：">
                                     <Select disabled={!props.canEdit} {...getFieldProps('backgroundImage')}>
                                         {this.getBackgroundImageList()}
                                     </Select>
