@@ -37,12 +37,7 @@
     </select>
 
     <select id="infoH5" resultType="map">
-      select
-      u.*
-      from
-        cl_user_base_info u
-        where
-        u.user_id=#{userId}
+      select * from cl_user_base_info where user_id=#{userId}
     </select>
     <select id="infoTmp" resultType="map">
         select * from arc_sys_config where code =#{code}

@@ -19,6 +19,8 @@ public interface ICompanyProductService {
 
     List<CompanyProdDetail> getAllList(String searchParams,int current,int pageSize);
 
+    List<CompanyProdDetail> selectAllStateList(Long userId,Integer auditState);
+
     void serviceAudit(String data);
 
     void updateProdClickNum();

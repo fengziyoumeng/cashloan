@@ -12,6 +12,7 @@ import com.rongdu.cashloan.core.common.context.Constant;
 import com.rongdu.cashloan.core.common.util.MapUtil;
 import com.rongdu.cashloan.core.common.util.StringUtil;
 import com.rongdu.cashloan.core.domain.Ticket;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -326,12 +327,24 @@ public class UserController {
 			public Object doAction(Ticket ticket, String userId) {
 				Map data = new LinkedHashMap();
 				Map ret = new LinkedHashMap();
-				Map rec= mybatisService.queryRec("usr.infoH5", userId);
-				ret.put("success", true);
-				ret.put("msg", "账户信息获取成功");
-				data.put("phone", rec.get("phone"));
-				data.put("realName", rec.get("real_name"));
-				ret.put("data", data);
+				if(StringUtils.isBlank(userId)){
+					ret.put("success", false);
+					ret.put("msg", "账户信息获取失败");
+					logger.info("账户信息获取失败，userId为空");
+				}else{
+					Map rec= mybatisService.queryRec("usr.infoH5", userId);
+					if(rec!=null){
+						data.put("phone", rec.get("phone"));
+						data.put("realName", rec.get("real_name"));
+						ret.put("success", true);
+						ret.put("msg", "账户信息获取成功");
+						ret.put("data", data);
+					}else{
+						ret.put("success", false);
+						ret.put("msg", "账户信息获取失败");
+						logger.info(String.format("账户信息获取失败，数据库中没有该userId【%s】对应数据",userId));
+					}
+				}
 				return ret;
 			}
 		};

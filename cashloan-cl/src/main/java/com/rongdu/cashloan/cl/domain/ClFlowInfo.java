@@ -200,7 +200,23 @@ import java.util.*;
      * 右上角标记
      */
    private String pMarks;
+
+    /**
+     * 角标背景图
+     */
+   private String backgroundImage;
+
     //=========================================
+
+
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
     /**
      * 获取右上角标记
      * @return
@@ -860,7 +876,9 @@ import java.util.*;
                 ", updateTime=" + updateTime +
                 ", pBorrowNum=" + pBorrowNum +
                 ", pMessage='" + pMessage + '\'' +
+                ", typeSort=" + typeSort +
                 ", pMarks='" + pMarks + '\'' +
+                ", backgroundImage='" + backgroundImage + '\'' +
                 '}';
     }
 }

@@ -118,20 +118,7 @@ public class ClFlowInfoServiceImpl implements ClFlowInfoService {
             String imageName = imgPath.substring(imgPath.lastIndexOf(File.separatorChar) + 1);
             flowInfoModel.setPicName(imageName);
             picUrls = ImageUploadUtil.uploadOSSDeleteTemp(imgPath, "image");
-            //上传的文件不为空，文件保存至Oss上
-           /* if(StringUtil.isNotEmpty(tempImgPath)){
-                File file =new File(imgPath);
-                if(file.exists()){//判断服务器上是否已经有图片，有则认为是重新上传，无则认为没有修改图片，不再上传oss
-                    picUrls = AliYunUtil.uploadH5File("image/",imgName,file);
-                    logger.info("===>OSS图片地址："+picUrls);
-                }
-                //上传成功后删除本地文件
-                //String path = request.getRealPath("/")+"flowPlatFormImg";
-                File file1 =new File(imgPath);
-                if (FileUtil.deleteFile(file1)) {
-                    logger.info("===>上传后删除本地文件成功" + file1);
-                }
-            }*/
+
             flowInfoModel.setPicUrl(picUrls);
             int x = 0;
             if ("update".equals(opType)) {
@@ -333,7 +320,7 @@ public class ClFlowInfoServiceImpl implements ClFlowInfoService {
         param.put("pageSize",pageSize);
         PageResult pageResult = null;
         try {
-            pageResult= (PageResult)redisClient.getObject(AppConstant.REDIS_KEY_CASH_FLOW_INFO_HOT_PAGERESULT+currentPage + pageSize);
+//            pageResult= (PageResult)redisClient.getObject(AppConstant.REDIS_KEY_CASH_FLOW_INFO_HOT_PAGERESULT+currentPage + pageSize);
             if(pageResult == null){
                 List<ClFlowInfo> infos = clFlowInfoMapper.getAllHot(param);
                 for (ClFlowInfo info : infos) {
@@ -356,7 +343,7 @@ public class ClFlowInfoServiceImpl implements ClFlowInfoService {
 
     @Override
     public Page<ClFlowInfo> getAll(int current, Map param) throws Exception {
-        List<ClFlowInfo> infos;
+        List<ClFlowInfo> infos = null;
         String key = null;
         try {
             // 数据非空判断

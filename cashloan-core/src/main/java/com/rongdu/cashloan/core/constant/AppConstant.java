@@ -147,4 +147,9 @@ public class AppConstant {
      * 产品id和name关联/
      */
     public static final String REDIS_KEY_LIAN_PRODUCT = "FLOW:LIAN:PRODUCT:";
+
+    /**
+     * 产品审核状态列表
+     */
+    public static final String REDIS_KEY_AUDIT_STATE_LIST = "FLOW:PRODUCT:AUDIT:";
 }

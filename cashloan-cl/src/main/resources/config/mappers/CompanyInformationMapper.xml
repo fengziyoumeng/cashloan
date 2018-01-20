@@ -35,7 +35,9 @@
     </sql>
 
     <sql id="audit_Column_List">
-        id,company_name,legal_person_name,ID_number,license_pic,contact_tel,audit_state
+        id,company_name,legal_person_name,ID_number,contact_person,contact_tel,introduction,
+         license_pic,identity_front_pic,identity_reverse_pic,hold_card_pic,create_time,
+         update_time,audit_time,audit_state,audit_message,registered_capital
     </sql>
 
     <!-- 基本的sql查询条件公共引用 -->
@@ -64,7 +66,7 @@
         values(#{userId,jdbcType=INTEGER},#{companyName,jdbcType=VARCHAR},#{companyAddress,jdbcType=VARCHAR},#{legalPersonName,jdbcType=VARCHAR},#{IDNumber,jdbcType=VARCHAR},
               #{contactPerson,jdbcType=VARCHAR},#{contactTel,jdbcType=VARCHAR},#{introduction,jdbcType=VARCHAR},#{licensePic,jdbcType=VARCHAR},
               #{identityFrontPic,jdbcType=VARCHAR},#{identityReversePic,jdbcType=VARCHAR},#{holdCardPic,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-              #{updateTime,jdbcType=INTEGER},#{auditState,jdbcType=INTEGER},#{registered_capital,jdbcType=VARCHAR})
+              #{updateTime,jdbcType=INTEGER},#{auditState,jdbcType=INTEGER},#{registeredCapital,jdbcType=VARCHAR})
     </insert>
     
     <update id="update" parameterType="com.rongdu.cashloan.cl.domain.CompanyInformation">
