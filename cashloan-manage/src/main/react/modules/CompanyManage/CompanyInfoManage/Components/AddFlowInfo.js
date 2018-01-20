@@ -268,35 +268,35 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="营业执照：">
-                                    <img src={licensePic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}} onclick={this.fangda}/>
+                                    <img src={licensePic} alt="" className="avatar" style={{width: '700px',marginLeft: '5px'}} onclick={this.fangda}/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="手持身份证：">
-                                    <img src={holdCardPic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}}/>
+                                    <img src={holdCardPic} alt="" className="avatar" style={{width: '700px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="身份证正面：">
-                                    <img src={identityFrontPic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}}/>
+                                    <img src={identityFrontPic} alt="" className="avatar" style={{width: '700px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="身份证反面：">
-                                    <img src={identityReversePic} alt="" className="avatar" style={{width: '500px',marginLeft: '5px'}}/>
+                                    <img src={identityReversePic} alt="" className="avatar" style={{width: '700px',marginLeft: '5px'}}/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="11">
                                 <FormItem  {...formItemLayout} label="注册资金：">
-                                    <Input  disabled={!props.canEdit} style={{width: 120, textAlign: 'center'}}  {...getFieldProps('registerCapital',{rules: [{ required: true, message: '必填'}]})} />
+                                    <Input  disabled={!props.canEdit} style={{width: 120}}  {...getFieldProps('registerCapital',{rules: [{ required: true, message: '必填'}]})} />
                                     <span style={{marginLeft: 10}}>万</span>
                                 </FormItem>
                             </Col>
