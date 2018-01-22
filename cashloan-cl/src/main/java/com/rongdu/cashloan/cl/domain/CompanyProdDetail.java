@@ -377,9 +377,11 @@ public class CompanyProdDetail implements Serializable {
     }
 
     public void setOperativeInfos(String operativeInfos) {
-        if(operativeInfos.contains("\\|")){
-            operativeInfos = operativeInfos.replace("\\|","\\,");
+        System.out.println("operativeInfos前："+operativeInfos);
+        if(operativeInfos.contains("|")){
+            operativeInfos = operativeInfos.replace("|",",");
         }
+        System.out.println("operativeInfos后："+operativeInfos);
         this.operativeInfos = operativeInfos;
         setOperativeInfoList(JSONArray.parseArray(operativeInfos,OperativeInfo.class));
     }
