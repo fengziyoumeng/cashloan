@@ -105,7 +105,9 @@ export default React.createClass({
             title: '公司名称',
             dataIndex: "companyInfo",
             render: function (value,record) {
-                return value.companyName;
+                if(value){
+                    return value.companyName;
+                }
             }
         },{
             title: 'LOGO',
