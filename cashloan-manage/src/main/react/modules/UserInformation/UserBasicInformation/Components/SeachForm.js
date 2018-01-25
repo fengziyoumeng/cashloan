@@ -57,7 +57,6 @@ let SeachForm = React.createClass({
           type: 'json',
           callback: (result) => {
               var items  = result.data.map((item)=>{
-                  debugger;
                   return (<Option key={item.id} value={String(item.id)}>{item.name}</Option>);
               });
               me.setState({roleList:items});

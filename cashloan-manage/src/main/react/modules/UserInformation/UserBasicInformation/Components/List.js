@@ -379,7 +379,10 @@ export default React.createClass({
     }, {
 	  title: '注册渠道',
 	  dataIndex: 'channelId',
-	}
+	}, {
+      title: '最近登录时间',
+      dataIndex: 'loginTime',
+    }
 
 	/*{
       title: '月薪范围',

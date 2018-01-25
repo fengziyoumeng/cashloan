@@ -43,6 +43,8 @@ import java.util.Date;
     */
     private Date loginpwdModifyTime;
 
+	private Date loginTime;
+
     /**
     * 交易密码
     */
@@ -81,6 +83,14 @@ import java.util.Date;
     * 代理等级 ，1一级，2二级，3普通用户
     */
     private Integer level;
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
 
 	/**
 	 * 获取主键Id
