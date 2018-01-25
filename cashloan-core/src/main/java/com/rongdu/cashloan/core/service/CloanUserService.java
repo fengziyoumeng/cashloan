@@ -67,6 +67,8 @@ public interface CloanUserService extends BaseService<User, Long>{
 
 	int updateShareFlag(User user);
 
+	int updateLoginTime(Map<String,Object> map);
+
 	Long queryNumberPlat(Map<String,Object> map);
 
 	Map<String,Object> queryMaxMinUserId(Map<String,Object> map);

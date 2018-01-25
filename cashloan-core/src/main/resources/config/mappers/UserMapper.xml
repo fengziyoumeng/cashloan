@@ -140,6 +140,12 @@
         where id = #{id ,jdbcType=BIGINT}
     </update>
 
+    <update id="updateLoginTime" parameterType="java.util.HashMap">
+        update cl_user set
+        login_time = #{loginTime}
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
     <update id="updateSelective"  parameterType="java.util.HashMap">
         update cl_user
           <set>

@@ -2,11 +2,13 @@ package com.rongdu.cashloan.api.user.bean;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rongdu.cashloan.cl.service.impl.MybatisService;
+import com.rongdu.cashloan.cl.threads.SingleThreadPool;
 import com.rongdu.cashloan.core.common.context.Global;
 import com.rongdu.cashloan.core.common.util.DateUtil;
 import com.rongdu.cashloan.core.common.util.StringUtil;
 import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.domain.Ticket;
+import com.rongdu.cashloan.core.domain.User;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Service
@@ -62,6 +62,10 @@ public class AppDbSession{
 		//更新最新访问时间和重置失效时间
 		Date now = new Date();
 		ticket.setLastAccessTime(now);
+
+		//更新上一次登录时间到缓存
+		redisClient.hset(AppConstant.REDIS_KEY_LOGIN_TIME + DateUtil.getNowDate(), ticket.getUserId(), new SimpleDateFormat("yyyyMMddHHmmss").format(now), 172800);
+
 		int expireTime = Global.getInt("session_expire");
 		if(expireTime ==0){
 			expireTime = 604800;

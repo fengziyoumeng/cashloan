@@ -73,6 +73,8 @@ public interface UserMapper extends BaseMapper<User,Long> {
 
 	int updateShareFlag(User user);
 
+	int updateLoginTime(Map<String,Object> map);
+
 	Long queryNumberPlat(Map<String,Object> map);
 
 	Long findChannelId(Long id);

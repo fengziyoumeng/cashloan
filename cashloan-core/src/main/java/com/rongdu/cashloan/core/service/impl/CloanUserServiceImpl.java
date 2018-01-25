@@ -131,6 +131,10 @@ public class CloanUserServiceImpl extends BaseServiceImpl<User, Long> implements
 		return userMapper.updateShareFlag(user);
 	}
 
+	public int updateLoginTime(Map<String,Object> map){
+		return userMapper.updateLoginTime(map);
+	}
+
 	public Long queryNumberPlat(Map<String,Object> map){
 		return userMapper.queryNumberPlat(map);
 	}

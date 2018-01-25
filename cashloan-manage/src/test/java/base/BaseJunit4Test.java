@@ -1,5 +1,7 @@
 package base;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.rongdu.cashloan.cl.domain.BankInfo;
 import com.rongdu.cashloan.cl.domain.ClFlowUV;
 import com.rongdu.cashloan.cl.domain.ClickTrack;
@@ -9,10 +11,12 @@ import com.rongdu.cashloan.cl.mapper.ClickTrackMapper;
 import com.rongdu.cashloan.cl.service.ClFlowUVService;
 import com.rongdu.cashloan.cl.service.IClickTrackService;
 import com.rongdu.cashloan.cl.util.DateTools;
+import com.rongdu.cashloan.core.common.util.DateUtil;
 import com.rongdu.cashloan.core.common.util.StringUtil;
 import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.mapper.UserMapper;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
+import com.rongdu.cashloan.core.service.CloanUserService;
 import com.rongdu.cashloan.manage.job.SftpPropertiesUtil;
 import com.rongdu.cashloan.manage.job.SftpUtils;
 import org.junit.Test;
@@ -25,9 +29,8 @@ import redis.clients.jedis.Protocol;
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)//表示整合JUnit4进行测试
 @ContextConfiguration(locations={"classpath:/config/spring/*-beans.xml"})//加载spring配置文件
@@ -54,21 +57,41 @@ public class BaseJunit4Test {
     @Resource
     private ClFlowUVService clFlowUVService;
 
+    @Resource
+    private CloanUserService cloanUserService;
 
     @Test
     public  void test1(){
-        List<String> lsr = DateTools.getSdateToEdate("2018-01-06","2018-01-07");
-        List<ClFlowUV> clFlowUVList = clFlowUVService.listFlowUv();
-        if(clFlowUVList!=null && clFlowUVList.size()>0){
-            for(ClFlowUV clFlowUV:clFlowUVList){
-                System.out.println(String.format("产品编码【%s】",clFlowUV.getPCode()));
-                for(String str:lsr){
-                    long i = redisClient.del(clFlowUV.getPCode()+":excel_uv:"+str);
-                    System.out.println(String.format("缓存数据【%s】",clFlowUV.getPCode()+":excel_uv:"+str));
-                    System.out.println(String.format("结果【%s】",i));
-                }
-            }
+//        List<String> lsr = DateTools.getSdateToEdate("2018-01-06","2018-01-07");
+//        List<ClFlowUV> clFlowUVList = clFlowUVService.listFlowUv();
+//        if(clFlowUVList!=null && clFlowUVList.size()>0){
+//            for(ClFlowUV clFlowUV:clFlowUVList){
+//                System.out.println(String.format("产品编码【%s】",clFlowUV.getPCode()));
+//                for(String str:lsr){
+//                    long i = redisClient.del(clFlowUV.getPCode()+":excel_uv:"+str);
+//                    System.out.println(String.format("缓存数据【%s】",clFlowUV.getPCode()+":excel_uv:"+str));
+//                    System.out.println(String.format("结果【%s】",i));
+//                }
+//            }
+//        }
+
+        Date now = new Date();
+        redisClient.hset(AppConstant.REDIS_KEY_LOGIN_TIME + DateUtil.getNowDate(), "13125", new SimpleDateFormat("yyyyMMddHHmmss").format(now), 172800);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        String date = calendar.get(1) + "-" + (calendar.get(2) + 1) + "-" + calendar.get(5);
+        Map<String, String> map = redisClient.hgetAll(AppConstant.REDIS_KEY_LOGIN_TIME+DateUtil.getNowDate());
+        for (String key : map.keySet()) {
+            System.out.println("=="+key+"===");
+            String value = map.get(key);
+            System.out.println("=="+value+"===");
+            Map<String,Object> userMap = new HashMap<String,Object>();
+            userMap.put("id",key);
+            userMap.put("loginTime",value);
+            cloanUserService.updateLoginTime(userMap);
         }
+
     }
 
     @Test

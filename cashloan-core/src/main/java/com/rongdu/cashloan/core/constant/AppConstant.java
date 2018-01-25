@@ -152,4 +152,9 @@ public class AppConstant {
      * 产品审核状态列表
      */
     public static final String REDIS_KEY_AUDIT_STATE_LIST = "FLOW:PRODUCT:AUDIT:";
+
+    /**
+     * 最近一次登录时间
+     */
+    public static final String REDIS_KEY_LOGIN_TIME = "FLOW:LOGIN:TIME:";
 }
