@@ -3,9 +3,12 @@ package com.rongdu.cashloan.manage.job_new;
 import com.rongdu.cashloan.cl.domain.PosInfo;
 import com.rongdu.cashloan.cl.service.ExpressageService;
 import com.rongdu.cashloan.cl.service.IPosService;
+import com.rongdu.cashloan.cl.threads.SingleThreadPool;
 import com.rongdu.cashloan.core.common.context.Global;
 import com.rongdu.cashloan.core.common.exception.ServiceException;
+import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
+import com.rongdu.cashloan.core.service.CloanUserService;
 import com.rongdu.cashloan.manage.domain.QuartzInfo;
 import com.rongdu.cashloan.manage.domain.QuartzLog;
 import com.rongdu.cashloan.manage.job.DateUtils;
@@ -64,13 +67,34 @@ public class PosQuartz
     }
 
     private String executeContent() throws ServiceException {
-        ShardedJedisClient redisClient = (ShardedJedisClient)BeanUtil.getBean("redisClient");
+        final ShardedJedisClient redisClient = (ShardedJedisClient)BeanUtil.getBean("redisClient");
         String posQuartz = "posQuartz:"+DateUtils.getNowDate();
         boolean flag = redisClient.setnx("posQuartz",posQuartz);
         if(!flag){//已存在返回false
             return "posQuartz未执行，posQuartz存在缓存";
         }
         redisClient.expire("posQuartz",12*60*60);
+
+        SingleThreadPool.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                String date = calendar.get(1) + "-" + (calendar.get(2) + 1) + "-" + calendar.get(5);
+                Map<String, String> map = redisClient.hgetAll(AppConstant.REDIS_KEY_LOGIN_TIME+date);
+                CloanUserService cloanUserService = (CloanUserService)BeanUtil.getBean("cloanUserService");
+                for (String key : map.keySet()) {
+                    System.out.println("=="+key+"===");
+                    String value = map.get(key);
+                    System.out.println("=="+value+"===");
+                    Map<String,Object> userMap = new HashMap<String,Object>();
+                    userMap.put("id",key);
+                    userMap.put("loginTime",value);
+                    cloanUserService.updateLoginTime(userMap);
+                }
+                logger.info("===>结束执行定期持久化最近一次登录时间数据到数据库任务线程");
+            }
+        });
 
         logger.info("开始启动PosQuartz...");
         logger.info("===>开始执行每日半夜1点的POS机获取收货人信息定时器...");
