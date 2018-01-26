@@ -202,7 +202,7 @@ public class BaseJunit4Test implements ApplicationContextAware {
 
     @Test
     public void testDeleteRedis(){
-        String loginName = "18507959523";
+        String loginName = "18071418791";
         System.out.println(loginName);
 
         String TicketId = redisClient.get(AppConstant.REDIS_KEY_LOGIN_PHONE_FOR_TICKETDATA+loginName);

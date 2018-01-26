@@ -79,12 +79,23 @@
             contact_person = #{contactPerson,jdbcType=VARCHAR},
             contact_tel = #{contactTel,jdbcType=VARCHAR},
             introduction = #{introduction,jdbcType=VARCHAR},
-            license_pic = #{licensePic,jdbcType=VARCHAR},
-            identity_front_pic = #{identityFrontPic,jdbcType=VARCHAR},
-            identity_reverse_pic = #{identityReversePic,jdbcType=VARCHAR},
-            hold_card_pic = #{holdCardPic,jdbcType=VARCHAR},
+            <if test="licensePic != null and licensePic != '' ">
+                license_pic = #{licensePic,jdbcType=VARCHAR},
+            </if>
+            <if test="identityFrontPic != null and identityFrontPic != '' ">
+                identity_front_pic = #{identityFrontPic,jdbcType=VARCHAR},
+            </if>
+            <if test="identityReversePic != null and identityReversePic != '' ">
+                identity_reverse_pic = #{identityReversePic,jdbcType=VARCHAR},
+            </if>
+            <if test="holdCardPic != null and holdCardPic != '' ">
+                hold_card_pic = #{holdCardPic,jdbcType=VARCHAR},
+            </if>
             update_time = #{updateTime,jdbcType=TIMESTAMP},
             audit_state = #{auditState,jdbcType=INTEGER},
+            audit_message = #{auditMessage,jdbcType=VARCHAR},
+            audit_person = #{auditPerson,jdbcType=VARCHAR},
+            audit_time = #{auditTime,jdbcType=TIMESTAMP},
             registered_capital = #{registeredCapital,jdbcType=VARCHAR}
         where id = #{id ,jdbcType=INTEGER}
     </update>

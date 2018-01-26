@@ -44,7 +44,7 @@ var AddFlowInfo = React.createClass({
                 return;
             }
             var data = objectAssign({}, {
-                form: JSON.stringify(objectAssign({'pass': 'ok'}, values, {}))
+                form: JSON.stringify(objectAssign(values, {}))
             });
             Utils.ajaxData({
                 url: url,
@@ -94,8 +94,8 @@ var AddFlowInfo = React.createClass({
                         <h2>基本信息</h2>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="营销信息：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('message',{
+                                <FormItem  {...formItemLayout} label="简介信息：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('p_message',{
                                         rules: [{
                                             max:'20',
                                             message: '填写少于等于4个字符'
@@ -105,8 +105,8 @@ var AddFlowInfo = React.createClass({
                             </Col>
 
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="标记：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('mark',{
+                                <FormItem  {...formItemLayout} label="角标：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('flag_msg',{
                                         rules: [{
                                             max:'4',
                                             message: '填写少于等于4个字符'
@@ -115,25 +115,21 @@ var AddFlowInfo = React.createClass({
                                 </FormItem>
                             </Col>
                         </Row>
+
                         <Row>
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="开启热门推荐：">
+                                    <Select id="select" size="large"  disabled={!props.canEdit} {...getFieldProps('proc_flag', { initialValue: 0 })} >
+                                        <Option value={1}>推荐</Option>
+                                        <Option value={0}>不推荐</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="是否开启：">
                                     <Select id="select" size="large"  disabled={!props.canEdit} {...getFieldProps('status', { initialValue: 0 })} >
                                         <Option value={1}>启用</Option>
                                         <Option value={0}>禁用</Option>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem  {...formItemLayout} label="标签：">
-                                    <Select disabled={!props.canEdit} multiple  {...getFieldProps('tags', {
-                                        rules: [{
-                                            required: true,
-                                            message: '必填',
-                                            type: 'array'
-                                        }]
-                                    })} >
-                                        {this.getTagList()}
                                     </Select>
                                 </FormItem>
                             </Col>

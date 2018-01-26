@@ -21,6 +21,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
     <result column="show_click_num" jdbcType="BIGINT" property="show_click_num" />
     <result column="flag_msg" jdbcType="VARCHAR" property="flag_msg" />
+    <result column="p_message" jdbcType="VARCHAR" property="p_message" />
   </resultMap>
 
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.rongdu.cashloan.cl.domain.CompanyProdDetail">
@@ -277,10 +278,13 @@
         update_time = #{update_time,jdbcType=TIMESTAMP},
       </if>
       <if test="show_click_num != null">
-        #{show_click_num,jdbcType=BIGINT},
+        show_click_num = #{show_click_num,jdbcType=BIGINT},
       </if>
       <if test="flag_msg != null">
-        #{flag_msg,jdbcType=VARCHAR},
+        flag_msg = #{flag_msg,jdbcType=VARCHAR},
+      </if>
+      <if test="p_message != null">
+        p_message = #{p_message,jdbcType=VARCHAR},
       </if>
       <if test="proc_info != null">
         proc_info = #{proc_info,jdbcType=LONGVARCHAR},
@@ -432,16 +436,27 @@
     ORDER BY update_time ASC
   </select>
 
-  <select id="getAllListBySearch" resultMap="ResultMapWithType">
-    select
+  <sql id="baseAllResult">
       bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
       bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
       bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
+      bcpd.create_time,bcpd.flag_msg,p_message,
       boi.id as boi_id,boi.proc_id as boi_proc_id,boi.name as boi_name,boi.tel as boi_tel,
       boi.wx as boi_wx,boi.qq as boi_qq,boi.job as boi_job,boi.module as boi_module,
       bcp.id as bcp_id,bcp.big_type as bcp_big_type,bcp.type as bcp_type,bcp.type_name AS bcp_type_name,
       bcp.type_img_path as bcp_type_img_path,bcp.sort as bcp_sort,
       bci.id AS bci_id,bci.company_name AS bci_company_name
+  </sql>
+  <sql id="productResult">
+      bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
+      bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
+      bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
+      bcpd.create_time,
+      bci.id AS bci_id,bci.company_name AS bci_company_name,bci.registered_capital AS bci_registered_capital
+  </sql>
+  <select id="getAllListBySearch" resultMap="ResultMapWithType">
+    select
+      <include refid="baseAllResult"/>
     FROM b_company_prod_detail bcpd
     LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
     LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
@@ -457,17 +472,25 @@
     ORDER BY update_time ASC
   </select>
 
-  <select id="getAuditStateList" resultMap="AuditStateMap">
+  <select id="getAuditStateList" resultMap="ResultMapWithType">
     select
-      bcpd.id, bcpd.proc_id,bcpd.type, bcpd.cp_type, bcpd.org_id, bcpd.proc_name,
-      bcpd.logo_path, bcpd.official_url, bcpd.proc_flag, bcpd.status,bcpd.proc_info,
-      bcpd.sort, bcpd.audit_person, bcpd.audit_state, bcpd.audit_message,bcpd.update_time,
-      bcpd.create_time,
-      bci.id AS bci_id,bci.company_name AS bci_company_name,bci.registered_capital AS bci_registered_capital
+    <include refid="baseAllResult"/>
     FROM b_company_prod_detail bcpd
+    LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
+    LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
     LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
     WHERE bci.user_id =#{userId} AND bcpd.audit_state = #{auditState}
     ORDER BY bcpd.update_time DESC
+  </select>
+
+  <select id="getProdDetailById" resultMap="ResultMapWithType">
+    select
+    <include refid="baseAllResult"/>
+    FROM b_company_prod_detail bcpd
+    LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
+    LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
+    LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
+    WHERE bcpd.proc_id = #{procId}
   </select>
 
 </mapper>

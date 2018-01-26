@@ -1,8 +1,10 @@
 package com.rongdu.cashloan.cl.domain;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.alibaba.fastjson.JSONArray;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -92,6 +94,11 @@ public class CompanyProdDetail implements Serializable {
     private String companyAddress;
 
     /**
+     * 营销信息
+     */
+    private String p_message;
+
+    /**
      * 注册资金
      */
     private String registeredCapital;
@@ -110,6 +117,10 @@ public class CompanyProdDetail implements Serializable {
      * 创建时间
      */
     private Date create_time;
+    /**
+     * 拒绝理由
+     */
+    private List<Integer> regectMessage;
 
     /**
      * 更新时间
@@ -148,10 +159,20 @@ public class CompanyProdDetail implements Serializable {
         return id;
     }
 
+    public String getP_message() {
+        return p_message;
+    }
+
+    public void setP_message(String p_message) {
+        this.p_message = p_message;
+    }
+
     /**
      * 
      * @param id 
      */
+
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -162,6 +183,14 @@ public class CompanyProdDetail implements Serializable {
 
     public void setProc_id(Long proc_id) {
         this.proc_id = proc_id;
+    }
+
+    public List<Integer> getRegectMessage() {
+        return regectMessage;
+    }
+
+    public void setRegectMessage(List<Integer> regectMessage) {
+        this.regectMessage = regectMessage;
     }
 
     /**
@@ -227,6 +256,8 @@ public class CompanyProdDetail implements Serializable {
     public void setProc_name(String proc_name) {
         this.proc_name = proc_name == null ? null : proc_name.trim();
     }
+
+
 
     /**
      * 产品logo
@@ -555,10 +586,12 @@ public class CompanyProdDetail implements Serializable {
                 ", companyProd=" + companyProd +
                 ", companyInfo=" + companyInfo +
                 ", companyAddress='" + companyAddress + '\'' +
+                ", p_message='" + p_message + '\'' +
                 ", registeredCapital='" + registeredCapital + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", audit_time=" + audit_time +
                 ", create_time=" + create_time +
+                ", regectMessage=" + regectMessage +
                 ", update_time=" + update_time +
                 ", show_click_num=" + show_click_num +
                 ", flag_msg='" + flag_msg + '\'' +

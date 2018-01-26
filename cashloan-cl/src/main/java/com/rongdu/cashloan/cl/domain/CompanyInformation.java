@@ -1,7 +1,9 @@
 package com.rongdu.cashloan.cl.domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class CompanyInformation implements Serializable{
     private Long id;
@@ -41,6 +43,8 @@ public class CompanyInformation implements Serializable{
     private Integer auditState;
     //审核信息
     private String auditMessage;
+    //拒绝理由
+    private List<Integer> regectMessage;
     //审核人
     private String auditPerson;
     //公司地址
@@ -58,6 +62,13 @@ public class CompanyInformation implements Serializable{
         this.id = id;
     }
 
+    public List<Integer> getRegectMessage() {
+        return regectMessage;
+    }
+
+    public void setRegectMessage(List<Integer> regectMessage) {
+        this.regectMessage = regectMessage;
+    }
 
     public Long getUserId() {
         return userId;
@@ -248,6 +259,7 @@ public class CompanyInformation implements Serializable{
                 ", auditTime=" + auditTime +
                 ", auditState=" + auditState +
                 ", auditMessage='" + auditMessage + '\'' +
+                ", regectMessage=" + regectMessage +
                 ", auditPerson='" + auditPerson + '\'' +
                 ", companyAddress='" + companyAddress + '\'' +
                 ", state=" + state +

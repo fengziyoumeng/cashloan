@@ -74,9 +74,9 @@ export default React.createClass({
             url: '/act/model/companyservice/alllist.htm',
             data: params,
             callback: (result) => {
-                // console.info("=======>"+JSON.stringify(result.data));
+                // console.info("=======>"+JSON.stringify(result));
                 const pagination = this.state.pagination;
-                pagination.total = result.totalCount;
+                /*pagination.total = result.totalCount;*/
                 if (!pagination.current) {
                     pagination.current = 1
                 };

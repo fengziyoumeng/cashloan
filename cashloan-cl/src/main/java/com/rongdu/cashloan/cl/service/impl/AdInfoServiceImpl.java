@@ -7,6 +7,7 @@ import com.rongdu.cashloan.cl.util.ImageUploadUtil;
 import com.rongdu.cashloan.core.aliyun.AliYunUtil;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
 import com.rongdu.cashloan.core.common.util.StringUtil;
+import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import org.activiti.explorer.util.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class AdInfoServiceImpl implements AdInfoService{
 
     @Resource
     private AdInfoMapper adInfoMapper;
+    @Resource
+    private ShardedJedisClient redisClient;
 
     @Override
     public List<AdInfo> selectAll() {
@@ -67,6 +70,10 @@ public class AdInfoServiceImpl implements AdInfoService{
                 adInfoMapper.insert(adInfo);
             }else {
                 adInfoMapper.updateByPrimaryKey(adInfo);
+            }
+            boolean exists = redisClient.exists("cache_b_adinfo_img_list");
+            if(exists){
+                redisClient.del("cache_b_adinfo_img_list");
             }
         }catch (Exception e){
             logger.info("保存或更新失败",e);

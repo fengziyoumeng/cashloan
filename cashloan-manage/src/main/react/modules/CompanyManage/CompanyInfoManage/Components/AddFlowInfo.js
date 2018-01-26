@@ -310,12 +310,10 @@ var AddFlowInfo = React.createClass({
                                     <Select disabled={!props.canEdit} multiple {...getFieldProps('auditMessage', {rules: [{type: "array" }]})} >
                                         <Option value={1}>企业名称不通过</Option>
                                         <Option value={2}>法人姓名不通过</Option>
-                                        <Option value={3}>法人身份证不通过</Option>
-                                        <Option value={4}>联系人手机号不通过</Option>
+                                        <Option value={3}>法人身份证信息不通过</Option>
+                                        <Option value={4}>公司介绍不通过</Option>
                                         <Option value={5}>营业执照不通过</Option>
-                                        <Option value={6}>身份证正面照不通过</Option>
-                                        <Option value={7}>身份证反面照不通过</Option>
-                                        <Option value={8}>手持身份证照不通过</Option>
+                                        <Option value={6}>联系人手机号不通过</Option>
                                     </Select>
                                 </FormItem>
                         </Col>

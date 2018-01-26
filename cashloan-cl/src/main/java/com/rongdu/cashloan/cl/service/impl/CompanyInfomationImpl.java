@@ -6,16 +6,14 @@ import com.rongdu.cashloan.cl.service.ICompanyInfomationService;
 import com.rongdu.cashloan.cl.util.ImageUploadUtil;
 import com.rongdu.cashloan.core.common.util.Base64;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
+import com.rongdu.cashloan.core.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CompanyInfomationImpl implements ICompanyInfomationService {
@@ -36,7 +34,7 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
                 companyInfo.setContactTel(companyInformation.getContactTel());
                 companyInfo.setIntroduction(companyInformation.getIntroduction());
                 companyInfo.setUpdateTime(new Date());
-                companyInfo.setAuditState(1);
+
                 companyInfo.setState(20);
                 //把传过来的图片路径用base64解密后上传到阿里云,返回的地址保存到对应字段中去
                 String licensePicUrl = ImageUploadUtil.uploadOSSDeleteTemp(Base64.decodeStr(companyInformation.getLicensePic()), "companyInfoPic");
@@ -53,7 +51,12 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
                     companyInfo.setCreateTime(new Date());
                     CompanyInfomationMapper.save(companyInfo);
                 } else {
+                    //更新时重置审核时间，审核状态，审核理由，审核人
                     companyInfo.setId(companyInformation.getId());
+                    companyInfo.setAuditTime(null);
+                    companyInfo.setAuditState(1);
+                    companyInfo.setAuditMessage("");
+                    companyInfo.setAuditPerson("");
                     CompanyInfomationMapper.update(companyInfo);
                 }
             }catch (Exception e){
@@ -106,13 +109,15 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
 
             companyInfo.setAuditTime(new Date());
             companyInfo.setId(Long.parseLong(id));
-            companyInfo.setAuditMessage(auditMessage);
+
             companyInfo.setAuditPerson(auditPerson);
 
             if (pass.equals("ok")) {
                 companyInfo.setState(10);
+                companyInfo.setAuditMessage("");
                 companyInfo.setAuditState(2);
             } else if (pass.equals("no")) {
+                companyInfo.setAuditMessage(auditMessage);
                 companyInfo.setState(20);
                 companyInfo.setAuditState(3);
             }
@@ -129,6 +134,20 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
         List<CompanyInformation> companyInfo = null;
         try{
             companyInfo = CompanyInfomationMapper.selectAuditStateByUserId(userId);
+            if(companyInfo!=null){
+
+                for ( CompanyInformation list: companyInfo) {
+                    if(StringUtil.isNotBlank(list.getAuditMessage())){
+                        List regectList = new ArrayList<Integer>();
+                        String auditMsg = list.getAuditMessage().substring(1,list.getAuditMessage().length()-1);
+                        String[] split = auditMsg.split(",");
+                        for (String s : split) {
+                            regectList.add(Integer.parseInt(s.trim()));
+                        }
+                        list.setRegectMessage(regectList);
+                    }
+                }
+            }
             if(companyInfo.size()>1){
                 return companyInfo.get(companyInfo.size()-1);
             }else if(companyInfo.size()==0){

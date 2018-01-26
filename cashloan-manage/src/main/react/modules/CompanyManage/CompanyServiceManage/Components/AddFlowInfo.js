@@ -363,14 +363,23 @@ var AddFlowInfo = React.createClass({
                         <h2>审核</h2>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="审核理由：">
+                                <FormItem  {...formItemLayout} label="不通过原因（可多选）：">
+                                    <Select disabled={!props.canEdit} multiple {...getFieldProps('auditMessage', {rules: [{type: "array" }]})} >
+                                        <Option value={1}>产品名称不符合</Option>
+                                        <Option value={2}>产品分类不通过</Option>
+                                        <Option value={3}>LOGO不符合规范</Option>
+                                        <Option value={4}>产品服务介绍不通过</Option>
+                                        <Option value={5}>联系人信息不通过</Option>
+                                    </Select>
+                                </FormItem>
+                                {/*<FormItem  {...formItemLayout} label="审核理由：">
                                     <Input rows={3} disabled={!props.canEdit}  {...getFieldProps('auditMessage',{
                                         rules: [{
                                             required: true,
                                             message: '必填'
                                         }]
                                     })}  type="textarea"/>
-                                </FormItem>
+                                </FormItem>*/}
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="审核人：">

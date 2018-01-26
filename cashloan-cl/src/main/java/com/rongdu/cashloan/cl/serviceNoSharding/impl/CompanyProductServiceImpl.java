@@ -1,6 +1,10 @@
 package com.rongdu.cashloan.cl.serviceNoSharding.impl;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
 import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
@@ -8,9 +12,11 @@ import com.rongdu.cashloan.cl.util.ImageUploadUtil;
 import com.rongdu.cashloan.core.common.util.Base64;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
 import com.rongdu.cashloan.core.common.util.OrderNoUtil;
+import com.rongdu.cashloan.core.common.util.StringUtil;
 import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
+import net.sf.json.util.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +55,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
     CompanyInformationMapper companyInformationMapper;
 
     @Override
-    public void saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception {
+    public Long saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception {
         long prod_id = Long.parseLong(OrderNoUtil.getSerialNumber());
         List<OperativeInfo> operativeInfos = companyProdDetail.getOperativeInfoList();
         if(companyProdDetail.getId()==null){
@@ -78,6 +84,7 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
                 }
             }
         }
+        return prod_id;
     }
 
     @Override
@@ -243,11 +250,32 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
     }
 
     @Override
-    public List<CompanyProdDetail> getAllList(String searchParams, int current, int pageSize) {
+    public CompanyProdDetail getDetailById(Long procId) {
+        CompanyProdDetail companyProdDetail = null;
+        try{
+            companyProdDetail = companyProdDetailMapper.getProdDetailById(procId);
+            if(companyProdDetail!=null && StringUtil.isNotBlank(companyProdDetail.getAudit_message())){
+                String auditMsg = companyProdDetail.getAudit_message().substring(1,companyProdDetail.getAudit_message().length()-1);
+                String[] split = auditMsg.split(",");
+                List regectList = new ArrayList<Integer>();
+                for (String s : split) {
+                    regectList.add(Integer.parseInt(s.trim()));
+                }
+                companyProdDetail.setRegectMessage(regectList);
+            }
+        }catch (Exception e){
+            logger.info("获取产品详情失败",e);
+            throw e;
+        }
+        return companyProdDetail;
+    }
+
+    @Override
+    public List getAllList(String searchParams, int current, int pageSize) {
         List<CompanyProdDetail> allListBySearch = null;
         try{
-            PageHelper.startPage(current,pageSize);
             Map params = JsonUtil.parse(searchParams, Map.class);
+//            PageHelper.startPage(current,pageSize);
             allListBySearch = companyProdDetailMapper.getAllListBySearch(params);
         }catch (Exception e){
             logger.info("查询失败",e);
@@ -269,7 +297,20 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
                 return prodDetails;
             }*/
             companyProdDetails = companyProdDetailMapper.getAuditStateList(params);
-//            redisClient.setObject(AppConstant.REDIS_KEY_AUDIT_STATE_LIST+userId+":"+auditState,companyProdDetails,1000*3600*24);
+            if(companyProdDetails!=null){
+                for ( CompanyProdDetail list: companyProdDetails) {
+                    if(StringUtil.isNotBlank(list.getAudit_message())){
+                        String auditMsg = list.getAudit_message().substring(1,list.getAudit_message().length()-1);
+                        String[] split = auditMsg.split(",");
+                        List regectList = new ArrayList<Integer>();
+                        for (String s : split) {
+                            regectList.add(Integer.parseInt(s.trim()));
+                        }
+                        list.setRegectMessage(regectList);
+                    }
+                }
+            }
+//            redisClient.setObject(AppConstant.REDIS_KEY_AUDIT_STATE_LIST+userId+":"+auditState,companyProdDetails);
         }catch (Exception e){
             logger.info("获取服务审核状态列表失败",e);
             throw e;
@@ -299,6 +340,18 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
             companyProdDetailMapper.serviceAudit(companyProdDetail);
         }catch (Exception e){
             logger.info("审核失败",e);
+            throw e;
+        }
+    }
+
+    @Override
+    public void serviceUpdata(String data) {
+        try{
+            CompanyProdDetail companyProdDetail = JsonUtil.parse(data, CompanyProdDetail.class);
+            companyProdDetailMapper.updateByPrimaryKeySelective(companyProdDetail);
+
+        }catch (Exception e){
+            logger.info("产品修改失败",e);
             throw e;
         }
     }

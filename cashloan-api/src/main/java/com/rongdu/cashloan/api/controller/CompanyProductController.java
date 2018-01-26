@@ -38,7 +38,8 @@ public class CompanyProductController {
         logger.info(String.format("保存公司产品>>前端传入的参数【%s】",companyProdDetail.toString()));
         Map<String,Object> result = new HashMap<String,Object>();
         try {
-            companyProductService.saveOrUpdate(companyProdDetail);
+            Long prodId = companyProductService.saveOrUpdate(companyProdDetail);
+            result.put(Constant.RESPONSE_DATA, prodId);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "保存成功");
         } catch (Exception e) {
@@ -88,6 +89,7 @@ public class CompanyProductController {
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
         }catch (Exception e){
+            e.printStackTrace();
             result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
         }
@@ -131,6 +133,26 @@ public class CompanyProductController {
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
         }catch (Exception e){
             e.printStackTrace();
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+
+    /**
+     * 根据id获取产品详情
+     * @param response
+     * @param procId
+     */
+    @RequestMapping("/get/product/byid.htm")
+    public void auditStateList(HttpServletResponse response,Long procId){
+        Map<String,Object> result = new HashMap<>();
+        try {
+            CompanyProdDetail companyProdDetail = companyProductService.getDetailById(procId);
+            result.put(Constant.RESPONSE_DATA, companyProdDetail);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
             result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询失败");
         }

@@ -58,5 +58,7 @@ public interface CompanyProdDetailMapper {
 
     List<CompanyProdDetail> getAuditStateList(Map params);
 
+    CompanyProdDetail getProdDetailById(Long procId);
+
     void serviceAudit(CompanyProdDetail companyProdDetail);
 }

@@ -70,7 +70,7 @@ public class ApiInterceptor implements HandlerInterceptor {
 
 		if (sb.length() > 1)
 			sb.deleteCharAt(sb.length() - 1);
-		logger.debug("签名验签" + sb.toString());
+		logger.debug("***********参数拼接后： " + sb.toString()+"***********");
 		return sb.toString();
 	}
 
@@ -182,7 +182,6 @@ public class ApiInterceptor implements HandlerInterceptor {
 
 		String token = request.getHeader("token");
 		String signMsg = request.getHeader("signMsg");
-		logger.info("*******传入的token："+token+"**********"+"传入的signMsg："+signMsg+"********");
 
 		Map<String, Object> rec = new LinkedHashMap<String, Object>();
 		String _signMsg;
@@ -208,11 +207,11 @@ public class ApiInterceptor implements HandlerInterceptor {
 				JsonUtil.writeJson(rec, response);
 				return false;
 			}
-
 			_signMsg = md5(Global.getValue("app_key") + (token == null ? "" : token) + paramsString(requestMap));
-			logger.info("*******md5加密后的_signMsg："+_signMsg+"**********");
 			flag = _signMsg.equalsIgnoreCase(signMsg);
 		}
+		logger.info("*******传入的token："+token+"**********"+"传入的signMsg："+signMsg+"********");
+		logger.info("*******md5加密生成的_signMsg>>"+_signMsg+"*******");
 
 		// 根据地址是否带/act/生成的_signMsg，校验
 		if (!flag) {
