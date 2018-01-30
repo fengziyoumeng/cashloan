@@ -131,6 +131,10 @@ public class AppConstant {
      * 获取产品用户浏览数
      */
     public static final String REDIS_KEY_CLICK_BDATA_PROD_INFO = "BDATA:PRODFORM:CLICK:";
+    /**
+     * 用户信息缓存
+     */
+    public static final String REDIS_KEY_USER_BASE_INFO = "USER:BASEINFO:";
 
     /**
      * 广播信息

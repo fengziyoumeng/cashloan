@@ -8,7 +8,9 @@ import com.rongdu.cashloan.cl.service.impl.MybatisService;
 import com.rongdu.cashloan.core.common.context.Constant;
 import com.rongdu.cashloan.core.common.util.StringUtil;
 import com.rongdu.cashloan.core.common.util.code.MD5;
+import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.domain.Ticket;
+import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,9 @@ public class LoginController {
 	private MybatisService mybatisService;
 	@Resource
 	private AppDbSession appDbSession;
+
+	@Resource
+	private ShardedJedisClient redisClient;
 
 	@Resource(name = "clUserService_")
 	private UserService userService;

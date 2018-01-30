@@ -5,7 +5,7 @@ import com.rongdu.cashloan.api.util.Des3Util;
 import com.rongdu.cashloan.cl.domain.BankInfo;
 import com.rongdu.cashloan.cl.domain.CompanyInformation;
 import com.rongdu.cashloan.cl.domain.FlowPic;
-import com.rongdu.cashloan.cl.service.ICompanyInfomationService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyInfomationService;
 import com.rongdu.cashloan.cl.service.FlowPicService;
 import com.rongdu.cashloan.cl.service.IBankInfoService;
 import com.rongdu.cashloan.cl.service.impl.JipushService;

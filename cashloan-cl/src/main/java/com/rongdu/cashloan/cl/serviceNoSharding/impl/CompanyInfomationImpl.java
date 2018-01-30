@@ -117,11 +117,16 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
             String auditMessage = dataMap.get("auditMessage") != null ? dataMap.get("auditMessage").toString() : "";
             String pass = dataMap.get("pass") != null ? dataMap.get("pass").toString() : "";
             String auditPerson = dataMap.get("auditPerson") != null ? dataMap.get("auditPerson").toString() : "";
+            String companyAddress = dataMap.get("companyAddress") != null ? dataMap.get("companyAddress").toString() : "";
+            String registeredCapital = dataMap.get("registeredCapital") != null ? dataMap.get("registeredCapital").toString() : "";
+
 
             CompanyInformation companyInfo = new CompanyInformation();
             companyInfo.setAuditTime(new Date());
             companyInfo.setId(Long.parseLong(id));
             companyInfo.setAuditPerson(auditPerson);
+            companyInfo.setCompanyAddress(companyAddress);
+            companyInfo.setRegisteredCapital(registeredCapital);
 
             Long userId = CompanyInfomationMapper.getUserIdByCompanyId(Long.parseLong(id));
 

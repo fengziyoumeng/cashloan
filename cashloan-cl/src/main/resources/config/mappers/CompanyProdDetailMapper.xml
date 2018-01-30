@@ -42,6 +42,8 @@
     <association property="companyInfo" javaType="com.rongdu.cashloan.cl.domain.CompanyInformation" columnPrefix="bci_">
       <id column="id" jdbcType="BIGINT" property="id" />
       <result column="company_name"  property="companyName" />
+      <result column="company_address"  property="companyAddress" />
+      <result column="registered_capital"  property="registeredCapital" />
     </association>
     <collection property="OperativeInfoList" ofType="com.rongdu.cashloan.cl.domain.OperativeInfo" columnPrefix="boi_">
       <result column="id" property="id"></result>
@@ -467,7 +469,8 @@
       boi.wx as boi_wx,boi.qq as boi_qq,boi.job as boi_job,boi.module as boi_module,
       bcp.id as bcp_id,bcp.big_type as bcp_big_type,bcp.type as bcp_type,bcp.type_name AS bcp_type_name,
       bcp.type_img_path as bcp_type_img_path,bcp.sort as bcp_sort,
-      bci.id AS bci_id,bci.company_name AS bci_company_name
+      bci.id AS bci_id,bci.company_name AS bci_company_name,
+      bci.company_address AS  bci_company_address,bci.registered_capital AS bci_registered_capital
   </sql>
 
   <sql id="baseTypeResult">
@@ -496,6 +499,7 @@
     LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
     LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
     <where>
+      bcpd.audit_state = 2
       <if test="companyName != null and companyName !=''">
         and bci.company_name LIKE concat('%',#{companyName,jdbcType=VARCHAR},'%')
       </if>

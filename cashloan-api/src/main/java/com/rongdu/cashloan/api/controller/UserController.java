@@ -11,11 +11,14 @@ import com.rongdu.cashloan.cl.service.impl.MybatisService;
 import com.rongdu.cashloan.core.common.context.Constant;
 import com.rongdu.cashloan.core.common.util.MapUtil;
 import com.rongdu.cashloan.core.common.util.StringUtil;
+import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.domain.Ticket;
+import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import tool.util.BeanUtil;
 
 import javax.annotation.Resource;
@@ -43,6 +46,9 @@ public class UserController {
 
 	@Resource
 	private AppDbSession appDbSession;
+
+	@Resource
+	private ShardedJedisClient redisClient;
 
 	@Resource(name = "clUserService_")
 	private UserService userService;
@@ -332,7 +338,13 @@ public class UserController {
 					ret.put("msg", "账户信息获取失败");
 					logger.info("账户信息获取失败，userId为空");
 				}else{
-					Map rec= mybatisService.queryRec("usr.infoH5", userId);
+					Map rec = (Map)redisClient.getObject(AppConstant.REDIS_KEY_USER_BASE_INFO + userId);
+					if(rec == null){
+						rec= mybatisService.queryRec("usr.infoH5", userId);
+						if(rec != null){
+							redisClient.setObject(AppConstant.REDIS_KEY_USER_BASE_INFO + userId,rec,3600*24*2);
+						}
+					}
 					if(rec!=null){
 						data.put("phone", rec.get("phone"));
 						data.put("realName", rec.get("real_name"));
@@ -470,6 +482,9 @@ public class UserController {
 					result.put("data", data);
 					result.put("success", true);
 					result.put("msg", "修改昵称成功!");
+					if(redisClient.exists(AppConstant.REDIS_KEY_USER_BASE_INFO + userId)){
+						redisClient.delObject(AppConstant.REDIS_KEY_USER_BASE_INFO + userId);
+					}
 				}else{
 					result.put("msg", "修改昵称失败!");
 				}

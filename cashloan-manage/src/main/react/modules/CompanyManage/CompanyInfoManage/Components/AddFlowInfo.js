@@ -293,7 +293,7 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="11">
                                 <FormItem  {...formItemLayout} label="注册资金：">
-                                    <Input  disabled={!props.canEdit} style={{width: 120}}  {...getFieldProps('registerCapital',{rules: [{ required: true, message: '必填'}]})} />
+                                    <Input  disabled={!props.canEdit} style={{width: 120}}  {...getFieldProps('registeredCapital',{rules: [{ required: true, message: '必填'}]})} />
                                     <span style={{marginLeft: 10}}>万</span>
                                 </FormItem>
                             </Col>
@@ -307,14 +307,13 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="不通过原因：">
-
-                                    <Select  disabled={!props.canEdit}  {...getFieldProps('auditMessage')} >
-                                        <Option value={"1"}>企业名称不通过</Option>
-                                        <Option value={"2"}>法人姓名不通过</Option>
-                                        <Option value={"3"}>身份信息不通过</Option>
-                                        <Option value={"4"}>公司介绍不通过</Option>
-                                        <Option value={"5"}>营业执照不通过</Option>
-                                        <Option value={"6"}>联系人手机号不通过</Option>
+                                    <Select disabled={!props.canEdit}  {...getFieldProps('auditMessage')} >
+                                        <Option value={1}>企业名称不通过</Option>
+                                        <Option value={2}>法人姓名不通过</Option>
+                                        <Option value={3}>身份信息不通过</Option>
+                                        <Option value={4}>公司介绍不通过</Option>
+                                        <Option value={5}>营业执照不通过</Option>
+                                        <Option value={6}>联系人手机号不通过</Option>
                                     </Select>
                                 </FormItem>
                             </Col>
