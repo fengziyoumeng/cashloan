@@ -30,4 +30,6 @@ public interface CompanyInformationMapper extends BaseMapper<CompanyInformation,
     void updateAudit(CompanyInformation companyInformation);
 
     List<CompanyInformation> selectAuditStateByUserId(Long userId);
+
+    Long getUserIdByCompanyId(Long companyId);
 }

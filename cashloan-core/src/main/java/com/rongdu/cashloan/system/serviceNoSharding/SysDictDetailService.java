@@ -6,6 +6,8 @@ import java.util.Map;
 import com.github.pagehelper.Page;
 import com.rongdu.cashloan.core.common.exception.ServiceException;
 import com.rongdu.cashloan.core.common.service.BaseService;
+import com.rongdu.cashloan.core.common.util.StringUtil;
+import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.system.domain.SysDictDetail;
 
 /**
@@ -94,4 +96,6 @@ public interface SysDictDetailService extends BaseService<SysDictDetail,Long>{
 	List<String> listValue(Map<String, Object> param);
 
     List<SysDictDetail> getItemCodeAndVlueByParentId(Map<String, Object> paramMap);
+
+    String getValueFromRedis(String parentCode,String childerCode) throws Exception;
 }

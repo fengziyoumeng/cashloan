@@ -2,7 +2,7 @@ package com.rongdu.cashloan.api.controller;
 
 
 import com.rongdu.cashloan.cl.domain.*;
-import com.rongdu.cashloan.cl.service.ICompanyInfomationService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyInfomationService;
 import com.rongdu.cashloan.core.common.context.Constant;
 import com.rongdu.cashloan.core.common.util.ServletUtils;
 import com.rongdu.cashloan.core.common.web.controller.BaseController;

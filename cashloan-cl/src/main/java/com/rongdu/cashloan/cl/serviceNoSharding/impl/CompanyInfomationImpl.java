@@ -1,12 +1,15 @@
-package com.rongdu.cashloan.cl.service.impl;
+package com.rongdu.cashloan.cl.serviceNoSharding.impl;
 
 import com.rongdu.cashloan.cl.domain.CompanyInformation;
 import com.rongdu.cashloan.cl.mapper.CompanyInformationMapper;
-import com.rongdu.cashloan.cl.service.ICompanyInfomationService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyInfomationService;
+import com.rongdu.cashloan.cl.serviceNoSharding.MessageService;
 import com.rongdu.cashloan.cl.util.ImageUploadUtil;
 import com.rongdu.cashloan.core.common.util.Base64;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
 import com.rongdu.cashloan.core.common.util.StringUtil;
+import com.rongdu.cashloan.core.redis.ShardedJedisClient;
+import com.rongdu.cashloan.system.serviceNoSharding.SysDictDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,15 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
     @Resource
     private CompanyInformationMapper CompanyInfomationMapper;
 
+    @Resource
+    private SysDictDetailService sysDictDetailService;
+
+    @Resource
+    private MessageService messageService;
+
+    @Resource
+    private ShardedJedisClient redisClient;
+
     @Override
     public void saveOrUpdate(CompanyInformation companyInformation) throws Exception {
             try {
@@ -34,6 +46,7 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
                 companyInfo.setContactTel(companyInformation.getContactTel());
                 companyInfo.setIntroduction(companyInformation.getIntroduction());
                 companyInfo.setUpdateTime(new Date());
+                companyInfo.setAuditState(1);
 
                 companyInfo.setState(20);
                 //把传过来的图片路径用base64解密后上传到阿里云,返回的地址保存到对应字段中去
@@ -96,7 +109,7 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
     }
 
     @Override
-    public void infoAudit(String data) {
+    public void infoAudit(String data) throws Exception {
         try {
             HashMap<String, Object> dataMap = JsonUtil.parse(data, HashMap.class);
 
@@ -106,20 +119,28 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
             String auditPerson = dataMap.get("auditPerson") != null ? dataMap.get("auditPerson").toString() : "";
 
             CompanyInformation companyInfo = new CompanyInformation();
-
             companyInfo.setAuditTime(new Date());
             companyInfo.setId(Long.parseLong(id));
-
             companyInfo.setAuditPerson(auditPerson);
 
+            Long userId = CompanyInfomationMapper.getUserIdByCompanyId(Long.parseLong(id));
+
             if (pass.equals("ok")) {
+                //审核通过
                 companyInfo.setState(10);
                 companyInfo.setAuditMessage("");
                 companyInfo.setAuditState(2);
+
+                //发送消息
+                messageService.sendMessage("SMS_TEMPLATE","COMPANY_TITLE_PASS","COMPANY_MSG_PASS",userId,1);
             } else if (pass.equals("no")) {
-                companyInfo.setAuditMessage(auditMessage);
+                //审核拒绝
+                companyInfo.setAuditMessage("["+auditMessage+"]");
                 companyInfo.setState(20);
                 companyInfo.setAuditState(3);
+
+                //发送消息
+                messageService.sendMessage("SMS_TEMPLATE","COMPANY_TITLE_REJ","COMPANY_MSG_REJ",userId,1);
             }
             CompanyInfomationMapper.updateAudit(companyInfo);
         }catch(Exception e){

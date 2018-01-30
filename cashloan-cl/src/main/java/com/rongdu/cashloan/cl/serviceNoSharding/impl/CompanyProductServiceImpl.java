@@ -1,13 +1,9 @@
 package com.rongdu.cashloan.cl.serviceNoSharding.impl;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.rongdu.cashloan.cl.domain.*;
 import com.rongdu.cashloan.cl.mapper.*;
 import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyProductService;
+import com.rongdu.cashloan.cl.serviceNoSharding.MessageService;
 import com.rongdu.cashloan.cl.util.ImageUploadUtil;
 import com.rongdu.cashloan.core.common.util.Base64;
 import com.rongdu.cashloan.core.common.util.JsonUtil;
@@ -16,7 +12,6 @@ import com.rongdu.cashloan.core.common.util.StringUtil;
 import com.rongdu.cashloan.core.constant.AppConstant;
 import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import com.rongdu.cashloan.system.mapper.SysDictDetailMapper;
-import net.sf.json.util.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +47,10 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
     private AdInfoMapper adInfoMapper;
 
     @Resource
-    CompanyInformationMapper companyInformationMapper;
+    private CompanyInformationMapper companyInformationMapper;
+
+    @Resource
+    private MessageService messageService;
 
     @Override
     public Long saveOrUpdate(CompanyProdDetail companyProdDetail) throws Exception {
@@ -327,13 +325,17 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
             String auditMessage = map.get("auditMessage") != null ? map.get("auditMessage").toString() :"";
             String auditPerson = map.get("auditPerson") != null ? map.get("auditPerson").toString() :"";
 
+            Long id = companyProdDetail.getId();
+            Map<String,Long> dataMap = companyProdDetailMapper.getUserIdByProcId(id);
             if(auditState.equals("no")){
+                companyProdDetail.setAudit_message(auditMessage);
                 companyProdDetail.setAudit_state(3);
+                messageService.sendMessage("SMS_TEMPLATE","SERVICE_TITLE_REJ","SERVICE_MSG_REJ",dataMap.get("userId"),2,dataMap.get("procId"));
             }else if(auditState.equals("ok")){
                 companyProdDetail.setAudit_state(2);
+                messageService.sendMessage("SMS_TEMPLATE","SERVICE_TITLE_PASS","SERVICE_MSG_PASS",dataMap.get("userId"),2,dataMap.get("procId"));
             }
 
-            companyProdDetail.setAudit_message(auditMessage);
             companyProdDetail.setAudit_person(auditPerson);
             companyProdDetail.setAudit_time(new Date());
 

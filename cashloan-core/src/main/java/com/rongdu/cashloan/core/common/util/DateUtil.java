@@ -83,4 +83,16 @@ public class DateUtil extends tool.util.DateUtil{
 		return strtodate;
 		
 	}
+
+	/**
+	 * 判断两个日期是否是同一天
+	 * @param d1
+	 * @param d2
+	 * @return
+	 */
+	public static boolean sameDate(Date d1, Date d2){
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		//fmt.setTimeZone(new TimeZone()); // 如果需要设置时间区域，可以在这里设置
+		return fmt.format(d1).equals(fmt.format(d2));
+	}
 }

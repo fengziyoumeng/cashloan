@@ -1,0 +1,5 @@
+/* you can make up upload button and sample style by using stylesheets */
+.avatar-uploader > .ant-upload {
+  width: 60px;
+  height: 60px;
+}

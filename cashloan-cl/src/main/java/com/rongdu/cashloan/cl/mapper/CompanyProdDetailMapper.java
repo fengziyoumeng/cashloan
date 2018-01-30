@@ -61,4 +61,6 @@ public interface CompanyProdDetailMapper {
     CompanyProdDetail getProdDetailById(Long procId);
 
     void serviceAudit(CompanyProdDetail companyProdDetail);
+
+    Map<String,Long>  getUserIdByProcId(Long procId);
 }

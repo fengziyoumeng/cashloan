@@ -159,6 +159,13 @@
         WHERE user_id = #{userId jdbcType=INTEGER}
     </select>
 
+    <select id="getUserIdByCompanyId" resultType="long">
+        select
+          user_id
+        from b_company_information
+        WHERE id = #{companyId jdbcType=INTEGER}
+    </select>
+
 
 
 </mapper>

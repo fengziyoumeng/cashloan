@@ -14,17 +14,17 @@ public class Create {
 	public void test(){
 
 		// 数据库连接信息
-		String url = "jdbc:mysql://192.168.2.253:3306/cashloan?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true";
+		String url = "jdbc:mysql://116.62.174.111:3306/jijiehao1?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true";
 		String MysqlUser = "root";
-		String mysqlPassword = "yiqifu@123";
+		String mysqlPassword = "Yiqifu@123";
 		
 		// 数据库及数据表名称
-		String database = "cashloan";
-		String table = "cl_pay_error_log";
+		String database = "jijiehao1";
+		String table = "cl_message";
 		
 		// 配置作者及Domain说明
-		String classAuthor = "pantheon";
-		String functionName = "支付记录异常表";
+		String classAuthor = "Yang";
+		String functionName = "用户消息";
  
 		// 公共包路径 (例如 BaseDao、 BaseService、 BaseServiceImpl)
 		String commonName ="com.rongdu.cashloan.core.common";
@@ -37,7 +37,7 @@ public class Create {
 		String db="mysql";
 		
 		//类名前缀
-		String classNamePrefix = "PayErrorLog";
+		String classNamePrefix = "Message";
 
 		try {
 			MybatisGenerate.generateCode(db,url, MysqlUser, mysqlPassword, database, table,commonName,packageName,batisName,moduleName,classAuthor,functionName,classNamePrefix);

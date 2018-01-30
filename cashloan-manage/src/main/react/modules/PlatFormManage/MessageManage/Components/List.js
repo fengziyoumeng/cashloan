@@ -8,6 +8,8 @@ import Lookdetails from './Lookdetails'
 import AddFlowInfo from './AddFlowInfo'
 import AssignPermissions from './AssignPermissions'
 var confirm = Modal.confirm;
+
+
 export default React.createClass({
     getInitialState() {
         return {
@@ -30,15 +32,42 @@ export default React.createClass({
         var pagination = this.state.pagination;
         this.fetch();
     },
-    //立即申请
+    //新窗口
     showModal(title, record, canEdit) {
         var record = record;
+        var data ='';
+        if(title=="修改"){
+            data = record;
+        }
+
         this.refs.AddFlowInfo.setFieldsValue(record);
         this.setState({
             canEdit: canEdit,
             visible: true,
             title: title,
-            record: record
+            record: data
+        });
+    },
+    deleteRecord(title, record, canEdit){
+        var me = this;
+        confirm({
+            title:"删除后不可恢复,确定要删除吗?",
+            onOk:function(){
+                Utils.ajaxData({
+                    url:"/act/message/delete.htm",
+                    data:{
+                        id:record.id,
+                    },
+                    method:"post",
+                    callback:function(result){
+                        Modal.success({
+                            title:result.msg
+                        });
+                        me.refreshList();
+                    }
+                })
+            },
+            onCancel:function(){}
         });
     },
     rowKey(record) {
@@ -71,7 +100,7 @@ export default React.createClass({
             loading: true
         });
         Utils.ajaxData({
-            url: '/act/model/company/auditList.htm',
+            url: '/act/message/getall.htm',
             data: params,
             callback: (result) => {
                 // console.info("=======>"+JSON.stringify(result.data));
@@ -85,7 +114,6 @@ export default React.createClass({
                     data: result.data,
                     pagination,
                 });
-                this.clearList();
             }
         });
     },
@@ -102,63 +130,46 @@ export default React.createClass({
     render() {
         var me = this;
         var columns = [{
-            title: '企业名称',
-            dataIndex: 'companyName'
-        },{
-            title: '法人名称',
-            dataIndex: "legalPersonName",
-        },{
-            title: '身份证号码',
-            dataIndex: "idnumber",
-            render: function (value,record) {
-                var str1 = value.substring(0,5);
-                var str2 = value.substring(13,18);
-                var str = str1+"******"+str2;
-                return str;
-            }
-        },{
-            title: '企业联系人',
-            dataIndex: "contactPerson"
-        },{
-            title: '联系人手机号',
-            dataIndex: "contactTel"
-        },{
-            title: '审核状态',
-            dataIndex: "auditState",
+            title: '消息类型',
+            dataIndex: "type",
             render:function(value,record){
-                if(value === 1){
-                    return "待审核";
-                }else if(value === 2){
-                    return "审核通过";
-                }else if(value === 3){
-                    return "审核拒绝";
+                if(value === 3){
+                    return "活动";
+                }else if(value === 4){
+                    return "口子";
                 }
             }
         },{
-            title: '启用状态',
-            dataIndex: "state",
-            render:function(value,record){
-                if(value === 10){
-                    return "开启";
-                }else if(value === 20){
-                    return "关闭";
-                }
-            }
+            title: '标题',
+            dataIndex: "title",
         },{
-            title: '提交时间',
-            dataIndex: "updateTime"
+            title: '信息体',
+            dataIndex: "message",
+        },{
+            title: '创建',
+            dataIndex: "skipUrl"
+        },{
+            title: '创建时间',
+            dataIndex: "createTime"
         },{
             title: '操作',
             dataIndex: "",
             render(text, record) {
                 return <div style={{ textAlign: "left" }}>
-                    <a href="#" onClick={me.showModal.bind(null, '资质审核', record, true)}>立即审核</a>
+                    <a href="#" onClick={me.showModal.bind(null, '修改', record, true)}>修改</a>
+                    <span className="ant-divider"></span>
+                    <a href="#" onClick={me.deleteRecord.bind(null, '删除', record, true)}>删除</a>
                 </div>
             }}];
 
         var state = this.state;
         return (
             <div className="block-panel">
+                <div className="actionBtns" style={{ marginBottom: 16 }}>
+                    <button className="ant-btn" onClick={this.showModal.bind(this, '新增', null, true) }>
+                        新增
+                    </button>
+                </div>
                 <Table columns={columns} rowKey={this.rowKey}  size="middle"  params ={this.props.params}
                        dataSource={this.state.data}
                        pagination={this.state.pagination}

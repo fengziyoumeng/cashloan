@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_message表:用户消息模块 -->
+<mapper namespace="com.rongdu.cashloan.cl.mapper.MessageMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.rongdu.cashloan.cl.domain.Message">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+        <result column="msg_template" property="msgTemplate" jdbcType="INTEGER" />
+        <result column="receiving" property="receiving" jdbcType="BIGINT" />
+        <result column="skip_url" property="skipUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="read_time" property="readTime" jdbcType="TIMESTAMP" />
+        <result column="p_id" property="pId" jdbcType="BIGINT" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,title,type,message,msg_template,receiving,skip_url,create_time,read_time,p_id
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="title != null and title != '' ">
+                and title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="message != null and message != '' ">
+                and message = #{message,jdbcType=VARCHAR}
+            </if>
+            <if test="msgTemplate != null and msgTemplate != '' ">
+                and msg_template = #{msgTemplate,jdbcType=INTEGER}
+            </if>
+            <if test="receiving != null and receiving != '' ">
+                and receiving = #{receiving,jdbcType=BIGINT}
+            </if>
+            <if test="skipUrl != null and skipUrl != '' ">
+                and skip_url = #{skipUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="readTime != null">
+                and read_time = #{readTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="pId != null and pId != '' ">
+                and p_id = #{pId,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.rongdu.cashloan.cl.domain.Message">
+        insert into cl_message(title,type,message,msg_template,receiving,skip_url,create_time,read_time,p_id)values(
+        #{title,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{message,jdbcType=VARCHAR},
+        #{msgTemplate,jdbcType=INTEGER},#{receiving,jdbcType=BIGINT},#{skipUrl,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},#{readTime,jdbcType=TIMESTAMP},#{pId,jdbcType=BIGINT})
+    </insert>
+
+    
+    <update id="update" parameterType="com.rongdu.cashloan.cl.domain.Message">
+        update cl_message set 
+            title = #{title,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            message = #{message,jdbcType=VARCHAR},
+            msg_template = #{msgTemplate,jdbcType=INTEGER},
+            receiving = #{receiving,jdbcType=BIGINT},
+            skip_url = #{skipUrl,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            read_time = #{readTime,jdbcType=TIMESTAMP},
+            p_id = #{pId,jdbcType=BIGINT}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_message
+          <set>
+            <if test="title != null and title != '' ">        
+                title = #{title,jdbcType=VARCHAR},                
+            </if>
+            <if test="type != null and type != '' ">        
+                type = #{type,jdbcType=INTEGER},                
+            </if>
+            <if test="message != null and message != '' ">        
+                message = #{message,jdbcType=VARCHAR},                
+            </if>
+            <if test="msgTemplate != null and msgTemplate != '' ">        
+                msg_template = #{msgTemplate,jdbcType=INTEGER},                
+            </if>
+            <if test="receiving != null and receiving != '' ">        
+                receiving = #{receiving,jdbcType=BIGINT},                
+            </if>
+            <if test="skipUrl != null and skipUrl != '' ">        
+                skip_url = #{skipUrl,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="readTime != null">
+                read_time = #{readTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="pId != null and pId != '' ">
+                p_id = #{pId,jdbcType=BIGINT}
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_message
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_message
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_message
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="getAllMessageByUserId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_message
+        WHERE receiving =#{userId} OR receiving = 0
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectMessageList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_message
+        WHERE type =3 OR type = 4
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="groupByTime" resultType="date" >
+        SELECT DATE_FORMAT(create_time,'%Y-%m-%d')
+        FROM cl_message
+        WHERE receiving =#{userId} OR receiving = 0
+        GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d')
+        ORDER BY DATE_FORMAT(create_time,'%Y-%m-%d') DESC
+    </select>
+
+    <delete id="deleteById">
+        DELETE
+        FROM cl_message
+        WHERE id =#{id}
+    </delete>
+
+</mapper>

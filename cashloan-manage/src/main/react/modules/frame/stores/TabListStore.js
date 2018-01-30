@@ -103,7 +103,8 @@ export default Reflux.createStore({
 					'CategoryImageManage',
 					'AdInfoManage',
 					'CompanyServiceManage',
-					'CompanyServiceEditManage'
+					'CompanyServiceEditManage',
+					'MessageManage'
 			];
 
 			var routeNames3 = [

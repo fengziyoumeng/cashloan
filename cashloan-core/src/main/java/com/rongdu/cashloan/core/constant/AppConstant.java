@@ -89,6 +89,10 @@ public class AppConstant {
     //加入计划的锁判断，手机号纬度
     public static final String REDIS_KEY_LOCK_SAVEORDERFUNDS_MOBILE = "LOCK:SAVEORDERFUNDS:MOBILE:";
 
+    //字典缓存
+    public static final String REDIS_KEY_DIRECT = "DIRECT:";
+
+
     /**
      * app首页火热借款产品缓存页面
      */

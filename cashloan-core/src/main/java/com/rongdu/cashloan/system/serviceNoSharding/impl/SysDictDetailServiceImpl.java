@@ -5,6 +5,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.rongdu.cashloan.core.common.util.StringUtil;
+import com.rongdu.cashloan.core.constant.AppConstant;
+import com.rongdu.cashloan.core.redis.ShardedJedisClient;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.Page;
@@ -30,6 +33,9 @@ public class SysDictDetailServiceImpl extends BaseServiceImpl<SysDictDetail,Long
 
 	@Resource
 	private SysDictDetailMapper sysDictDetailMapper;
+
+	@Resource
+	private ShardedJedisClient redisClient;
 
 	@Override
 	public Boolean deleteSysDictDetail(Long id) throws ServiceException {
@@ -110,4 +116,21 @@ public class SysDictDetailServiceImpl extends BaseServiceImpl<SysDictDetail,Long
 	public List<SysDictDetail> getItemCodeAndVlueByParentId(Map<String, Object> paramMap) {
 		return sysDictDetailMapper.listSelective(paramMap);
 	}
+
+	@Override
+	public String getValueFromRedis(String parentCode, String childerCode) throws Exception {
+		String msg = redisClient.get(AppConstant.REDIS_KEY_DIRECT+parentCode+":"+childerCode);
+		if(StringUtil.isBlank(msg)){
+			SysDictDetail detail_msg = findDetail(childerCode,parentCode);
+			if(detail_msg != null && StringUtil.isNotBlank(detail_msg.getItemValue())){
+				msg = detail_msg.getItemValue();
+				redisClient.set(AppConstant.REDIS_KEY_DIRECT + parentCode+":"+childerCode,msg);
+			}else {
+				throw new Exception("消息模板配置有误");
+			}
+		}
+		return msg;
+	}
+
+
 }

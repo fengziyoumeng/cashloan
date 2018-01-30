@@ -1,4 +1,4 @@
-package com.rongdu.cashloan.cl.service;
+package com.rongdu.cashloan.cl.serviceNoSharding;
 
 import com.rongdu.cashloan.cl.domain.CompanyInformation;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +13,7 @@ public interface ICompanyInfomationService {
 
     List<CompanyInformation> auditList();
 
-    void infoAudit(String data);
+    void infoAudit(String data) throws Exception;
 
     CompanyInformation selectAuditState(Long userId);
 

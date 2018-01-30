@@ -1,7 +1,7 @@
 package com.rongdu.cashloan.manage.controller;
 
 import com.rongdu.cashloan.cl.domain.CompanyInformation;
-import com.rongdu.cashloan.cl.service.ICompanyInfomationService;
+import com.rongdu.cashloan.cl.serviceNoSharding.ICompanyInfomationService;
 import com.rongdu.cashloan.core.common.context.Constant;
 import com.rongdu.cashloan.core.common.util.ServletUtils;
 import org.springframework.context.annotation.Scope;

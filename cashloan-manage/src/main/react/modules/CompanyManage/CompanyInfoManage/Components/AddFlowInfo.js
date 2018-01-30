@@ -12,7 +12,7 @@ var processList = [];
 var sortList = [];
 var vlu = '';
 
-Utils.ajaxData({
+/*Utils.ajaxData({
     url: '/act/flowControl/getMutilCheckBox.htm',
     method: 'get',
     type: 'json',
@@ -47,7 +47,7 @@ Utils.ajaxData({
     callback: (result) => {
         sortList = result.data;
     }
-});
+});*/
 
 
 function getBase64(img, callback) {
@@ -163,7 +163,7 @@ var AddFlowInfo = React.createClass({
         this.setState({"i_val": val.substring(0, 15)});
         length < 16 ? this.setState({"info": (15 - length)}) : "";
     },
-    getTagList() {
+   /* getTagList() {
         return tagList.map((item, index) => {
             return <Option key={item.itemCode}>{item.itemValue}</Option>
         })
@@ -177,7 +177,7 @@ var AddFlowInfo = React.createClass({
         return sortList.map((item, index) => {
             return <Option key={item.itemCode}>{item.itemValue}</Option>
         })
-    },
+    },*/
     setVlue(vlu) {
         this.setState({"i_val": vlu});
     },
@@ -192,12 +192,12 @@ var AddFlowInfo = React.createClass({
         var identityReversePic = {...getFieldProps('identityReversePic')}.value;
         var holdCardPic = {...getFieldProps('holdCardPic')}.value;
 
-        var introduction = {...getFieldProps('introduction')}.value;
-        var companyName={...getFieldProps('companyName')}.value;
-        var legalPersonName={...getFieldProps('legalPersonName')}.value;
-        var idnumber={...getFieldProps('idnumber')}.value;
-        var contactPerson={...getFieldProps('contactPerson')}.value;
-        var contactTel={...getFieldProps('contactTel')}.value;
+        // var introduction = {...getFieldProps('introduction')}.value;
+        // var companyName={...getFieldProps('companyName')}.value;
+        // var legalPersonName={...getFieldProps('legalPersonName')}.value;
+        // var idnumber={...getFieldProps('idnumber')}.value;
+        // var contactPerson={...getFieldProps('contactPerson')}.value;
+        // var contactTel={...getFieldProps('contactTel')}.value;
 
 
         var props = this.props;
@@ -306,20 +306,22 @@ var AddFlowInfo = React.createClass({
                         </Row>
                         <Row>
                             <Col span="12">
-                                <FormItem  {...formItemLayout} label="不通过原因（可多选）：">
-                                    <Select disabled={!props.canEdit} multiple {...getFieldProps('auditMessage', {rules: [{type: "array" }]})} >
-                                        <Option value={1}>企业名称不通过</Option>
-                                        <Option value={2}>法人姓名不通过</Option>
-                                        <Option value={3}>法人身份证信息不通过</Option>
-                                        <Option value={4}>公司介绍不通过</Option>
-                                        <Option value={5}>营业执照不通过</Option>
-                                        <Option value={6}>联系人手机号不通过</Option>
+                                <FormItem  {...formItemLayout} label="不通过原因：">
+
+                                    <Select  disabled={!props.canEdit}  {...getFieldProps('auditMessage')} >
+                                        <Option value={"1"}>企业名称不通过</Option>
+                                        <Option value={"2"}>法人姓名不通过</Option>
+                                        <Option value={"3"}>身份信息不通过</Option>
+                                        <Option value={"4"}>公司介绍不通过</Option>
+                                        <Option value={"5"}>营业执照不通过</Option>
+                                        <Option value={"6"}>联系人手机号不通过</Option>
                                     </Select>
                                 </FormItem>
-                        </Col>
+                            </Col>
+
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="审核人：">
-                                    <Input rows={3} disabled={!props.canEdit}  {...getFieldProps('auditPerson',{
+                                    <Input  disabled={!props.canEdit}  {...getFieldProps('auditPerson',{
                                         rules: [{
                                             required: true,
                                             message: '必填'
@@ -327,6 +329,7 @@ var AddFlowInfo = React.createClass({
                                     })}  type="text"/>
                                 </FormItem>
                             </Col>
+
                         </Row>
                     </div>
                 </Form>

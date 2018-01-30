@@ -2,6 +2,7 @@ package com.rongdu.cashloan.cl.domain;
 
 import com.alibaba.druid.sql.visitor.functions.Char;
 import com.alibaba.fastjson.JSONArray;
+import com.rongdu.cashloan.system.domain.SysDictDetail;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -88,6 +89,16 @@ public class CompanyProdDetail implements Serializable {
     private List<OperativeInfo> OperativeInfoList;
     private CompanyProd companyProd;
     private CompanyInformation companyInfo;
+    private SysDictDetail sysDictDetail;
+
+    public SysDictDetail getSysDictDetail() {
+        return sysDictDetail;
+    }
+
+    public void setSysDictDetail(SysDictDetail sysDictDetail) {
+        this.sysDictDetail = sysDictDetail;
+    }
+
     /**
      * 企业地址
      */
