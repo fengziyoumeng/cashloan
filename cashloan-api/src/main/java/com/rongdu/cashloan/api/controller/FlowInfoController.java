@@ -194,9 +194,11 @@ public class FlowInfoController {
     ){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
-            clFlowInfoService.getUrl(id,pCode);
-            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
-            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+            boolean flag = clFlowInfoService.getUrl(id,pCode);
+            if(flag){
+                result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+                result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+            }
         }catch (Exception e){
             result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "服务异常，请重试");

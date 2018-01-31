@@ -411,30 +411,24 @@ public class ClFlowInfoServiceImpl implements ClFlowInfoService {
 
     @Override
     public boolean getUrl(long id, String pCode) throws Exception {
-//        try{
+//        final RedissonClient redisson = RedisUtils.getInstance().getRedisson(redisIp, redisPort, redisPasswd);
+//        final RLock bLock = redisson.getLock(AppConstant.LOCK_FLOWINFO_COUNT + pCode);
+//        try {
+//            bLock.lock(20, TimeUnit.SECONDS); //20秒后自动释放
+//            logger.info("====>设置分布式锁，key=" + AppConstant.LOCK_FLOWINFO_COUNT + pCode);
 //            String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
 //            int expire = Global.getInt("appClickExpire");
-//            redisClient.incr(AppConstant.REDIS_KEY_CLICK_FLOW_INFO + pCode + ":" + date, expire*86400);
-//            return true;
-//        }catch (Exception e){
-//            logger.info(id+"=========》增加redis中的点击数时发生错误"+e);
+//            redisClient.incr(AppConstant.REDIS_KEY_CLICK_FLOW_INFO + pCode + ":" + date, expire * 86400);
+//        } catch (Exception e) {
+//            logger.info(id + "=========》增加redis中的点击数时发生错误" + e);
 //            return false;
+//        } finally {
+//            logger.info("====>释放分布式锁，key=" + AppConstant.LOCK_FLOWINFO_COUNT + pCode);
+//            bLock.unlock();
 //        }
-        final RedissonClient redisson = RedisUtils.getInstance().getRedisson(redisIp, redisPort, redisPasswd);
-        final RLock bLock = redisson.getLock(AppConstant.LOCK_FLOWINFO_COUNT + pCode);
-        try {
-            bLock.lock(20, TimeUnit.SECONDS); //20秒后自动释放
-            logger.info("====>设置分布式锁，key=" + AppConstant.LOCK_FLOWINFO_COUNT + pCode);
-            String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            int expire = Global.getInt("appClickExpire");
-            redisClient.incr(AppConstant.REDIS_KEY_CLICK_FLOW_INFO + pCode + ":" + date, expire * 86400);
-        } catch (Exception e) {
-            logger.info(id + "=========》增加redis中的点击数时发生错误" + e);
-            return false;
-        } finally {
-            logger.info("====>释放分布式锁，key=" + AppConstant.LOCK_FLOWINFO_COUNT + pCode);
-            bLock.unlock();
-        }
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        int expire = Global.getInt("appClickExpire");
+        redisClient.incr(AppConstant.REDIS_KEY_CLICK_FLOW_INFO + pCode + ":" + date, expire * 86400);
         return true;
     }
 
