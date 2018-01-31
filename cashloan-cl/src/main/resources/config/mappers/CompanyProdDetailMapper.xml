@@ -44,6 +44,7 @@
       <result column="company_name"  property="companyName" />
       <result column="company_address"  property="companyAddress" />
       <result column="registered_capital"  property="registeredCapital" />
+      <result column="introduction"  property="introduction" />
     </association>
     <collection property="OperativeInfoList" ofType="com.rongdu.cashloan.cl.domain.OperativeInfo" columnPrefix="boi_">
       <result column="id" property="id"></result>
@@ -470,7 +471,8 @@
       bcp.id as bcp_id,bcp.big_type as bcp_big_type,bcp.type as bcp_type,bcp.type_name AS bcp_type_name,
       bcp.type_img_path as bcp_type_img_path,bcp.sort as bcp_sort,
       bci.id AS bci_id,bci.company_name AS bci_company_name,
-      bci.company_address AS  bci_company_address,bci.registered_capital AS bci_registered_capital
+      bci.company_address AS  bci_company_address,bci.registered_capital AS bci_registered_capital,
+      bci.introduction AS  bci_introduction
   </sql>
 
   <sql id="baseTypeResult">

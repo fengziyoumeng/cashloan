@@ -140,7 +140,9 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
                 messageService.sendMessage("SMS_TEMPLATE","COMPANY_TITLE_PASS","COMPANY_MSG_PASS",userId,1);
             } else if (pass.equals("no")) {
                 //审核拒绝
-                companyInfo.setAuditMessage("["+auditMessage+"]");
+                if(StringUtil.isNotBlank(auditMessage)){
+                    companyInfo.setAuditMessage("["+auditMessage+"]");
+                }
                 companyInfo.setState(20);
                 companyInfo.setAuditState(3);
 

@@ -97,8 +97,8 @@ var AddFlowInfo = React.createClass({
                                 <FormItem  {...formItemLayout} label="简介信息：">
                                     <Input disabled={!props.canEdit}  {...getFieldProps('p_message',{
                                         rules: [{
-                                            max:'20',
-                                            message: '填写少于等于4个字符'
+                                            max:'18',
+                                            message: '填写少于等于18个字符'
                                         }]
                                     })} type="text"/>
                                 </FormItem>

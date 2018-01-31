@@ -7,35 +7,10 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const objectAssign = require('object-assign');
 let treeData = [];
-var tagList = [];
-var processList = [];
-var sortList = [];
+var options = [];
 var vlu = '';
 
-/*Utils.ajaxData({
-    url: '/act/flowControl/getMutilCheckBox.htm',
-    method: 'get',
-    type: 'json',
-    data: {
-        "typeCode": "FLOWINFO_P_TAG"
-    },
-    callback: (result) => {
-        tagList = result.data;
-    }
-});
 
-
-Utils.ajaxData({
-    url: '/act/flowControl/getMutilCheckBox.htm',
-    method: 'get',
-    type: 'json',
-    data: {
-        "typeCode": "FLOWINFO_P_PROCESS"
-    },
-    callback: (result) => {
-        processList = result.data;
-    }
-});
 
 Utils.ajaxData({
     url: '/act/flowControl/getMutilCheckBox.htm',
@@ -45,9 +20,9 @@ Utils.ajaxData({
         "typeCode": "FLOWINFO_SHOW_TYPE"
     },
     callback: (result) => {
-        sortList = result.data;
+        options = result.data;
     }
-});*/
+});
 
 
 function getBase64(img, callback) {
@@ -163,7 +138,7 @@ var AddFlowInfo = React.createClass({
         this.setState({"i_val": val.substring(0, 15)});
         length < 16 ? this.setState({"info": (15 - length)}) : "";
     },
-   /* getTagList() {
+    getTagList() {
         return tagList.map((item, index) => {
             return <Option key={item.itemCode}>{item.itemValue}</Option>
         })
@@ -174,9 +149,19 @@ var AddFlowInfo = React.createClass({
         })
     },
     getSortList() {
-        return sortList.map((item, index) => {
+        return options.map((item, index) => {
             return <Option key={item.itemCode}>{item.itemValue}</Option>
         })
+    },
+    /*getOptions() {
+        return <div>
+            <Option value={1}>企业名称不通过</Option>
+            <Option value={2}>法人姓名不通过</Option>
+            <Option value={3}>身份信息不通过</Option>
+            <Option value={4}>公司介绍不通过</Option>
+            <Option value={5}>营业执照不通过</Option>
+            <Option value={6}>联系人手机号不通过</Option>
+        </div>
     },*/
     setVlue(vlu) {
         this.setState({"i_val": vlu});
