@@ -77,6 +77,8 @@
     <association property="companyInfo" javaType="com.rongdu.cashloan.cl.domain.CompanyInformation" columnPrefix="bci_">
       <id column="id" jdbcType="BIGINT" property="id" />
       <result column="company_name"  property="companyName" />
+      <result column="company_address"  property="companyAddress" />
+      <result column="introduction"  property="introduction" />
     </association>
     <collection property="OperativeInfoList" ofType="com.rongdu.cashloan.cl.domain.OperativeInfo" columnPrefix="boi_">
       <result column="id" property="id"></result>
@@ -483,7 +485,8 @@
       boi.id as boi_id,boi.proc_id as boi_proc_id,boi.name as boi_name,boi.tel as boi_tel,
       boi.wx as boi_wx,boi.qq as boi_qq,boi.job as boi_job,boi.module as boi_module,
       asdd.item_value as asdd_item_value,
-      bci.id AS bci_id,bci.company_name AS bci_company_name
+      bci.id AS bci_id,bci.company_name AS bci_company_name,
+      bci.company_address AS bci_company_address,bci.introduction AS bci_introduction
   </sql>
 
   <sql id="productResult">
