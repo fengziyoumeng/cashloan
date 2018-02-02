@@ -442,7 +442,7 @@
         and proc_info = #{proc_info,jdbcType=LONGVARCHAR}
       </if>
     </where>
-    order by sort desc
+    order by sort
   </select>
 
   <select id="getAuditList" resultMap="ResultMapWithType">
