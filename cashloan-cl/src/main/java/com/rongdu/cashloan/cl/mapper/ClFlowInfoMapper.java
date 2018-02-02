@@ -43,4 +43,8 @@ public interface ClFlowInfoMapper extends BaseMapper<ClFlowInfo,Long> {
 	List<ClFlowInfo> getAllListOrderByTypeSort();
 
 	String findName(Long id);
+
+	Long queryCountByInsert(Map<String, Object> paramMap);
+
+	Long queryCountByUpdate(Map<String, Object> paramMap);
 }

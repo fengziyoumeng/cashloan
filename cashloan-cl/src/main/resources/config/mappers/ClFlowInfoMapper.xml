@@ -585,4 +585,16 @@
         from cl_flow_info WHERE p_code = #{pCode}
     </select>
 
+    <select id="queryCountByInsert" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select
+        count(id)
+        from cl_flow_info WHERE p_code = #{pCode}
+    </select>
+
+    <select id="queryCountByUpdate" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select
+        count(id)
+        from cl_flow_info WHERE id != #{id} and p_code = #{pCode}
+    </select>
+
 </mapper>

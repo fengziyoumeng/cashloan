@@ -6,8 +6,6 @@ import com.rongdu.cashloan.cl.domain.HomeSort;
 import com.rongdu.cashloan.cl.page.PageResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +18,7 @@ public interface ClFlowInfoService {
 
     void getPlatFormClick(String code) throws Exception;
 
+    long queryOnlyValue(String opType,ClFlowInfo flowInfo)throws Exception;
 
     boolean channelDelete(Long id,String code,String imageName) throws Exception;
 

@@ -201,6 +201,23 @@ public class ClFlowInfoServiceImpl implements ClFlowInfoService {
 //        ServletUtils.writeToResponse(response, result);
     }
 
+    @Override
+    public long queryOnlyValue(String opType, ClFlowInfo flowInfo) throws Exception {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("pCode",flowInfo.getPCode());
+        Long count = 0l;
+        if ("insert".equals(opType)) {
+            count = clFlowInfoMapper.queryCountByInsert(map);
+        }else{
+            map.put("id",flowInfo.getId());
+            count = clFlowInfoMapper.queryCountByUpdate(map);
+        }
+        if(count==null){
+            count = 0l;
+        }
+        return count;
+    }
+
 
     /**
      * 平台信息删除（物理删除），此步骤涉及删除redis中的平台地址及平台点击数等数据

@@ -314,12 +314,18 @@ public class FlowController extends BaseController {
             Date now = DateUtil.getNow();
             flowInfo.setCreateTime(now);
         }
+        long count = clFlowInfoService.queryOnlyValue(opType,flowInfo);
+        Map<String,Object> responseMap = new HashMap<String,Object>();
+        if(count>0){
+            responseMap.put(Constant.RESPONSE_CODE, Constant.FAIL_CODE_VALUE);
+            responseMap.put(Constant.RESPONSE_CODE_MSG, "编码已经存在，请重新输入!");
+            ServletUtils.writeToResponse(response, responseMap);
+            return;
+        }
         //imgPath:临时服务器路径,imgName:图片名称,tempImgTemp:服务器临时存放目录,opType:保存或更新标志
          picUrls =  clFlowInfoService.saveOrUpdate(flowInfo,imgPath,imgName,tempImgTemp,opType);
-        Map<String,Object> responseMap = new HashMap<String,Object>();
         if (!StringUtil.isEmpty( picUrls)  ) {
             responseMap.put("imgUrlOss", picUrls);
-
         }
         responseMap.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
         responseMap.put(Constant.RESPONSE_CODE_MSG, "保存成功");
