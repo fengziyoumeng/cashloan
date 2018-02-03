@@ -29,7 +29,7 @@
     <h1>一起聊天吧</h1>
     <!-- m.51jjhao.com -->
     <div class="c_info">
-        &nbsp;<b class="c_intext">服务器地址</b>：<input type="text" id="addr" class="inputText" value="localhost://chat" readonly="true">
+        &nbsp;<b class="c_intext">服务器地址</b>：<input type="text" id="addr" class="inputText" value="m.51jjhao.com://chat" readonly="true">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b>用户名</b>：<input type="text" id="userName" class="inputText" value="" placeholder="请输入用户名...">
         <input type="button" id="con" class="inputText btn" value="连接">
