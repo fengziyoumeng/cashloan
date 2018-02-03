@@ -116,8 +116,7 @@ var AddFlowInfo = React.createClass({
             }
             if (title == "新增") {
                 var data = objectAssign({}, {
-                    form: JSON.stringify(objectAssign({'path': path, 'name': name}, values, {}
-                    ))
+                    form: JSON.stringify(objectAssign({'path': path, 'name': name}, values, {}))
                 });
             }
             else if (title == "修改") {

@@ -161,6 +161,17 @@
         ORDER BY DATE_FORMAT(create_time,'%Y-%m-%d') DESC
     </select>
 
+    <select id="hasNewMessage" resultType="list" >
+        SELECT create_time
+        FROM cl_message
+        WHERE receiving =#{userId}
+    </select>
+    <select id="getMassMessage" resultType="list" >
+        SELECT create_time
+        FROM cl_message
+        WHERE receiving = 0
+    </select>
+
     <delete id="deleteById">
         DELETE
         FROM cl_message

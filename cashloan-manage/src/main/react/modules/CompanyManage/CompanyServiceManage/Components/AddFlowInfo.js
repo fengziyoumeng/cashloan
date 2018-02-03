@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Form, Input, Modal, Row, Select} from 'antd';
+import {Col,Button , Form, Input, Modal, Row, Select} from 'antd';
 
 const { TextArea } = Input;
 const createForm = Form.create;
@@ -63,6 +63,7 @@ function getBase64(img, callback) {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 }
+
 
 var AddFlowInfo = React.createClass({
     getInitialState() {
@@ -197,6 +198,7 @@ var AddFlowInfo = React.createClass({
         var companyInfo = getFieldProps("companyInfo").value;
         var companyProd = getFieldProps("companyProd").value;
         var operativeInfoList = getFieldProps("operativeInfoList").value;
+        var procInfo = getFieldProps('proc_info').value;
 
         var name1;
         var tel1;
@@ -239,12 +241,17 @@ var AddFlowInfo = React.createClass({
                 module2 = operativeInfoList[1].module;
             }
         }
+        if(procInfo){
+            procInfo = procInfo.replace("\n","/n");
+        }
+
+
         var props = this.props;
         var state = this.state;
 
         var modalBtns = [
-            <button key="back" className="ant-btn" onClick={this.handleAuditOk}>审核通过</button>,
-            <button key="button" className="ant-btn ant-btn-primary" onClick={this.handleAuditNo}>审核拒绝</button>
+            <Button key="back" className="ant-btn" disabled={!props.canEdit} onClick={this.handleAuditOk}>审核通过</Button>,
+            <Button key="button" className="ant-btn ant-btn-primary" disabled={!props.canEdit} onClick={this.handleAuditNo}>审核拒绝</Button>
         ];
         const formItemLayout = {
             labelCol: {
@@ -263,13 +270,13 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="公司名称：">
-                                    <Input disabled={props.canEdit}  value ={companyName} type="text"/>
+                                    <Input disabled={true}  value ={companyName} type="text"/>
                                 </FormItem>
                             </Col>
 
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="分类：">
-                                    <Input disabled={props.canEdit}  value = {companyType} />
+                                    <Input disabled={true}  value = {companyType} />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -281,7 +288,7 @@ var AddFlowInfo = React.createClass({
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="产品服务介绍：">
-                                    <Input disabled={props.canEdit} rows={5}  {...getFieldProps('proc_info')} type="textarea"/>
+                                    <Input disabled={true} rows={5}  value={procInfo} type="textarea"/>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -289,36 +296,36 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="姓名：">
-                                    <Input disabled={props.canEdit}  value = {name1}  type="text"/>
+                                    <Input disabled={true}  value = {name1}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="手机：">
-                                    <Input  disabled={props.canEdit}  value = {tel1}  type="text"/>
+                                    <Input  disabled={true}  value = {tel1}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="微信：">
-                                    <Input disabled={props.canEdit}  value = {wx1}  type="text"/>
+                                    <Input disabled={true}  value = {wx1}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="QQ：">
-                                    <Input  disabled={props.canEdit}  value = {qq1}  type="text"/>
+                                    <Input  disabled={true}  value = {qq1}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="职位：">
-                                    <Input disabled={props.canEdit}  value={job1}  type="text"/>
+                                    <Input disabled={true}  value={job1}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="负责模块：">
-                                    <Input  disabled={props.canEdit}  value={module1}  type="text"/>
+                                    <Input  disabled={true}  value={module1}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -326,36 +333,36 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="姓名：">
-                                    <Input disabled={props.canEdit}  value = {name2}  type="text"/>
+                                    <Input disabled={true}  value = {name2}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="手机：">
-                                    <Input  disabled={props.canEdit}  value = {tel2}  type="text"/>
+                                    <Input  disabled={true}  value = {tel2}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="微信：">
-                                    <Input disabled={props.canEdit}  value = {wx2}  type="text"/>
+                                    <Input disabled={true}  value = {wx2}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="QQ：">
-                                    <Input disabled={props.canEdit}  value = {qq2}  type="text"/>
+                                    <Input disabled={true}  value = {qq2}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="职位：">
-                                    <Input disabled={props.canEdit}  value={job2}  type="text"/>
+                                    <Input disabled={true}  value={job2}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="负责模块：">
-                                    <Input  disabled={props.canEdit}  value={module2}  type="text"/>
+                                    <Input  disabled={true}  value={module2}  type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>

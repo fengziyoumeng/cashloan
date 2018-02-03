@@ -52,7 +52,7 @@ public interface CompanyProdDetailMapper {
 
     List<CompanyProdDetail> listCompanyprodDetail(CompanyProdDetail record);
 
-    List<CompanyProdDetail> getAuditList();
+    List<CompanyProdDetail> getAuditList(Map param);
 
     List<CompanyProdDetail> getAllListBySearch(Map params);
 

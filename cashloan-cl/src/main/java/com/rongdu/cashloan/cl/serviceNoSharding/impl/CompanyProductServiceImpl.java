@@ -236,10 +236,11 @@ public class CompanyProductServiceImpl implements ICompanyProductService{
     }
 
     @Override
-    public List<CompanyProdDetail> getCompanyproductAuditList() {
+    public List<CompanyProdDetail> getCompanyproductAuditList(String seachParams) {
         List<CompanyProdDetail> companyProdDetailList = null;
         try{
-            companyProdDetailList = companyProdDetailMapper.getAuditList();
+            Map param = JsonUtil.parse(seachParams, Map.class);
+            companyProdDetailList = companyProdDetailMapper.getAuditList(param);
         }catch (Exception e){
             logger.info("获取公司服务审核列表失败",e);
             throw e;

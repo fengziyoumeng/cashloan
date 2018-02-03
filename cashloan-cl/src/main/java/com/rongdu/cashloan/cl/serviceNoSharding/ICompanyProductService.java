@@ -17,7 +17,7 @@ public interface ICompanyProductService {
 
     Long getProdClickNum(String userId, String proc_id);
 
-    List<CompanyProdDetail> getCompanyproductAuditList();
+    List<CompanyProdDetail> getCompanyproductAuditList(String seachParams);
 
     CompanyProdDetail getDetailById(Long prodId);
 

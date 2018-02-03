@@ -11,7 +11,7 @@ public interface ICompanyInfomationService {
 
     String uploadCompanyImage(String realPath,MultipartFile image,String fileName);
 
-    List<CompanyInformation> auditList();
+    List<CompanyInformation> auditList(String seachParams);
 
     void infoAudit(String data) throws Exception;
 

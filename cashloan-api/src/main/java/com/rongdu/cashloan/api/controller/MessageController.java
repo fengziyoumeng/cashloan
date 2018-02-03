@@ -1,6 +1,7 @@
 package com.rongdu.cashloan.api.controller;
 
 import com.rongdu.cashloan.cl.domain.Message;
+import com.rongdu.cashloan.cl.service.IMessageVoService;
 import com.rongdu.cashloan.cl.serviceNoSharding.MessageService;
 import com.rongdu.cashloan.cl.vo.MessageVo;
 import com.rongdu.cashloan.core.common.context.Constant;
@@ -22,6 +23,9 @@ public class MessageController extends BaseController{
     @Resource
     private MessageService messageService;
 
+    @Resource
+    private IMessageVoService messageVoService;
+
     @RequestMapping("/api/message/getall/byuserid.htm")
     public void getMessageAll(Long userId){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -30,6 +34,35 @@ public class MessageController extends BaseController{
             result.put(Constant.RESPONSE_DATA, dataList);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "服务异常，请重试");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+
+    @RequestMapping("/api/message/hasnewmessage.htm")
+    public void hasNewMessage(Long userId){
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            Integer newMessage= messageVoService.hasNewMessage(userId);
+            result.put(Constant.RESPONSE_DATA, newMessage);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
+        }catch (Exception e){
+            result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "服务异常，请重试");
+        }
+        ServletUtils.writeToResponse(response,result);
+    }
+
+    @RequestMapping("/api/message/read.htm")
+    public void readMessage(Long userId){
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            messageVoService.readMessage(userId);
+            result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
+            result.put(Constant.RESPONSE_CODE_MSG, "更新成功");
         }catch (Exception e){
             result.put(Constant.RESPONSE_CODE, Constant.OTHER_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "服务异常，请重试");

@@ -24,7 +24,8 @@ var AddFlowInfo = React.createClass({
         return {
             status: {},
             formData: {},
-            info: 15
+            info: 15,
+            edit:true
         };
     },
     handleCancel() {
@@ -70,6 +71,14 @@ var AddFlowInfo = React.createClass({
             return <Option key={item.itemCode}>{item.itemValue}</Option>
         })
     },
+    changeSelect(value, option){
+        if(value == 0){
+            this.setState({edit:true});
+        }else if(value == 1){
+            this.setState({edit:false});
+        }
+
+    },
     render() {
         const { getFieldProps } = this.props.form;
 
@@ -95,7 +104,7 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="简介信息：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('p_message',{
+                                    <Input disabled={this.state.edit}  {...getFieldProps('p_message',{
                                         rules: [{
                                             max:'18',
                                             message: '填写少于等于18个字符'
@@ -106,7 +115,7 @@ var AddFlowInfo = React.createClass({
 
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="角标：">
-                                    <Input disabled={!props.canEdit}  {...getFieldProps('flag_msg',{
+                                    <Input disabled={this.state.edit}  {...getFieldProps('flag_msg',{
                                         rules: [{
                                             max:'4',
                                             message: '填写少于等于4个字符'
@@ -119,12 +128,25 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="开启热门推荐：">
-                                    <Select id="select" size="large"  disabled={!props.canEdit} {...getFieldProps('proc_flag', { initialValue: 0 })} >
+                                    <Select id="select" size="large"  disabled={!props.canEdit} onSelect={this.changeSelect} {...getFieldProps('proc_flag', { initialValue: 0 })} >
                                         <Option value={1}>推荐</Option>
                                         <Option value={0}>不推荐</Option>
                                     </Select>
                                 </FormItem>
                             </Col>
+
+                            <Col span="12">
+                                <FormItem  {...formItemLayout} label="排序号：">
+                                    <Input disabled={!props.canEdit}  {...getFieldProps('sort',{
+                                        rules: [{
+                                            required:true,
+                                            message: '必填'
+                                        }]
+                                    })}  />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="是否开启：">
                                     <Select id="select" size="large"  disabled={!props.canEdit} {...getFieldProps('status', { initialValue: 0 })} >

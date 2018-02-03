@@ -94,12 +94,12 @@ public class CompanyInfomationImpl implements ICompanyInfomationService {
     }
 
     @Override
-    public List<CompanyInformation> auditList() {
-        Map<String, Object> param = new HashMap<>();
+    public List<CompanyInformation> auditList(String seachParams) {
         List<CompanyInformation> companyInformations = null;
         try {
-            param.put("auditState", 1);
-            companyInformations = CompanyInfomationMapper.auditList(param);
+            Map params = JsonUtil.parse(seachParams, Map.class);
+//            param.put("auditState", 1);
+            companyInformations = CompanyInfomationMapper.auditList(params);
 
         }catch(Exception e){
             logger.info("获取审核列表失败",e);

@@ -41,6 +41,17 @@ export default React.createClass({
             record: record
         });
     },
+    //审核详情
+    showModalDetail(title, record, canEdit) {
+        var record = record;
+        this.refs.AddFlowInfo.setFieldsValue(record);
+        this.setState({
+            canEdit: canEdit,
+            visible: true,
+            title: title,
+            record: record
+        });
+    },
     rowKey(record) {
         return record.id;
     },
@@ -127,11 +138,21 @@ export default React.createClass({
             dataIndex: "auditState",
             render:function(value,record){
                 if(value === 1){
-                    return "待审核";
+                    return <font color='blue'>待审核</font>;
                 }else if(value === 2){
-                    return "审核通过";
+                    return <font color='green'>审核通过</font>;
                 }else if(value === 3){
-                    return "审核拒绝";
+                    return <font color='red'>审核拒绝</font>;
+                }
+            }
+        },{
+            title: '审核人',
+            dataIndex: "auditPerson",
+            render:function(value,record){
+                if(value){
+                    return value;
+                }else{
+                    return "---";
                 }
             }
         },{
@@ -150,11 +171,17 @@ export default React.createClass({
         },{
             title: '操作',
             dataIndex: "",
-            render(text, record) {
-                return <div style={{ textAlign: "left" }}>
-                    <a href="#" onClick={me.showModal.bind(null, '资质审核', record, true)}>立即审核</a>
-                </div>
-            }}];
+            render:function(value, record) {
+                if(record.auditState==1){
+                    return <div style={{ textAlign: "left" }}>
+                        <a href="#" onClick={me.showModal.bind(null, '资质审核', record, true)}>立即审核</a>
+                    </div>
+                }else{
+                    return <div style={{ textAlign: "left" }}>
+                        <a href="#" onClick={me.showModalDetail.bind(null, '审核详情', record, false)}>查看详情</a>
+                    </div>
+                }
+        }}];
 
         var state = this.state;
         return (

@@ -44,12 +44,18 @@
     <!-- 基本的sql查询条件公共引用 -->
     <sql id="searchBy">
         <trim prefix="where" prefixOverrides="and|or">
+            <if test="companyName !='' and companyName !=null">
+                company_name LIKE concat('%',#{companyName},'%')
+            </if>
+            <if test="contactPerson !='' and contactPerson !=null">
+                contact_person LIKE concat('%',#{contactPerson},'%')
+            </if>
+            <if test="contactTel !='' and contactTel !=null">
+                contact_tel LIKE concat('%',#{contactTel},'%')
+            </if>
             <if test="auditState !='' and auditState !=null">
                 audit_state = #{auditState,jdbcType=INTEGER}
             </if>
-            <!--<if test="userId !='' and userId !=null">
-                user_id = #{userId,jdbcType=INTEGER}
-            </if>-->
         </trim>
     </sql>
       <!-- 基本的模糊sql查询条件公共引用 -->

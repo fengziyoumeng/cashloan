@@ -205,6 +205,15 @@
         where login_name = #{loginName ,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateMsgReadTime" parameterType="map">
+        update cl_user set
+         msg_read_time = #{msgReadTime}
+        where id = #{userId}
+    </update>
+
+    <select id="queryMsgReadTime" resultType="map">
+        select msg_read_time from cl_user where id =#{userId}
+    </select>
 
     <update id="updateClUserById" parameterType="map">
         update cl_user

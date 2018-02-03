@@ -27,4 +27,5 @@ public interface MessageService extends BaseService<Message, Long>{
     void saveOrUpdateMessage(String data);
 
     void deleteMessage(Long id);
+
 }

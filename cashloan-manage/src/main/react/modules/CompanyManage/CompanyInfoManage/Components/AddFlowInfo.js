@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Form, Input, Modal, Row, Select} from 'antd';
+import {Col,Button ,Form, Input, Modal, Row, Select} from 'antd';
 
 const { TextArea } = Input;
 const createForm = Form.create;
@@ -189,8 +189,8 @@ var AddFlowInfo = React.createClass({
         var state = this.state;
 
         var modalBtns = [
-            <button key="back" className="ant-btn" onClick={this.handleAuditOk}>审核通过</button>,
-            <button key="button" className="ant-btn ant-btn-primary" onClick={this.handleAuditNo}>审核拒绝</button>
+            <Button key="back" className="ant-btn" disabled={!props.canEdit} onClick={this.handleAuditOk}>审核通过</Button>,
+            <Button key="button" className="ant-btn ant-btn-primary" disabled={!props.canEdit} onClick={this.handleAuditNo}>审核拒绝</Button>
         ];
         const formItemLayout = {
             labelCol: {
@@ -210,37 +210,37 @@ var AddFlowInfo = React.createClass({
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="企业名称：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('companyName')} type="text"/>
+                                    <Input disabled={true}  {...getFieldProps('companyName')} type="text"/>
                                 </FormItem>
                             </Col>
 
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="法人姓名：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('legalPersonName')}/>
+                                    <Input disabled={true}  {...getFieldProps('legalPersonName')}/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="身份证号：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('idnumber')} type="text"/>
+                                    <Input disabled={true}  {...getFieldProps('idnumber')} type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="企业联系人：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('contactPerson')} type="text"/>
+                                    <Input disabled={true}  {...getFieldProps('contactPerson')} type="text"/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="联系人手机号：">
-                                    <Input disabled={props.canEdit}  {...getFieldProps('contactTel')}  type="text"/>
+                                    <Input disabled={true}  {...getFieldProps('contactTel')}  type="text"/>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem  {...formItemLayout} label="公司简介：">
-                                    <Input rows={6} disabled={props.canEdit}  {...getFieldProps('introduction')}  type="textarea"/>
+                                    <Input rows={6} disabled={true}  {...getFieldProps('introduction')}  type="textarea"/>
                                 </FormItem>
                             </Col>
                         </Row>

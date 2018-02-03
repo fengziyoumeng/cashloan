@@ -25,13 +25,12 @@ public class CompanyInfoController {
     /**
      * 入驻企业待审核列表
      * @param response
-     * @param companyInformation
      */
     @RequestMapping("/act/model/company/auditList.htm")
-    public void CompanySaveOrUpdate(HttpServletResponse response, CompanyInformation companyInformation ){
+    public void CompanySaveOrUpdate(HttpServletResponse response, @RequestParam(value="searchParams",required = false)String searchParams ){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
-            List<CompanyInformation> companyInformations = companyInfomationService.auditList();
+            List<CompanyInformation> companyInformations = companyInfomationService.auditList(searchParams);
             result.put(Constant.RESPONSE_DATA, companyInformations);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");

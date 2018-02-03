@@ -459,7 +459,17 @@
     LEFT JOIN b_operative_info boi ON bcpd.proc_id = boi.proc_id
     LEFT JOIN b_company_prod bcp ON bcp.type = bcpd.cp_type
     LEFT JOIN b_company_information bci ON bci.id = bcpd.org_id
-    WHERE bcpd.audit_state = 1
+    <where>
+      <if test="companyName != '' and companyName !=null">
+        bci.company_name LIKE concat('%',#{companyName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="productName != '' and productName !=null">
+        and bcpd.proc_name LIKE concat('%',#{productName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="auditState !='' and auditState !=null">
+        and bcpd.audit_state = #{auditState}
+      </if>
+    </where>
     ORDER BY update_time ASC
   </select>
 

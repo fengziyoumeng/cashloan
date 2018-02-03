@@ -28,10 +28,10 @@ public class CompanyProdDetailController extends ManageBaseController{
      * 服务审核列表
      */
     @RequestMapping("/act/model/companyservice/auditList.htm")
-    public void serviceAuditList(){
+    public void serviceAuditList(@RequestParam(value= "searchParams",required=false)String seachParams){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
-            List<CompanyProdDetail> listData = companyProductService.getCompanyproductAuditList();
+            List<CompanyProdDetail> listData = companyProductService.getCompanyproductAuditList(seachParams);
             result.put(Constant.RESPONSE_DATA, listData);
             result.put(Constant.RESPONSE_CODE, Constant.SUCCEED_CODE_VALUE);
             result.put(Constant.RESPONSE_CODE_MSG, "查询成功");
