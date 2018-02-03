@@ -79,17 +79,17 @@ public class ClSmsServiceImpl extends BaseServiceImpl<Sms, Long> implements ClSm
 	
 	@Override
 	public long findTimeDifference(String phone, String type) {
-		int countdown = Global.getInt("sms_countdown");
+		int countdown = Global.getInt("sms_countdown");//60s倒计时
 		Sms sms = smsService.getSmsFromRedis(phone,type);
 		long times = 0;
 		if (sms != null) {
 			Date d1 = sms.getSendTime();
 			Date d2 = DateUtil.getNow();
 			long diff = d2.getTime() - d1.getTime();
-			if (diff < countdown*1000) {
+			if (diff < countdown*1000) { //发送间隔时间小于60s，time为两者差值
 				times = countdown-(diff/1000);
 			}else {
-				times = 0;
+				times = 0; //time为0说明该手机号发送间隔大于或者等于60s，满足时差
 			}
 		}
 		return times;
@@ -107,12 +107,12 @@ public class ClSmsServiceImpl extends BaseServiceImpl<Sms, Long> implements ClSm
 	@Override
 	public long sendSms(String phone, String type) {
 		type = StringUtil.upperCase(type);
-		SmsTpl tpl = smsService.getSmsTplFromRedis(type);
+		SmsTpl tpl = smsService.getSmsTplFromRedis(type);//获取没有验证码的短信内容：您的找回登陆密码的验证码是:%s请在1分钟内输入【急借号】
 		if (tpl!=null && "10".equals(tpl.getState())) {
 			int vcode = (int) (Math.random() * 9000) + 1000;
 			String result = null;
 			try {
-				String messge = change(type).replaceAll("%s",vcode+"");
+				String messge = change(type).replaceAll("%s",vcode+"");//获取有验证码的短信内容：您的找回登陆密码的验证码是:1234请在1分钟内输入【急借号】
 				//result = sendCodeForDahantc(phone,change(type)+vcode);
 				result = sendCodeForDahantc(phone,messge);
 			} catch (UnsupportedEncodingException e) {

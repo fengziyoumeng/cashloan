@@ -139,6 +139,10 @@ var AddFlowInfo = React.createClass({
                         this.setState({
                             imageUrl: ''
                         })
+                    }else {
+                        Modal.error({
+                            title: result.msg,
+                        });
                     }
                 }
             });
