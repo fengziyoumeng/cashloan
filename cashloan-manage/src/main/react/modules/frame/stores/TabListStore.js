@@ -104,7 +104,8 @@ export default Reflux.createStore({
 					'AdInfoManage',
 					'CompanyServiceManage',
 					'CompanyServiceEditManage',
-					'MessageManage'
+					'MessageManage',
+					'ShowChannelRegister'
 			];
 
 			var routeNames3 = [

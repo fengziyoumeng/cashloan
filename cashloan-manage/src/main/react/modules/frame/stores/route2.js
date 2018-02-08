@@ -34,6 +34,7 @@ var flowInfoManage = require('../../FlowInfo/flowInfoManage/index');//流量平�
 var flowInfoUVPlatForm = require('../../FlowInfo/flowInfoUVPlatForm/index');//流量平台统计--UV统计
 var ChannelH5Manage = require('../../FlowInfo/ChannelH5Manage/index');//推广注册统计
 var ChannelH5ManageTwo = require('../../FlowInfo/ChannelH5ManageTwo/index');//推广注册统计-按80%来呈现
+var ShowChannelRegister = require('../../FlowInfo/ShowChannelRegister/index');//推广注册统计-给渠道登录查看
 var BannerManage = require('../../PlatFormManage/BannerManage/index');//Banner管理
 var NewBannerManage = require('../../PlatFormManage/NewBannerManage/index');//新Banner管理，用于金融圈子
 var ClickTrackManage = require('../../FlowInfo/ClickTrackManage/index');//点击轨迹统计
@@ -82,6 +83,7 @@ module.exports = {
   flowInfoManage,
   ChannelH5Manage,
   ChannelH5ManageTwo,
+  ShowChannelRegister,
   BannerManage,
   NewBannerManage,
   flowInfoUVPlatForm,

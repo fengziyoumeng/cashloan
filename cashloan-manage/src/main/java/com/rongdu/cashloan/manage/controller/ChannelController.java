@@ -132,7 +132,8 @@ public class ChannelController extends ManageBaseController {
        Map<String, Object> params = JsonUtil.parse(searchParams, Map.class);
        Date beginTime = null;
        Date endTime = null;
-       if (params!=null){
+       if (params!=null && StringUtil.isNotBlank(params.get("beginTime")) &&
+               StringUtil.isNotBlank(params.get("endTime"))){
            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
            beginTime =sdf.parse((String)params.get("beginTime"));
            endTime =sdf.parse((String)params.get("endTime"));
@@ -160,7 +161,8 @@ public class ChannelController extends ManageBaseController {
        Map<String, Object> params = JsonUtil.parse(searchParams, Map.class);
        Date beginTime = null;
        Date endTime = null;
-       if (params!=null){
+       if (params!=null && StringUtil.isNotBlank(params.get("beginTime")) &&
+               StringUtil.isNotBlank(params.get("endTime"))){
            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
            beginTime =sdf.parse((String)params.get("beginTime"));
            endTime =sdf.parse((String)params.get("endTime"));

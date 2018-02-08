@@ -1,11 +1,8 @@
 import React from 'react';
-import { Row, Col } from 'antd';
 import './style.css';
-import Map from './Map';
 import Bar1 from './Bar1';
 import Bar2 from './Bar2';
-import Pie1 from './Pie1';
-import Pie2 from './Pie2';
+
 var Reflux = require('reflux');
 var AppActions = require('../../frame/actions/AppActions');
 var UserMessageStore = require('../../frame/stores/UserMessageStore');

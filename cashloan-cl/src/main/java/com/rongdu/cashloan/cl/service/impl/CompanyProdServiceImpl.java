@@ -54,6 +54,7 @@ public class CompanyProdServiceImpl implements CompanyProdService {
             String oldPath = companyProd.getType_img_path();
             String ossPath = ImageUploadUtil.uploadOSSDeleteTemp(iconUrl, "categoryImage",oldPath);
             companyProd.setType_img_path(ossPath);
+
             if(companyProd.getId()==null){
                 companyProdMapper.insert(companyProd);
             }else{

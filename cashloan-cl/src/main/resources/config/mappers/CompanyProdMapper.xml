@@ -85,7 +85,7 @@
       <if test="type_name != null">
         type_name = #{type_name,jdbcType=VARCHAR},
       </if>
-      <if test="type_img_path != null">
+      <if test="type_img_path != null and type_img_path !=''">
         type_img_path = #{type_img_path,jdbcType=VARCHAR},
       </if>
       <if test="sort != null">
